@@ -6,9 +6,6 @@ import LoginPage from './components/Login/LoginPage.vue';
 import ProfilePage from './components/Profile/ProfilePage.vue';
 import FindFriendsPage from './components/FindFriends/FindFriendsPage.vue';
 import RegisterPage from './components/Login/RegisterPage.vue';
-import ProfilePage from './components/Profile/ProfilePage.vue';
-import FindFriendsPage from './components/FindFriends/FindFriendsPage.vue';
-import RegisterPage from './components/Login/RegisterPage.vue';
 import NotFound from './NotFound.vue';
 
 Vue.use(VueRouter);

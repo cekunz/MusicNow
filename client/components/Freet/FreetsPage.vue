@@ -2,15 +2,21 @@
 
 <template>
   <main>
-    <section v-if="$store.state.username">
+    <section v-if="$store.state.mixtapePosted===false && $store.state.username">
+       <header>
+        <h2>Welcome to MusicNow!</h2>
+      </header>
+      <MakeMixtapePage />
+    </section>
+
+    <section v-if="$store.state.mixtapePosted===true && $store.state.username">
       <header>
         <h2>Welcome @{{ $store.state.username }}</h2>
       </header>
-      <CreateFreetForm />
     </section>
-    <section v-else>
+    <section v-if="!$store.state.username">>
       <header>
-        <h2>Welcome to Fritter!</h2>
+        <h2>Welcome to MusicNow!</h2>
       </header>
       <article>
         <h3>
@@ -21,7 +27,7 @@
         </h3>
       </article>
     </section>
-    <section>
+    <section v-if="$store.state.mixtapePosted===true && $store.state.username">
       <header>
         <div class="left">
           <h2>
@@ -62,10 +68,11 @@
 import FreetComponent from '@/components/Freet/FreetComponent.vue';
 import CreateFreetForm from '@/components/Freet/CreateFreetForm.vue';
 import GetFreetsForm from '@/components/Freet/GetFreetsForm.vue';
+import MakeMixtapePage from '@/components/Mixtape/MakeMixtapePage.vue';
 
 export default {
   name: 'FreetPage',
-  components: {FreetComponent, GetFreetsForm, CreateFreetForm},
+  components: {FreetComponent, GetFreetsForm, CreateFreetForm, MakeMixtapePage},
   mounted() {
     this.$refs.getFreetsForm.submit();
   }

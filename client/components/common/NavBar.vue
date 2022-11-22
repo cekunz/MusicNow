@@ -5,20 +5,32 @@
 <template>
   <nav>
     <div class="left">
-      <img src="../../public/logo.svg">
-      <h1 class="title">
-        Fritter
-      </h1>
+      <!-- <img src="../../public/logo.svg"> -->
+      <router-link to="/">
+        MusicNow
+      </router-link>
     </div>
     <div class="right">
       <router-link to="/">
-        Home
+        Feed
+      </router-link>
+      <router-link
+        v-if="$store.state.username"
+        to="/findFriends"
+      >
+        Find Friends
+      </router-link>
+      <router-link
+        v-if="$store.state.username"
+        to="/profile"
+      >
+        Profile
       </router-link>
       <router-link
         v-if="$store.state.username"
         to="/account"
       >
-        Account
+        Settings
       </router-link>
       <router-link
         v-else

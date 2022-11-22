@@ -150,6 +150,14 @@ button {
   padding: 4px;
   margin-top: 8px;
   height: 2em;
+  border: solid 1px rgb(192, 192, 192);
+  border-radius: 2px;
+}
+
+button:hover {
+  background-color: rgb(84, 84, 84);
+  color: white;
+  border-color: rgb(54, 54, 54);
 }
 
 form > article p {

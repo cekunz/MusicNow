@@ -1,4 +1,3 @@
-<!-- eslint-disable vue/singleline-html-element-content-newline -->
 <!-- Page for account sign-in and registration -->
 <!-- User should be NOT authenticated in order to see this page -->
 
@@ -6,23 +5,23 @@
   <main>
     <MusicNowHeader />
     <article class="forms-container">
-      <LoginForm />
+      <RegisterForm />
       <section class="signup-section">
-        <p>Dont have an account?</p>
-        <button @click="$router.push('/register')">Sign Up</button>
+        <p>Already have an account?</p>
+        <button @click="$router.push('/login')">Log In</button>
       </section>
     </article>
   </main>
 </template>
 
 <script>
-import LoginForm from '@/components/Login/LoginForm.vue';
+import RegisterForm from '@/components/Login/RegisterForm.vue';
 import MusicNowHeader from '@/components/common/MusicNowHeader.vue';
 
 export default {
-  name: 'LoginPage',
+  name: 'RegisterPage',
   components: {
-    LoginForm,
+    RegisterForm,
     MusicNowHeader
   }
 };

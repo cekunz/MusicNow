@@ -9,30 +9,17 @@
   <nav>
     <div class="left">
       <!-- <img src="../../public/logo.svg"> -->
-      <router-link to="/">
-        MusicNow
-      </router-link>
+      <router-link to="/"> MusicNow </router-link>
     </div>
     <div class="right">
-      <router-link to="/">
-        Feed
-      </router-link>
-      <router-link
-        v-if="$store.state.username"
-        to="/findFriends"
-      >
+      <router-link to="/"> Feed </router-link>
+      <router-link v-if="$store.state.username" to="/findFriends">
         Find Friends
       </router-link>
-      <router-link
-        v-if="$store.state.username"
-        to="/profile"
-      >
+      <router-link v-if="$store.state.username" to="/profile">
         Profile
       </router-link>
-      <router-link
-        v-if="$store.state.username"
-        to="/account"
-      >
+      <router-link v-if="$store.state.username" to="/account">
         Settings
       </router-link>
       <router-link v-else to="/login"> Login </router-link>

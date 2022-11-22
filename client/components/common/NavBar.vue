@@ -9,6 +9,8 @@
   <nav>
     <div class="left">
       <!-- <img src="../../public/logo.svg"> -->
+      <!-- using 'font awesome' to get icons -->
+      <i class="fas fa-play-circle fa-lg"></i>
       <router-link to="/"> MusicNow </router-link>
     </div>
     <div class="right">

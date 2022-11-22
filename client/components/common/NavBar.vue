@@ -8,14 +8,19 @@
 <template>
   <nav>
     <div class="left">
-      <!-- using 'font awesome' to get icons -->
-      <i class="fas fa-play-circle fa-lg"></i>
-      <h1 class="title">MusicNow</h1>
+      <!-- <img src="../../public/logo.svg"> -->
+      <router-link to="/"> MusicNow </router-link>
     </div>
     <div class="right">
-      <router-link to="/"> Home </router-link>
+      <router-link to="/"> Feed </router-link>
+      <router-link v-if="$store.state.username" to="/findFriends">
+        Find Friends
+      </router-link>
+      <router-link v-if="$store.state.username" to="/profile">
+        Profile
+      </router-link>
       <router-link v-if="$store.state.username" to="/account">
-        Account
+        Settings
       </router-link>
       <router-link v-else to="/login"> Login </router-link>
     </div>

@@ -1,6 +1,5 @@
 <!-- eslint-disable vue/singleline-html-element-content-newline -->
-<!-- Reusable component representing a single freet and its actions -->
-<!-- We've tagged some elements with classes; consider writing CSS using those classes to style them... -->
+<!-- Reusable component for displaying the Music Now header that shows today's date -->
 
 <template>
   <header class="header-container">
@@ -13,14 +12,7 @@
 
 <script>
 export default {
-  name: 'FreetComponent',
-  props: {
-    // Data from the stored freet
-    freet: {
-      type: Object,
-      required: true
-    }
-  },
+  name: 'MusicNowHeader',
   data() {
     return {};
   },

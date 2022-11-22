@@ -8,10 +8,10 @@ export default {
   mixins: [BlockForm],
   data() {
     return {
-      url: '/',
-      method: 'GET',
-      hasBody: false,
-      setUsername: false,
+      url: '/api/users',
+      method: 'POST',
+      hasBody: true,
+      setUsername: true,
       fields: [
         {id: 'username', label: 'Username', value: ''},
         {id: 'fullName', label: 'Full Name', value: ''},
@@ -22,7 +22,7 @@ export default {
       callback: () => {
         const message = 'Successfully created an account!';
         this.$router.push({name: 'Home'});
-        this.$set(this.alerts, message, 'not connected to backend yet');
+        this.$set(this.alerts, message, 'Success');
         setTimeout(() => this.$delete(this.alerts, message), 3000);
       }
     };

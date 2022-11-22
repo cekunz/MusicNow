@@ -16,17 +16,13 @@ const router = express.Router();
  *
  * @return - currently logged in user, or null if not logged in
  */
-router.get(
-  '/session',
-  [],
-  async (req: Request, res: Response) => {
-    const user = await UserCollection.findOneByUserId(req.session.userId);
-    res.status(200).json({
-      message: 'Your session info was found successfully.',
-      user: user ? util.constructUserResponse(user) : null
-    });
-  }
-);
+router.get('/session', [], async (req: Request, res: Response) => {
+  const user = await UserCollection.findOneByUserId(req.session.userId);
+  res.status(200).json({
+    message: 'Your session info was found successfully.',
+    user: user ? util.constructUserResponse(user) : null
+  });
+});
 
 /**
  * Sign in user.
@@ -52,7 +48,8 @@ router.post(
   ],
   async (req: Request, res: Response) => {
     const user = await UserCollection.findOneByUsernameAndPassword(
-      req.body.username, req.body.password
+      req.body.username,
+      req.body.password
     );
     req.session.userId = user._id.toString();
     res.status(201).json({
@@ -73,9 +70,7 @@ router.post(
  */
 router.delete(
   '/session',
-  [
-    userValidator.isUserLoggedIn
-  ],
+  [userValidator.isUserLoggedIn],
   (req: Request, res: Response) => {
     req.session.userId = undefined;
     res.status(200).json({
@@ -90,6 +85,7 @@ router.delete(
  * @name POST /api/users
  *
  * @param {string} username - username of user
+ * @param {string} fullName - full name of user
  * @param {string} password - user's password
  * @return {UserResponse} - The created user
  * @throws {403} - If there is a user already logged in
@@ -106,7 +102,11 @@ router.post(
     userValidator.isValidPassword
   ],
   async (req: Request, res: Response) => {
-    const user = await UserCollection.addOne(req.body.username, req.body.password);
+    const user = await UserCollection.addOne(
+      req.body.username,
+      req.body.fullName,
+      req.body.password
+    );
     req.session.userId = user._id.toString();
     res.status(201).json({
       message: `Your account was created successfully. You have been logged in as ${user.username}`,
@@ -155,9 +155,7 @@ router.patch(
  */
 router.delete(
   '/',
-  [
-    userValidator.isUserLoggedIn
-  ],
+  [userValidator.isUserLoggedIn],
   async (req: Request, res: Response) => {
     const userId = (req.session.userId as string) ?? ''; // Will not be an empty string since its validated in isUserLoggedIn
     await UserCollection.deleteOne(userId);

@@ -8,7 +8,7 @@
         <h2> Nov. 22, 2022 </h2><!-- <h2>prompt.date</h2> -->
     </header>
     <body>
-        This will be where the prompt text is added.
+        This will be where the prompt text is added soon.
     </body>
    </div>
   </article>

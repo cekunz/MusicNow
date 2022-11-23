@@ -37,14 +37,14 @@
             </span>
           </h2>
         </div>
-        <div class="right">
+        <!-- <div class="right">
           <GetFreetsForm
             ref="getFreetsForm"
             value="author"
             placeholder="🔍 Filter by author (optional)"
             button="🔄 Get freets"
           />
-        </div>
+        </div> -->
       </header>
       <section
         v-if="$store.state.freets.length"
@@ -67,15 +67,15 @@
 <script>
 import FreetComponent from '@/components/Freet/FreetComponent.vue';
 import CreateFreetForm from '@/components/Freet/CreateFreetForm.vue';
-import GetFreetsForm from '@/components/Freet/GetFreetsForm.vue';
+// import GetFreetsForm from '@/components/Freet/GetFreetsForm.vue';
 import MakeMixtapePage from '@/components/Mixtape/MakeMixtapePage.vue';
 
 export default {
   name: 'FreetPage',
-  components: {FreetComponent, GetFreetsForm, CreateFreetForm, MakeMixtapePage},
-  mounted() {
-    this.$refs.getFreetsForm.submit();
-  }
+  components: {FreetComponent, CreateFreetForm, MakeMixtapePage},
+  // mounted() {
+  //   this.$refs.getFreetsForm.submit();
+  // }
 };
 </script>
 

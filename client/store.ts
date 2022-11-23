@@ -50,7 +50,13 @@ const store = new Vuex.Store({
       /**
        * Update status if Mixtape has been posted for the day
        */
-      state.mixtapePosted = !state.mixtapePosted;
+      state.mixtapePosted = true;
+    },
+    resetMixtape(state) {
+    /**
+     * Update status if Mixtape has been posted for the day
+     */
+      state.mixtapePosted = false;
     },
     async refreshFreets(state) {
       /**

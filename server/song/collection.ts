@@ -25,7 +25,7 @@ class SongCollection {
       songArtist,
       trackId
     });
-    await song.save(); // Saves freet to MongoDB
+    await song.save(); // Saves song to MongoDB
     return song;
   }
 
@@ -35,7 +35,6 @@ class SongCollection {
    * @return {Promise<HydratedDocument<Song>[]>} - An array of all of the songs
    */
    static async findAll(): Promise<Array<HydratedDocument<Song>>> {
-    // Retrieves freets and sorts them from most to least recent
     return SongModel.find({});
   }
 

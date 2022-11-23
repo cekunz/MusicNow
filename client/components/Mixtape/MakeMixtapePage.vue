@@ -1,23 +1,35 @@
 <template>
   <main>
-    <section>
-      <header>
-        <h2>Prompt Here</h2>
-      </header>
+    <!-- <section> -->
+    <!-- <div class="center"> -->
+        <header>
+            <h1>MusicNow</h1>
+            <h2> Nov. 22, 2022 </h2><!-- <h2>prompt.date</h2> -->
+        </header> 
+        <p>
+            This will be where the prompt text is added.
+        </p>
+    <!-- </div> -->
       <!--Make Mixtape form here -->
-    </section>
+    <!-- <body> -->
+    <!-- <div> -->
     <button
       @click="submitMixtape"
     >
       Submit
     </button>
+    <!-- </div> -->
+    <!-- </body> -->
+    <!-- </section> -->
   </main>
 </template>
 
 <script>
+import PromptComponent from '@/components/Prompt/Prompt.vue';
 
 export default {
   name: 'MakeMixtapePage',
+  components: {PromptComponent},
 //  data() {
 //     // return {value: this.$store.state.filter};
 //   },

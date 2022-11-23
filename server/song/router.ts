@@ -8,14 +8,14 @@ import * as util from './util';
 const router = express.Router();
 
 /**
- * Get all the freets
+ * Get all the songs
  *
  * @name GET /api/song
  *
  * @return {SongResponse[]} - A list of all songs
  */
 /**
- * Get freets by author.
+ * Get songs by title and artist.
  *
  * @name GET /api/song?songTitle=songTitle&songArtist=songArtist
  *
@@ -23,6 +23,11 @@ const router = express.Router();
  * @throws {400} - If author is not given
  * @throws {404} - If no user has given author
  *
+ */
+/**
+ * Get song information from Spotify API 
+ * @name GET /api/song?trackId=number
+ * 
  */
 router.get(
   '/',
@@ -39,9 +44,22 @@ router.get(
   [
     songValidator.isSongExists
   ],
-  async (req: Request, res: Response) => {
+  async (req: Request, res: Response, next: NextFunction) => {
+    if (req.query.trackId !== undefined) {
+      next();
+      return;
+    }
     const song = await SongCollection.findOneByTitleAndSong(req.query.songTitle as string, req.query.songArtist as string);
     const response = util.constructSongResponse(song);
+    res.status(200).json(response);
+  },
+  async (req: Request, res: Response) => {
+    const url = `https://api.spotify.com/v1/tracks/${req.query.trackId}?market=US`;
+    const accessToken = 'BQAPZ8CjVYsLyxFXWH0RZ_zt23-Ip_6J2aDuap1DMo0Tw3g1vrFG4Tum3xKzMH0N_AzQfg0ZYSMYmqxc0EUCizmc6wEnWKb320Y8vY41QBqDfbNLJiZLgzeiKSHMyKFYQhxQgKZHEv5kvyve9pvWTB7nLLYlpgZ_xSYKpCzWSZaYuZaGK8JKPEHhEaO53VF-ius';
+    const response = await fetch(url, {method: 'GET', headers: {'Accept': 'application/json', 
+                                                                'Content-Type': 'application/json',
+                                                                'Authorization': `Bearer ${accessToken}`}})
+                                                                .then(async r => r.json());
     res.status(200).json(response);
   }
 );

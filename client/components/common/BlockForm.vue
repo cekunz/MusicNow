@@ -1,16 +1,13 @@
+<!-- eslint-disable vue/html-self-closing -->
+<!-- eslint-disable vue/max-attributes-per-line -->
 <!-- Reusable component representing a form in a block style -->
 <!-- This is just an example; feel free to define any reusable components you want! -->
 
 <template>
   <form @submit.prevent="submit">
-    <h3>{{ title }}</h3>
-    <article
-      v-if="fields.length"
-    >
-      <div
-        v-for="field in fields"
-        :key="field.id"
-      >
+    <h3 v-if="showTitle">{{ title }}</h3>
+    <article v-if="fields.length">
+      <div v-for="field in fields" :key="field.id">
         <label :for="field.id">{{ field.label }}:</label>
         <textarea
           v-if="field.id === 'content'"
@@ -24,15 +21,13 @@
           :name="field.id"
           :value="field.value"
           @input="field.value = $event.target.value"
-        >
+        />
       </div>
     </article>
     <article v-else>
       <p>{{ content }}</p>
     </article>
-    <button
-      type="submit"
-    >
+    <button type="submit">
       {{ title }}
     </button>
     <section class="alerts">
@@ -48,7 +43,6 @@
 </template>
 
 <script>
-
 export default {
   name: 'BlockForm',
   data() {
@@ -60,30 +54,32 @@ export default {
       method: 'GET', // Form request method
       hasBody: false, // Whether or not form request has a body
       setUsername: false, // Whether or not stored username should be updated after form submission
-      resetMixtape: false,  // Whether or not stored mixtape status should be updated after form submission
       refreshFreets: false, // Whether or not stored freets should be updated after form submission
       alerts: {}, // Displays success/error messages encountered during form submission
-      callback: null // Function to run after successful form submission
+      callback: null, // Function to run after successful form submission
+      showTitle: true
     };
   },
   methods: {
     async submit() {
       /**
-        * Submits a form with the specified options from data().
-        */
+       * Submits a form with the specified options from data().
+       */
       const options = {
         method: this.method,
         headers: {'Content-Type': 'application/json'},
         credentials: 'same-origin' // Sends express-session credentials with request
       };
       if (this.hasBody) {
-        options.body = JSON.stringify(Object.fromEntries(
-          this.fields.map(field => {
-            const {id, value} = field;
-            field.value = '';
-            return [id, value];
-          })
-        ));
+        options.body = JSON.stringify(
+          Object.fromEntries(
+            this.fields.map((field) => {
+              const {id, value} = field;
+              field.value = '';
+              return [id, value];
+            })
+          )
+        );
       }
 
       try {
@@ -97,11 +93,10 @@ export default {
         if (this.setUsername) {
           const text = await r.text();
           const res = text ? JSON.parse(text) : {user: null};
-          this.$store.commit('setUsername', res.user ? res.user.username : null);
-        }
-
-        if (this.resetMixtape) {
-          this.$store.commit('resetMixtape');
+          this.$store.commit(
+            'setUsername',
+            res.user ? res.user.username : null
+          );
         }
 
         if (this.refreshFreets) {
@@ -122,8 +117,9 @@ export default {
 
 <style scoped>
 form {
-  border: 1px solid #111;
-  padding: 0.5rem;
+  border: 1px solid rgb(176, 176, 176);
+  border-radius: 4px;
+  padding: 2rem 4rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -134,6 +130,34 @@ form {
 article > div {
   display: flex;
   flex-direction: column;
+}
+
+input {
+  height: 2em;
+  margin-bottom: 16px;
+  border: 1px solid rgb(153, 153, 153);
+  border-radius: 2px;
+  background-color: rgb(249, 249, 249);
+}
+
+label {
+  font-size: 18px;
+  margin-bottom: 4px;
+}
+
+button {
+  font-size: 15px;
+  padding: 4px;
+  margin-top: 8px;
+  height: 2em;
+  border: solid 1px rgb(192, 192, 192);
+  border-radius: 2px;
+}
+
+button:hover {
+  background-color: rgb(84, 84, 84);
+  color: white;
+  border-color: rgb(54, 54, 54);
 }
 
 form > article p {
@@ -150,7 +174,7 @@ form h3 {
 }
 
 textarea {
-   font-family: inherit;
-   font-size: inherit;
+  font-family: inherit;
+  font-size: inherit;
 }
 </style>

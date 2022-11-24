@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 import FreetsPage from './components/Freet/FreetsPage.vue';
 import AccountPage from './components/Account/AccountPage.vue';
 import LoginPage from './components/Login/LoginPage.vue';
+import RegisterPage from './components/Login/RegisterPage.vue';
 import ProfilePage from './components/Profile/ProfilePage.vue';
 import FindFriendsPage from './components/FindFriends/FindFriendsPage.vue';
 import NotFound from './NotFound.vue';
@@ -13,6 +14,7 @@ const routes = [
   {path: '/', name: 'Home', component: FreetsPage},
   {path: '/account', name: 'Settings', component: AccountPage},
   {path: '/login', name: 'Login', component: LoginPage},
+  {path: '/register', name: 'Register', component: RegisterPage},
   {path: '/profile', name: 'Profile', component: ProfilePage},
   {path: '/findFriends', name: 'Find Friends', component: FindFriendsPage},
   {path: '*', name: 'Not Found', component: NotFound}

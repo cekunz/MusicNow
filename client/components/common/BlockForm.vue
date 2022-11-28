@@ -54,7 +54,7 @@ export default {
       method: 'GET', // Form request method
       hasBody: false, // Whether or not form request has a body
       setUsername: false, // Whether or not stored username should be updated after form submission
-      refreshFreets: false, // Whether or not stored freets should be updated after form submission
+      resetMixtape: false, // Whether or not stored freets should be updated after form submission
       alerts: {}, // Displays success/error messages encountered during form submission
       callback: null, // Function to run after successful form submission
       showTitle: true
@@ -99,8 +99,8 @@ export default {
           );
         }
 
-        if (this.refreshFreets) {
-          this.$store.commit('refreshFreets');
+        if (this.resetMixtape) {
+          this.$store.commit('resetMixtape');
         }
 
         if (this.callback) {

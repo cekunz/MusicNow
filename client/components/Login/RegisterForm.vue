@@ -14,13 +14,15 @@ export default {
       setUsername: true,
       fields: [
         {id: 'username', label: 'Username', value: ''},
+        {id: 'fullName', label: 'Full Name', value: ''},
         {id: 'password', label: 'Password', value: ''}
       ],
       title: 'Create account',
+      showTitle: true,
       callback: () => {
         const message = 'Successfully created an account!';
         this.$router.push({name: 'Home'});
-        this.$set(this.alerts, message, 'success');
+        this.$set(this.alerts, message, 'Success');
         setTimeout(() => this.$delete(this.alerts, message), 3000);
       }
     };

@@ -37,20 +37,20 @@ const isSongExists = async (req: Request, res: Response, next: NextFunction) => 
  * spaces and not more than 140 characters
  */
 const isValidSongContent = (req: Request, res: Response, next: NextFunction) => {
-  if (!req.params.songTitle.trim()) {
+  if (!req.body.songTitle.trim()) {
     res.status(400).json({
       error: 'Title content must be at least one character long.'
     });
     return;
   }
-  if (!req.params.songArtist.trim()) {
+  if (!req.body.songArtist.trim()) {
     res.status(400).json({
       error: 'Artist content must be at least one character long.'
     });
     return;
   }
 
-  if (!req.params.trackId.trim()) {
+  if (!req.body.trackId.trim()) {
     res.status(400).json({
       error: 'trackId content must be at least one character long.'
     });

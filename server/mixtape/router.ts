@@ -53,7 +53,7 @@ router.get(
 /**
  * Create a new mixtape.
  *
- * @name POST /api/mixtape?username=username
+ * @name POST /api/mixtape/:username?
  * 
  * Body: 3 song IDs
  *
@@ -74,7 +74,7 @@ router.post(
     const song1 = await SongCollection.findOne(req.body.song1);
     const song2 = await SongCollection.findOne(req.body.song2);
     const song3 = await SongCollection.findOne(req.body.song3);
-    const username = req.query.username as string;
+    const username = req.params.username as string;
     const date = new Date();
     const mixtape = await MixtapeCollection.addOne(song1, song2, song3, username, date)
 
@@ -110,4 +110,4 @@ router.delete(
   }
 );
 
-export {router as songRouter};
+export {router as mixtapeRouter};

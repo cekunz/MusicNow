@@ -83,7 +83,7 @@ router.post(
     songValidator.isValidSongContent
   ],
   async (req: Request, res: Response) => {
-    const song = await SongCollection.addOne(req.params.songTitle, req.params.songArtist, req.params.trackId);
+    const song = await SongCollection.addOne(req.body.songTitle, req.body.songArtist, req.body.trackId);
 
     res.status(201).json({
       message: 'Your song was created successfully.',

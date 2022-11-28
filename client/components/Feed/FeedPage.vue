@@ -31,20 +31,12 @@
       <header>
         <div class="left">
           <h2>
-            Viewing all freets
+            Viewing all Mixtapes
             <span v-if="$store.state.filter">
               by @{{ $store.state.filter }}
             </span>
           </h2>
         </div>
-        <!-- <div class="right">
-          <GetFreetsForm
-            ref="getFreetsForm"
-            value="author"
-            placeholder="🔍 Filter by author (optional)"
-            button="🔄 Get freets"
-          />
-        </div> -->
       </header>
       <section
         v-if="$store.state.freets.length"
@@ -65,17 +57,14 @@
 </template>
 
 <script>
-import FreetComponent from '@/components/Freet/FreetComponent.vue';
-import CreateFreetForm from '@/components/Freet/CreateFreetForm.vue';
+import FreetComponent from '@/components/Feed/FreetComponent.vue';
+import CreateFreetForm from '@/components/Feed/CreateFreetForm.vue';
 // import GetFreetsForm from '@/components/Freet/GetFreetsForm.vue';
 import MakeMixtapePage from '@/components/Mixtape/MakeMixtapePage.vue';
 
 export default {
   name: 'FreetPage',
   components: {FreetComponent, CreateFreetForm, MakeMixtapePage},
-  // mounted() {
-  //   this.$refs.getFreetsForm.submit();
-  // }
 };
 </script>
 

@@ -33,7 +33,7 @@ router.get(
   '/',
   async (req: Request, res: Response, next: NextFunction) => {
     // got to next function if song arguments are given
-    if (req.query.songTitle !== undefined || req.query.songArtist !== undefined) {
+    if (req.query.songTitle !== undefined || req.query.songArtist !== undefined || req.query.trackId !== undefined) {
         next();
         return;
     }
@@ -45,24 +45,25 @@ router.get(
     songValidator.isSongExists
   ],
   async (req: Request, res: Response, next: NextFunction) => {
-    if (req.query.trackId !== undefined) {
-      next();
-      return;
-    }
+    // if (req.query.trackId !== undefined) {
+    //   next();
+    //   return;
+    // }
     const song = await SongCollection.findOneByTitleAndSong(req.query.songTitle as string, req.query.songArtist as string);
     const response = util.constructSongResponse(song);
     res.status(200).json(response);
   },
-  async (req: Request, res: Response) => {
-    const url = `https://api.spotify.com/v1/tracks/${req.query.trackId}?market=US`;
-    const accessToken = 'BQAPZ8CjVYsLyxFXWH0RZ_zt23-Ip_6J2aDuap1DMo0Tw3g1vrFG4Tum3xKzMH0N_AzQfg0ZYSMYmqxc0EUCizmc6wEnWKb320Y8vY41QBqDfbNLJiZLgzeiKSHMyKFYQhxQgKZHEv5kvyve9pvWTB7nLLYlpgZ_xSYKpCzWSZaYuZaGK8JKPEHhEaO53VF-ius';
-    const response = await fetch(url, {method: 'GET', headers: {'Accept': 'application/json', 
-                                                                'Content-Type': 'application/json',
-                                                                'Authorization': `Bearer ${accessToken}`}})
-                                                                .then(async r => r.json());
-    res.status(200).json(response);
-  }
+  // async (req: Request, res: Response) => {
+  //   const url = `https://api.spotify.com/v1/tracks/${req.query.trackId}?market=US`;
+  //   const accessToken = 'BQBUMD_9C7ObTa57qKGnPndLW1Oqv556znkzIgWSgGUObI9BZZrC0Xuj2VDhKJJXsCmisbuSdJaAmhToQAa5vdz-a36iGpNgwwm8Bdz2sdRPSezfZsZ2PbYKhAzRIzvxGQ2xf31Q-YQqbvjFPqcsfoDcUDYBbeNIKwdw4s0Y8Q';
+  //   const response = await fetch(url, {method: 'GET', headers: {'Accept': 'application/json', 
+  //                                                               'Content-Type': 'application/json',
+  //                                                               'Authorization': `Bearer ${accessToken}`}})
+  //                                                               .then(async r => r.json());
+  //   res.status(200).json(response);
+  // }
 );
+
 
 /**
  * Create a new song.

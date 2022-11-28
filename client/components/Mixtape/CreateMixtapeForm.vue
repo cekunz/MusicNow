@@ -7,11 +7,12 @@
         <h2> Select Songs for your Mixtape </h2>
     </header>
     <section class="songs">
-        <SelectSongForm />
-        <SelectSongForm />
-        <SelectSongForm />
+        <SelectSongForm @submit="updateSong1" />
+        <SelectSongForm @submit="updateSong2"/>
+        <SelectSongForm @submit="updateSong3"/>
     </section>
      <button
+      v-if="song1!==null && song2!==null && song3!==null"
       @click="submitMixtape"
     >
       Submit
@@ -34,45 +35,38 @@ export default {
   },
   data() {
     return {
+      song1: null,
+      song2: null,
+      song3: null,
       alerts: {} // Displays success/error messages encountered during freet modification
     };
   },
   methods: {
-    submitMixtape(){
-        console.log(submit);
+    updateSong1(song1){
+        this.song1 = song1;
     },
-//    selectSong() {
-//       /**
-//        * Select a song
-//        */
-//         console.log('draft1', this.draft1);
-//     },
-//     startEditing(song) {
-//       /**
-//        * Enables edit mode on this freet.
-//        */
-//       if (song === 1) this.editing1 = true; 
-//       if (song === 2) this.editing2 = true; 
-//       if (song === 3) this.editing3 = true; 
-//     //   this.draft = this.freet.content; // The content of our current "draft" while being edited
-//     },
-    // submitSong() {
-    //   /**
-    //    * Finds song for mixtape
-    //    * - first get the song objects, then ping the mixtape endpoint
-    //    */
+    updateSong2(song2){
+        this.song2 = song2;
+    },
+    updateSong3(song3){
+        this.song3 = song3;
+    },
 
-    //   const params = {
-    //     method: 'POST',
-    //     message: 'Successfully found song!',
-    //     // body: JSON.stringify({content: this.draft}),
-    //     callback: () => {
-    //       this.$set(this.alerts, params.message, 'success');
-    //       setTimeout(() => this.$delete(this.alerts, params.message), 3000);
-    //     }
-    //   };
-    //   this.postMixtape(params);
-    // },
+    submitMixtape() {
+      /**
+       * puts together mixtape
+       */
+      const params = {
+        method: 'POST',
+        message: 'Successfully created mixtape!',
+        body: JSON.stringify({song1: this.song1, song2: this.song2, song3:this.song3}),
+        callback: () => {
+          this.$set(this.alerts, params.message, 'success');
+          setTimeout(() => this.$delete(this.alerts, params.message), 3000);
+        }
+      };
+      this.postMixtape(params);
+    },
     async postMixtape(params) {
       /**
        * Submits a request to the song's endpoint
@@ -94,7 +88,6 @@ export default {
           throw new Error(res.error);
         }
 
-        this.editing1 = false;
         this.$store.commit('postMixtape');
 
         params.callback();

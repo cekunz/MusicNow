@@ -39,13 +39,13 @@ class SongCollection {
   }
 
   /**
-   * Find a song by songId
+   * Find a song by trackId
    *
-   * @param {string} songId - The id of the song to find
-   * @return {Promise<HydratedDocument<Song>> | Promise<null> } - The song with the given songId, if any
+   * @param {string} trackId - The id of the song to find
+   * @return {Promise<HydratedDocument<Song>> | Promise<null> } - The song with the given trackId, if any
    */
-  static async findOne(songId: Types.ObjectId | string): Promise<HydratedDocument<Song>> {
-    return SongModel.findOne({_id: songId});
+  static async findOne(trackId: Types.ObjectId | string): Promise<HydratedDocument<Song>> {
+    return SongModel.findOne({trackId: trackId});
   }
 
 
@@ -64,13 +64,13 @@ class SongCollection {
   }
 
   /**
-   * Delete a song with given songId.
+   * Delete a song with given trackId.
    *
-   * @param {string} songId - The songId of the song to delete
+   * @param {string} trackId - The trackId of the song to delete
    * @return {Promise<Boolean>} - true if the song has been deleted, false otherwise
    */
-   static async deleteOneById(songId: Types.ObjectId | string): Promise<boolean> {
-    const song = await SongModel.deleteOne({_id: songId});
+   static async deleteOneById(trackId: Types.ObjectId | string): Promise<boolean> {
+    const song = await SongModel.deleteOne({_id: trackId});
     return song !== null;
   }
 

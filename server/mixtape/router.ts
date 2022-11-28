@@ -66,7 +66,7 @@ router.get(
  * @throws {403} - If the user is not logged in
  */
 router.post(
-  '/',
+  '/:username?',
   [
     userValidator.isUserLoggedIn,
   ],

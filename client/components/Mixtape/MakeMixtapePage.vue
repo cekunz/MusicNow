@@ -19,6 +19,7 @@ import MusicNowHeader from '@/components/common/MusicNowHeader.vue';
 export default {
   name: 'MakeMixtapePage',
   components: {PromptComponent, CreateMixtapeForm, MusicNowHeader},
+  
   methods: {
     submitMixtape() {
         this.$store.commit('postMixtape'); 

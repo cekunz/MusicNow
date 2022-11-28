@@ -3,10 +3,11 @@ import {Types} from 'mongoose';
 import SongCollection from './collection';
 
 /**
- * Checks if a Song with songTitle and songArtist in req.params exists
+ * Checks if a Song with songTitle and songArtist in req.query exists
  */
 const isSongExists = async (req: Request, res: Response, next: NextFunction) => {
-  const song = await SongCollection.findOneByTitleAndSong(req.params.songTitle, req.params.songArtist);
+  console.log('is song exists');
+  const song = await SongCollection.findOneByTitleAndSong(req.query.songTitle as string, req.query.songArtist as string);
   if (!song) {
     res.status(404).json({
       error: `Song with title ${req.params.songTitle} by ${req.params.songArtist} does not exist.`

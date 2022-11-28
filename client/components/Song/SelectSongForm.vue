@@ -2,7 +2,7 @@
 
 <template>
 <div>
-    <section>
+    <section v-if="!submitted">
         <div v-if="!editing">
             <button class='plus'
             v-if="!editing"
@@ -14,15 +14,29 @@
         <div v-if="editing">
             <textarea
             class="song"
-            @input="draft = $event.target.value"
-            placeholder="Enter the Spotify Song ID"
+            @input="songArtist = $event.target.value"
+            placeholder="Enter the Song Artist"
+            />
+             <textarea
+            class="song"
+            @input="songTitle = $event.target.value"
+            placeholder="Enter the Song Title"
+            />
+             <textarea
+            class="song"
+            @input="trackId = $event.target.value"
+            placeholder="Enter the Song Spotify ID"
             />
             <button class ='submit'
-            @click="createSong"
+            @click="submitSong"
             >
             Submit
             </button>
         </div>
+    </section>
+    <section v-if="submitted">
+      <h1> {{songTitle}} </h1>
+      <h3> {{songArtist}} </h3>
     </section>
 </div>
 </template>
@@ -40,17 +54,14 @@ export default {
   data() {
     return {
       editing: false, // Whether or not this song is in edit mode
-      draft: '', // new song
+      songArtist: '',
+      songTitle: '', 
+      trackId: '',
+      submitted: false,
       alerts: {} // Displays success/error messages encountered during freet modification
     };
   },
   methods: {
-   selectSong() {
-      /**
-       * Select a song
-       */
-        console.log('draft', this.draft);
-    },
     startEditing() {
       /**
        * Enables edit mode on this freet.
@@ -68,7 +79,7 @@ export default {
         url: `/api/song`,
         method: 'POST',
         message: 'Successfully created song!',
-        body: JSON.stringify({songTitle: "Good Days", songArtist:"SZA", trackId: '3YJJjQPAbDT7mGpX3WtQ9A'}),
+        body: JSON.stringify({songTitle: this.songTitle,  songArtist: this.songArtist, trackId: this.trackId}),
         callback: () => {
           this.$set(this.alerts, params.message, 'success');
           setTimeout(() => this.$delete(this.alerts, params.message), 3000);
@@ -82,7 +93,7 @@ export default {
        * - first get the song objects, then ping the mixtape endpoint
        */
       const params = {
-        url:`/api/song?trackId=${this.draft}`,
+        url:`/api/song?songTitle=${this.songTitle}&songArtist=${this.songArtist}`,
         method: 'GET',
         message: 'Successfully found song!',
         callback: () => {
@@ -90,7 +101,12 @@ export default {
           setTimeout(() => this.$delete(this.alerts, params.message), 3000);
         }
       };
-      this.sendRequest(params);
+     
+     // to do, first check if the song already exists, then create if needed
+     // this would likely require a change to the backend, maybe a patch?
+        this.createSong();
+        this.submitted = true;
+        this.$emit(`submit`, this.trackId);
     },
     async sendRequest(params) {
       /**

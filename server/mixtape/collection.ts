@@ -66,7 +66,7 @@ class MixtapeCollection {
   }
 
   /**
-   * Delete a song with given creator and date.
+   * Find a song with given creator and date.
    *
    * @param {string} username - The username of creator of the mixtape to delete
    * @param {Date} date - The date of the mixtape to delete

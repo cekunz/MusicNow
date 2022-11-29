@@ -4,9 +4,9 @@ import type {Mixtape} from './model';
 import type {Song} from '../song/model';
 
 type MixtapeResponse = {
-  _id: string;
+  _id: String;
   songs: Song[];
-  creator: string;
+  creator: String;
   date: Date;
 };
 

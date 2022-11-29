@@ -11,6 +11,7 @@ import {userRouter} from '../server/user/router';
 import {freetRouter} from '../server/freet/router';
 import { songRouter } from '../server/song/router';
 import { mixtapeRouter } from '../server/mixtape/router';
+import { promptRouter } from '../server/prompt/router';
 import MongoStore from 'connect-mongo';
 
 // Load environmental variables
@@ -74,6 +75,7 @@ app.use('/api/users', userRouter);
 app.use('/api/freets', freetRouter);
 app.use('/api/song', songRouter);
 app.use('/api/mixtape', mixtapeRouter);
+app.use('/api/prompt', promptRouter);
 
 
 // Catch all the other routes and display error message

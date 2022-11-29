@@ -4,6 +4,8 @@ import { Buffer } from 'buffer'
 import createPersistedState from 'vuex-persistedstate';
 // import { secret } from './spotify_secret';
 
+
+
 Vue.use(Vuex);
 
 /**
@@ -11,12 +13,12 @@ Vue.use(Vuex);
  */
 const store = new Vuex.Store({
   state: {
-    filter: null, // Username to filter shown freets by (null = show all)
-    freets: [], // All freets created in the app
+    // filter: null, // Username to filter shown freets by (null = show all)
+    // freets: [], // All freets created in the app
     username: null, // Username of the logged in user
     alerts: {}, // global success/error messages encountered during submissions to non-visible forms
     mixtapePosted: false,
-    // token: null,
+    prompt: '', // the daily prompt 
   },
   mutations: {
     alert(state, payload) {
@@ -35,20 +37,6 @@ const store = new Vuex.Store({
        */
       state.username = username;
     },
-    updateFilter(state, filter) {
-      /**
-       * Update the stored freets filter to the specified one.
-       * @param filter - Username of the user to fitler freets by
-       */
-      state.filter = filter;
-    },
-    updateFreets(state, freets) {
-      /**
-       * Update the stored freets to the provided freets.
-       * @param freets - Freets to store
-       */
-      state.freets = freets;
-    },
     postMixtape(state) {
       /**
        * Update status if Mixtape has been posted for the day
@@ -60,6 +48,23 @@ const store = new Vuex.Store({
      * Update status if Mixtape has been posted for the day
      */
       state.mixtapePosted = false;
+    },
+    async refreshPrompt(state) {
+    /**
+     * Update prompt of the day
+     */
+      const date = new Date();
+      const day = date.getDate();
+      const month = date.toLocaleString('default', { month: 'long'})
+      const year = date.getFullYear();
+      // Formatted as Month Day, Year (Nov 21, 2022 for example)
+      
+      const today = `${month} ${day}, ${year}`;
+      console.log('today ', today);
+      const url = `/api/prompt?date=${today}`;
+      const res = await fetch(url).then(async r => r.json());
+      state.prompt = res[0];
+      console.log('prompt',state.prompt);
     },
     // async getCredentials(state) {
     //   const client_id = '27fc9a26af9b4c83a61da1db5c1a4833';
@@ -91,14 +96,7 @@ const store = new Vuex.Store({
     //   state.token = token;
       
     // },
-    async refreshFreets(state) {
-      /**
-       * Request the server for the currently available freets.
-       */
-      const url = state.filter ? `/api/users/${state.filter}/freets` : '/api/freets';
-      const res = await fetch(url).then(async r => r.json());
-      state.freets = res;
-    }
+   
   },
   // Store data across page refreshes, only discard on browser close
   plugins: [createPersistedState()]

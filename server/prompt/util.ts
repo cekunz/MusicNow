@@ -3,9 +3,9 @@ import moment from 'moment';
 import type {Prompt} from './model';
 
 type PromptResponse = {
-  _id: String;
-  promptText: String;
-  date: Date;
+  _id: string;
+  promptText: string;
+  date: string;
 };
 
 /**

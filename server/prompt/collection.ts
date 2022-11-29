@@ -17,10 +17,10 @@ class PromptCollection {
    * Add a prompt to the collection
    *
    * @param {string} promptText - The text stored in the prompt
-   * @param {Date} date - The date the prompt is posted
+   * @param {string} date - The date the prompt is posted
    * @return {Promise<HydratedDocument<Prompt>>} - The newly created prompt
    */
-  static async addOne(promptText: string, date: Date): Promise<HydratedDocument<Prompt>> {
+  static async addOne(promptText: string, date: string): Promise<HydratedDocument<Prompt>> {
     const prompt = new PromptModel({
       promptText,
       date
@@ -42,10 +42,10 @@ class PromptCollection {
   /**
    * Find a prompt by date
    *
-   * @param {Date} date - The day the desired prompt is for
+   * @param {string} date - The day the desired prompt is for
    * @return {Promise<Array<HydratedDocument<Mixtape>.> | Promise<null> } - The prompt for that date if any
    */
-  static async findByDate(date: Date): Promise<Array<HydratedDocument<Prompt>>> {
+  static async findByDate(date: string): Promise<Array<HydratedDocument<Prompt>>> {
     return PromptModel.find({date});
   }
 
@@ -54,10 +54,10 @@ class PromptCollection {
   /**
    * Delete a prompt with given date.
    *
-   * @param {Date} date - The date of the mixtape to delete
+   * @param {string} date - The date of the mixtape to delete
    * @return {Promise<Boolean>} - true if the song has been deleted, false otherwise
    */
-   static async deleteOneByDate(date: Date): Promise<boolean> {
+   static async deleteOneByDate(date: string): Promise<boolean> {
     const mixtape = await PromptModel.deleteOne({date});
     return mixtape !== null;
   }

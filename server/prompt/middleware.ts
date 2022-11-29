@@ -24,7 +24,7 @@ const isModerator = async (req: Request, res: Response, next: NextFunction) => {
  */
  const deleteNonexistentPrompt = async (req: Request, res: Response, next: NextFunction) => {
     const date = (req.query.date as string) ?? undefined;
-    const prompt = await PromptCollection.findByDate(new Date(date));
+    const prompt = await PromptCollection.findByDate(date);
     if (!prompt) {
       res.status(406).json({
         error: `No prompt exists on ${req.params.date} to delete.`
@@ -39,7 +39,7 @@ const isModerator = async (req: Request, res: Response, next: NextFunction) => {
  */
  const doublePost = async (req: Request, res: Response, next: NextFunction) => {
     const date = (req.query.date as string) ?? undefined;
-    const prompt = await PromptCollection.findByDate(new Date(date));
+    const prompt = await PromptCollection.findByDate(date);
     if (prompt) {
       res.status(406).json({
         error: `A prompt already exists on ${req.params.date}!`

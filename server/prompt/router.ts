@@ -44,7 +44,7 @@ router.get(
     userValidator.isUserLoggedIn
   ],
   async (req: Request, res: Response) => {
-    const prompt = await PromptCollection.findByDate(new Date(req.query.date as string));
+    const prompt = await PromptCollection.findByDate(req.query.date as string);
     const response = prompt.map(util.constructPromptResponse);
     res.status(200).json(response);
   }
@@ -72,7 +72,7 @@ router.post(
   ],
   async (req: Request, res: Response) => {
     const promptText = req.query.promptText as string;
-    const date = new Date(req.query.date as string);
+    const date = req.query.date as string;
     const prompt = await PromptCollection.addOne(promptText, date)
 
     res.status(201).json({
@@ -101,7 +101,7 @@ router.delete(
     promptValidator.deleteNonexistentPrompt
   ],
   async (req: Request, res: Response) => {
-    const date = new Date(req.query.date as string)
+    const date = req.query.date as string;
     await PromptCollection.deleteOneByDate(date);
     res.status(200).json({
       message: 'Your prompt was deleted successfully.'

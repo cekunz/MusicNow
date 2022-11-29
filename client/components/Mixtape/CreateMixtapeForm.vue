@@ -3,12 +3,12 @@
 <template>
 <div class='forms-container'>
     <header>
-        <h1> Prompt text will go here </h1>
-        <h2> Select Songs for your Mixtape </h2>
+        <PromptComponent />
+        <!-- <h2> Select Songs for your Mixtape </h2> -->
     </header>
     <section class="songs">
-        <SelectSongForm @submit="updateSong1" />
-        <SelectSongForm @submit="updateSong2"/>
+        <SelectSongForm style='margin-right:30px' @submit="updateSong1" />
+        <SelectSongForm style='margin-right:30px' @submit="updateSong2"/>
         <SelectSongForm @submit="updateSong3"/>
     </section>
      <button
@@ -21,24 +21,18 @@
 </template>
 
 <script>
-import PromptComponent from '@/components/Prompt/Prompt.vue';
+import PromptComponent from '@/components/Prompt/PromptComponent.vue';
 import SelectSongForm from '@/components/Song/SelectSongForm.vue';
 
 export default {
   name: 'CreateMixtapeForm',
   components: {PromptComponent, SelectSongForm},
-  props: { // PROMPT GOES HERE!
-    prompt: {
-        type: Object,
-        required: false
-    },
-  },
   data() {
     return {
       song1: null,
       song2: null,
       song3: null,
-      alerts: {} // Displays success/error messages encountered during freet modification
+      alerts: {} // Displays success/error messages
     };
   },
   methods: {
@@ -111,21 +105,18 @@ export default {
   border: solid 4px rgb(192, 192, 192);
 }
 
-header {
+h2 {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  text-align: center;
+  font-weight: lighter;
 }
 .songs {
   display: flex;
   flex-direction: row;
-  /* align-items: center; */
   justify-content: center;
-  /* border: 1px solid rgb(176, 176, 176); */
-  /* border-radius: 4px; */
-  /* padding: 10px; */
   padding-bottom: 2rem;
-  /* margin-top: 8px; */
+  
 }
 
 /* SelectSongForm {

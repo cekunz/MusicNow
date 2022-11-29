@@ -11,19 +11,16 @@
             +
             </button> 
         </div>
-        <div v-if="editing">
+        <div v-if="editing" class="song">
             <textarea
-            class="song"
             @input="songArtist = $event.target.value"
             placeholder="Enter the Song Artist"
             />
              <textarea
-            class="song"
             @input="songTitle = $event.target.value"
             placeholder="Enter the Song Title"
             />
              <textarea
-            class="song"
             @input="trackId = $event.target.value"
             placeholder="Enter the Song Spotify ID"
             />
@@ -147,11 +144,17 @@ export default {
 
 .plus {
   font-size: 30px;
-  padding: 30px;
-  margin: 8px;
+  padding: 50px;
+  margin: 10px;
   border: solid 4px rgb(192, 192, 192);
   border-radius: 2px;
   width: 100%;
+}
+
+.song {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 button:hover {

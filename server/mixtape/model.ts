@@ -1,6 +1,6 @@
 import type {Types} from 'mongoose';
 import {Schema, model} from 'mongoose';
-import { User } from '../user/model';
+import { Prompt } from '../prompt/model';
 import type {Song} from '../song/model';
 
 /**
@@ -13,7 +13,7 @@ export type Mixtape = {
   _id: Types.ObjectId; // MongoDB assigns each object this ID on creation
   songs: Song[]; 
   date: Date;
-//   prompt: Prompt;
+  promptText: string;
   creator: string;
 };
 
@@ -27,12 +27,10 @@ const MixtapeSchema = new Schema({
     type: Date,
     required: true
   },
-  // The user's password
-//   prompt: {
-//     type: Prompt,
-//     required: true
-//   },
-  // The date the user joined
+  promptText: {
+    type: String,
+    required: true,
+  },
   creator: {
     type: String,
     required: true,

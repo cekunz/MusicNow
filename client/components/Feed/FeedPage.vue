@@ -3,9 +3,6 @@
 <template>
   <main>
     <section v-if="$store.state.mixtapePosted===false && $store.state.username">
-       <header>
-        <h2>Welcome to MusicNow!</h2>
-      </header>
       <MakeMixtapePage />
     </section>
 

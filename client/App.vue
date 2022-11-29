@@ -23,6 +23,7 @@ export default {
         const user = res.user;
         this.$store.commit('setUsername', user ? user.username : null);
         this.$store.commit('resetMixtape');
+        this.$store.commit('refreshPrompt');
       });
 
     // Clear alerts on page refresh

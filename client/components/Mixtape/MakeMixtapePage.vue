@@ -2,24 +2,17 @@
   <main class='forms-container'>
     <MusicNowHeader />
     <CreateMixtapeForm />
-
-    <!-- <button
-      @click="submitMixtape"
-    >
-      Submit
-    </button> -->
   </main>
 </template>
 
 <script>
-import PromptComponent from '@/components/Prompt/Prompt.vue';
 import CreateMixtapeForm from '@/components/Mixtape/CreateMixtapeForm.vue';
 import MusicNowHeader from '@/components/common/MusicNowHeader.vue';
 
 export default {
   name: 'MakeMixtapePage',
-  components: {PromptComponent, CreateMixtapeForm, MusicNowHeader},
-  
+  components: {CreateMixtapeForm, MusicNowHeader},
+
   methods: {
     submitMixtape() {
         this.$store.commit('postMixtape'); 

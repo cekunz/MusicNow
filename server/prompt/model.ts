@@ -9,14 +9,14 @@ import {Schema, model} from 'mongoose';
 // Type definition for Prompt on the backend
 export type Prompt = {
   _id: Types.ObjectId; // MongoDB assigns each object this ID on creation
-  date: Date; 
-  promptText: String;
+  date: string; 
+  promptText: string;
 };
 
 const PromptSchema = new Schema({
   // The user's username
   date: {
-    type: Date,
+    type: String,
     required: true
   },
   promptText: {

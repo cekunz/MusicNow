@@ -96,17 +96,17 @@ router.post(
 /**
  * Delete a song
  *
- * @name DELETE /api/song/:songId
+ * @name DELETE /api/song/:trackId
  *
  * @return {string} - A success message
  * @throws {403} - If the user is not logged in
  * @throws {404} - If the songId is not valid
  */
 router.delete(
-  '/:songId?',
+  '/:trackId?',
   [
     userValidator.isUserLoggedIn,
-    songValidator.isSongIdExists,
+    songValidator.istrackIdExists,
   ],
   async (req: Request, res: Response) => {
     await SongCollection.deleteOneById(req.params.songId);

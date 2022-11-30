@@ -6,7 +6,6 @@ import SongCollection from './collection';
  * Checks if a Song with songTitle and songArtist in req.query exists
  */
 const isSongExists = async (req: Request, res: Response, next: NextFunction) => {
-  console.log('is song exists');
   const song = await SongCollection.findOneByTitleAndSong(req.query.songTitle as string, req.query.songArtist as string);
   if (!song) {
     res.status(404).json({
@@ -19,13 +18,28 @@ const isSongExists = async (req: Request, res: Response, next: NextFunction) => 
 };
 
 /**
- * Checks if a Song with songIdin req.params exists
+ * Checks if a Song with trackId in req.params exists
  */
- const isSongIdExists = async (req: Request, res: Response, next: NextFunction) => {
-  const song = await SongCollection.findOne(req.params.songId);
+ const istrackIdExists = async (req: Request, res: Response, next: NextFunction) => {
+  const song = await SongCollection.findOne(req.params.trackId);
   if (!song) {
     res.status(404).json({
       error: `Song with id ${req.params.songId} does not exist.`
+    });
+    return;
+  }
+
+  next();
+};
+
+/**
+ * Checks if a Song with songId in req.query exists
+ */
+ const istrackIdExistsQuery = async (req: Request, res: Response, next: NextFunction) => {
+  const song = await SongCollection.findOne(req.query.trackId as string);
+  if (!song) {
+    res.status(404).json({
+      error: `Song with id ${req.query.songId} does not exist.`
     });
     return;
   }
@@ -64,5 +78,6 @@ const isValidSongContent = (req: Request, res: Response, next: NextFunction) => 
 export {
   isValidSongContent,
   isSongExists,
-  isSongIdExists
+  istrackIdExists,
+  istrackIdExistsQuery
 };

@@ -5,38 +5,38 @@
 <template>
   <nav>
     <div class="left">
-      <!-- <img src="../../public/logo.svg"> -->
+      
       <router-link to="/">
-        MusicNow
+        <img src="../../public/logo-musicnow.png">
       </router-link>
     </div>
     <div class="right">
       <router-link to="/">
-        Feed
+        <img src="../../public/musicnow-logos/feed.png">
       </router-link>
       <router-link
         v-if="$store.state.username"
         to="/findFriends"
       >
-        Find Friends
+        <img class="friends" src="../../public/musicnow-logos/find-friends.png">
       </router-link>
       <router-link
         v-if="$store.state.username"
         to="/profile"
       >
-        Profile
+        <img class="profile" src="../../public/musicnow-logos/profile.png">
       </router-link>
       <router-link
         v-if="$store.state.username"
         to="/account"
       >
-        Settings
+        <img  class="settings" src="../../public/musicnow-logos/settings.png">
       </router-link>
       <router-link
         v-else
         to="/login"
       >
-        Login
+        <img src="../../public/musicnow-logos/login.png">
       </router-link>
     </div>
     <section class="alerts">
@@ -67,9 +67,22 @@ nav {
 }
 
 img {
-    height: 32px;
+  height: 31px;
+  width: auto;
 }
 
+.settings {
+  margin-top: 10px;
+  height: 32px;
+}
+.profile {
+  height: 27px;
+  width: auto;
+}
+.friends {
+  height: 27px;
+  width: auto;
+}
 .left {
 	display: flex;
 	align-items: center;

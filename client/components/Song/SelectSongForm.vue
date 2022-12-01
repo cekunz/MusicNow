@@ -128,7 +128,6 @@ export default {
 
         this.editing = false;
         const returned = await r.json();
-        console.log('returned', returned);
 
         params.callback();
       } catch (e) {

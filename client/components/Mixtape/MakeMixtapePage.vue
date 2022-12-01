@@ -12,11 +12,13 @@ import MusicNowHeader from '@/components/common/MusicNowHeader.vue';
 export default {
   name: 'MakeMixtapePage',
   components: {CreateMixtapeForm, MusicNowHeader},
-
   methods: {
     submitMixtape() {
         this.$store.commit('postMixtape'); 
     }
+  },
+  created() {
+    this.$store.commit('refreshPrompt');
   }
 };
 </script>
@@ -30,12 +32,6 @@ export default {
   justify-content: center;
   width: 90%;
 }
-
-/* .info  {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-} */
 
 
 </style>

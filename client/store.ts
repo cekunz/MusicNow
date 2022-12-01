@@ -1,9 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import { Buffer } from 'buffer'
 import createPersistedState from 'vuex-persistedstate';
-// import { secret } from './spotify_secret';
-
 
 
 Vue.use(Vuex);
@@ -60,11 +57,9 @@ const store = new Vuex.Store({
       // Formatted as Month Day, Year (Nov 21, 2022 for example)
       
       const today = `${month} ${day}, ${year}`;
-      console.log('today ', today);
       const url = `/api/prompt?date=${today}`;
       const res = await fetch(url).then(async r => r.json());
       state.prompt = res[0];
-      console.log('prompt',state.prompt);
     },
     // async getCredentials(state) {
     //   const client_id = '27fc9a26af9b4c83a61da1db5c1a4833';

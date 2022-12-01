@@ -4,7 +4,6 @@
 <div class='forms-container'>
     <header>
         <PromptComponent />
-        <!-- <h2> Select Songs for your Mixtape </h2> -->
     </header>
     <section class="songs">
         <SelectSongForm style='margin-right:30px' @submit="updateSong1" />

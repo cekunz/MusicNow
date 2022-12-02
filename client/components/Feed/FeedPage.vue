@@ -2,16 +2,7 @@
 
 <template>
   <main>
-    <section v-if="$store.state.mixtapePosted===false && $store.state.username">
-      <MakeMixtapePage />
-    </section>
-
-    <section v-if="$store.state.mixtapePosted===true && $store.state.username">
-      <header>
-        <h2>Welcome @{{ $store.state.username }}</h2>
-      </header>
-    </section>
-
+    <!-- what you see before you log in -->
     <section class="general" v-if="!$store.state.username">
       <h3 class="welcome" >Welcome to MusicNow</h3>
       <h3>The app for finding new music with your friends through a daily prompted mixtape.</h3>
@@ -21,37 +12,38 @@
       </article>
     </section>
 
-    <section v-if="$store.state.mixtapePosted===true && $store.state.username">
+    <!-- what you see after logging in before you post a mixtape-->
+    <section v-if="!$store.state.mixtapePosted && $store.state.username">
+      <MakeMixtapePage />
+    </section>
+
+    <!-- what you see after logging in after you post a mixtape-->
+    <section v-if="$store.state.mixtapePosted && $store.state.username">
       <header>
-        <div class="left">
-          <h2>
-            Viewing all Mixtapes
-            <span v-if="$store.state.filter">
-              by @{{ $store.state.filter }}
-            </span>
-          </h2>
+        <div class="center">
+          <h2>Welcome @{{ $store.state.username }}</h2>
         </div>
       </header>
       <section
-        v-if="$store.state.freets.length"
+        v-if="$store.state.mixtapes.length"
       >
-        <FreetComponent
-          v-for="freet in $store.state.freets"
-          :key="freet.id"
-          :freet="freet"
+        <MixtapeComponent
+          v-for="mixtape in $store.state.mixtapes"
+          :key="mixtape.id"
+          :mixtape="mixtape"
         />
       </section>
       <article
         v-else
       >
-        <h3>No freets found.</h3>
+        <h3>Your friends haven't posted any mixtapes yet!</h3>
       </article>
     </section>
   </main>
 </template>
 
 <script>
-import MixtapeComponent from '@/components/Feed/MixtapeComponent.vue';
+import MixtapeComponent from '@/components/Mixtape/MixtapeComponent.vue';
 import CreateFreetForm from '@/components/Feed/CreateFreetForm.vue';
 import MusicNowHeader from '@/components/common/MusicNowHeader.vue';
 import MakeMixtapePage from '@/components/Mixtape/MakeMixtapePage.vue';
@@ -59,6 +51,9 @@ import MakeMixtapePage from '@/components/Mixtape/MakeMixtapePage.vue';
 export default {
   name: 'FeedPage',
   components: {MixtapeComponent, CreateFreetForm, MakeMixtapePage, MusicNowHeader},
+  mounted() {
+    this.$store.commit('refreshFeed');
+  }
 };
 </script>
 

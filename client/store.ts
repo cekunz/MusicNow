@@ -10,11 +10,10 @@ Vue.use(Vuex);
  */
 const store = new Vuex.Store({
   state: {
-    // filter: null, // Username to filter shown freets by (null = show all)
-    // freets: [], // All freets created in the app
     username: null, // Username of the logged in user
     alerts: {}, // global success/error messages encountered during submissions to non-visible forms
-    mixtapePosted: false,
+    mixtapePosted: false, 
+    mixtapes: [],
     prompt: '', // the daily prompt 
   },
   mutations: {
@@ -46,6 +45,22 @@ const store = new Vuex.Store({
      */
       state.mixtapePosted = false;
     },
+    async refreshFeed(state) {
+    /**
+     * Update prompt of the day
+     */
+     const date = new Date();
+     const day = date.getDate();
+     const month = date.toLocaleString('default', { month: 'long'})
+     const year = date.getFullYear();
+     // Formatted as Month Day, Year (Nov 21, 2022 for example)
+     
+     const today = `${month} ${day}, ${year}`;
+      const url = `/api/mixtape/${state.username}?date=${today}&feed=true`
+      const res = await fetch(url).then(async r => r.json());
+      state.mixtapes = res;
+
+    },
     async refreshPrompt(state) {
     /**
      * Update prompt of the day
@@ -61,36 +76,7 @@ const store = new Vuex.Store({
       const res = await fetch(url).then(async r => r.json());
       state.prompt = res[0];
     },
-    // async getCredentials(state) {
-    //   const client_id = '27fc9a26af9b4c83a61da1db5c1a4833';
-    //   const client_secret = secret;
-    //   const url =  'https://accounts.spotify.com/api/token';
-
-    //   console.log('encoded',Buffer.from(client_id + ':' + client_secret, 'base64')); 
-      
-    //   const options = {
-    //     headers: {
-    //       'Authorization': 'Basic ' + Buffer.from(client_id + ':' + client_secret, 'base64')
-    //     },
-    //     method: "POST",
-    //     form: {
-    //       grant_type: 'client_credentials'
-    //     },
-    //     json: true
-    //   }
-    //   console.log('options', options);
-    //   const r = await fetch(url, options);
-    //   if (!r.ok) {
-    //     const res = await r.json();
-    //     throw new Error(res.error);
-    //   }
-    //   const returned = await r.json();
-    //   console.log('returned!', returned);
-    //   const token = returned.body.access_token;
-
-    //   state.token = token;
-      
-    // },
+   
    
   },
   // Store data across page refreshes, only discard on browser close

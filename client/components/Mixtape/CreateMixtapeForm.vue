@@ -82,6 +82,7 @@ export default {
         }
 
         this.$store.commit('postMixtape');
+        this.$store.commit('refreshFeed');
 
         params.callback();
       } catch (e) {

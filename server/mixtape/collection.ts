@@ -21,12 +21,11 @@ class MixtapeCollection {
    * @param {Song} song3 - The third song in the mixtape
    * @param {Prompt} prompt - The prompt the mixtape is made for
    * @param {string} username - The username of the creator of the mixtape
-   * @return {Promise<HydratedDocument<Song>>} - The newly created song
+   * @return {Promise<HydratedDocument<Mixtape>>} - The newly created song
    */
-  static async addOne(song1: Song, song2: Song, song3: Song, username: string, date: Date): Promise<HydratedDocument<Mixtape>> {
+  static async addOne(song1: Song, song2: Song, song3: Song, username: string, date: string): Promise<HydratedDocument<Mixtape>> {
     const mixtape = new MixtapeModel({
       songs:[song1, song2, song3],
-    //   prompt, 
       creator: username,
       date: date
     });
@@ -39,9 +38,19 @@ class MixtapeCollection {
    *
    * @return {Promise<HydratedDocument<Mixtape>[]>} - An array of all of the mixtapes
    */
-   static async findAll(): Promise<Array<HydratedDocument<Song>>> {
+   static async findAll(): Promise<Array<HydratedDocument<Mixtape>>> {
     // Retrieves all mixtapes
     return MixtapeModel.find({});
+  }
+
+  /**
+   * Get all the m ixtapes in the database
+   * @param {string} date - the day to get mixtapes for
+   * @return {Promise<HydratedDocument<Mixtape>[]>} - An array of all of the mixtapes
+   */
+   static async findAllByDate(date:string): Promise<Array<HydratedDocument<Mixtape>>> {
+    // Retrieves all mixtapes for a day
+    return MixtapeModel.find({date});
   }
 
   /**

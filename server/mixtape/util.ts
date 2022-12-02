@@ -7,8 +7,7 @@ type MixtapeResponse = {
   _id: String;
   songs: Song[];
   creator: String;
-  promptText: String;
-  date: Date;
+  date: String;
 };
 
 /**
@@ -28,7 +27,6 @@ const constructMixtapeResponse = (mixtape: HydratedDocument<Mixtape>): MixtapeRe
     ...mixtapeCopy,
     _id: mixtapeCopy._id.toString(),
     songs: mixtapeCopy.songs,
-    promptText: mixtapeCopy.promptText,
     creator: mixtapeCopy.creator,
     date: mixtapeCopy.date
   };

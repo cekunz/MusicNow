@@ -24,6 +24,7 @@ export default {
         this.$store.commit('setUsername', user ? user.username : null);
         this.$store.commit('resetMixtape');
         this.$store.commit('refreshPrompt');
+        this.$store.commit('refreshFeed');
       });
 
     // Clear alerts on page refresh

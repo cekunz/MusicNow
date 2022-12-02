@@ -13,6 +13,7 @@ import { songRouter } from '../server/song/router';
 import { mixtapeRouter } from '../server/mixtape/router';
 import { promptRouter } from '../server/prompt/router';
 import { favoriteRouter } from '../server/favorite/router';
+import { friendRouter } from '../server/friend/router';
 import MongoStore from 'connect-mongo';
 
 // Load environmental variables
@@ -78,7 +79,7 @@ app.use('/api/song', songRouter);
 app.use('/api/mixtape', mixtapeRouter);
 app.use('/api/prompt', promptRouter);
 app.use('/api/favorite', favoriteRouter);
-
+app.use('/api/friend', friendRouter);
 
 // Catch all the other routes and display error message
 app.all('*', (req: Request, res: Response) => {

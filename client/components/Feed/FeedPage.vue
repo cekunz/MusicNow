@@ -51,14 +51,14 @@
 </template>
 
 <script>
-import FreetComponent from '@/components/Feed/FreetComponent.vue';
+import MixtapeComponent from '@/components/Feed/MixtapeComponent.vue';
 import CreateFreetForm from '@/components/Feed/CreateFreetForm.vue';
 import MusicNowHeader from '@/components/common/MusicNowHeader.vue';
 import MakeMixtapePage from '@/components/Mixtape/MakeMixtapePage.vue';
 
 export default {
-  name: 'FreetPage',
-  components: {FreetComponent, CreateFreetForm, MakeMixtapePage, MusicNowHeader},
+  name: 'FeedPage',
+  components: {MixtapeComponent, CreateFreetForm, MakeMixtapePage, MusicNowHeader},
 };
 </script>
 

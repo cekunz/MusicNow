@@ -11,7 +11,9 @@
       </router-link>
     </div>
     <div class="right">
-      <router-link to="/">
+      <router-link 
+       v-if="$store.state.username"
+       to="/">
         <img src="../../public/musicnow-logos/feed.png">
       </router-link>
       <router-link

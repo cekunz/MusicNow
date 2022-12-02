@@ -11,19 +11,16 @@
         <h2>Welcome @{{ $store.state.username }}</h2>
       </header>
     </section>
-    <section v-if="!$store.state.username">>
-      <header>
-        <h2>Welcome to MusicNow!</h2>
-      </header>
-      <article>
-        <h3>
-          <router-link to="/login">
-            Sign in
-          </router-link>
-          to create, edit, and delete freets.
-        </h3>
+
+    <section class="general" v-if="!$store.state.username">
+      <h3 class="welcome" >Welcome to MusicNow</h3>
+      <h3>The app for finding new music with your friends through a daily prompted mixtape.</h3>
+      <article class="logins">
+          <button @click="$router.push('/login')">Log In</button>
+          <button @click="$router.push('/register')">Register</button>
       </article>
     </section>
+
     <section v-if="$store.state.mixtapePosted===true && $store.state.username">
       <header>
         <div class="left">
@@ -56,12 +53,12 @@
 <script>
 import FreetComponent from '@/components/Feed/FreetComponent.vue';
 import CreateFreetForm from '@/components/Feed/CreateFreetForm.vue';
-// import GetFreetsForm from '@/components/Freet/GetFreetsForm.vue';
+import MusicNowHeader from '@/components/common/MusicNowHeader.vue';
 import MakeMixtapePage from '@/components/Mixtape/MakeMixtapePage.vue';
 
 export default {
   name: 'FreetPage',
-  components: {FreetComponent, CreateFreetForm, MakeMixtapePage},
+  components: {FreetComponent, CreateFreetForm, MakeMixtapePage, MusicNowHeader},
 };
 </script>
 
@@ -71,14 +68,40 @@ section {
   flex-direction: column;
 }
 
+.general {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.logins {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 header, header > * {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
+.welcome {
+  font-size: 50px;
+  margin-bottom: 20px;
+}
+
+h3 {
+  font-size:20px;
+  margin-bottom: 40px;
+}
+
 button {
     margin-right: 10px;
+    width: 200px;
+    height: 80px;
+    margin-bottom: 10px;
+    font-size: 30px;
 }
 
 section .scrollbox {
@@ -87,3 +110,4 @@ section .scrollbox {
   overflow-y: scroll;
 }
 </style>
+

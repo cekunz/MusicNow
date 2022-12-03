@@ -1,4 +1,4 @@
-import type {Request, Response} from 'express';
+import type {NextFunction, Request, Response} from 'express';
 import express from 'express';
 import FreetCollection from '../freet/collection';
 import UserCollection from './collection';
@@ -23,6 +23,51 @@ router.get('/session', [], async (req: Request, res: Response) => {
     user: user ? util.constructUserResponse(user) : null
   });
 });
+
+/**
+ * Get all users (except self)
+ * 
+ * @name GET /api/users
+ * 
+ * @return {UserResponse[]} - A list of all the users (except self) sorted alphabetically
+ */
+/**
+ * Get user by username
+ * 
+ * @name GET /api/users?username=USERNAME
+ *
+ * @return {UserResponse} - the user by username
+ * @throws {400} - if username not given
+ * @throws {404} - if no user has given username
+ */
+router.get(
+  '/',
+  [
+    userValidator.isUserLoggedIn
+  ],
+  async (req: Request, res: Response, next: NextFunction) => {
+    // Check if username query parameter was supplied
+    if (req.query.username !== undefined) {
+      next();
+      return;
+    }
+
+    const allUsers = await UserCollection.findAllExcept(req.session.userId);
+    const response = allUsers.map(util.constructUserResponse);
+    console.log(response);
+    res.status(200).json(response);
+  },
+  [
+    userValidator.isValidUsername,
+    userValidator.isAccountExists
+  ],
+  async (req: Request, res: Response, next: NextFunction) => {
+    const user = await UserCollection.findOneByUsername(req.query.username as string);
+    const response = util.constructUserResponse(user);
+    console.log(response);
+    res.status(200).json(response);
+  }
+);
 
 /**
  * Sign in user.

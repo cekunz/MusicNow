@@ -14,7 +14,7 @@ import { mixtapeRouter } from '../server/mixtape/router';
 import { promptRouter } from '../server/prompt/router';
 import { favoriteRouter } from '../server/favorite/router';
 import { friendRouter } from '../server/friend/router';
-import { likeRouter } from 'server/likes/router';
+import { likeRouter } from '../server/likes/router';
 import MongoStore from 'connect-mongo';
 
 // Load environmental variables

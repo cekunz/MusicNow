@@ -75,6 +75,16 @@ class UserCollection {
   }
 
   /**
+   * Find all users (except self).
+   * 
+   * @return {Promise<HydratedDocument<User>[]>} - An array of all the users (except self)
+   */
+  static async findAllExcept(userId: Types.ObjectId | string): Promise<Array<HydratedDocument<User>>> {
+    // Retrieves all users (except self) and sorts them alphabetically
+    return UserModel.find({_id:{$nin:userId}}).sort({username:'asc'});
+  }
+
+  /**
    * Update user's information
    *
    * @param {string} userId - The userId of the user to update

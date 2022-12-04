@@ -86,7 +86,6 @@ class MixtapeCollection {
     username: string
   ): Promise<Array<HydratedDocument<Mixtape>>> {
     const friends = await FriendCollection.findFriends(username);
-    console.log(friends);
     const today = formatDate();
     const feedMixtapes = await MixtapeModel.find({
       date: today,

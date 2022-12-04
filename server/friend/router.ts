@@ -89,7 +89,6 @@ router.patch(
     const requestingUser = req.query.user as string;
     const user = req.params.username;
     const confirmed = req.query.confirmed as string;
-    console.log(requestingUser, user, confirmed);
     if (confirmed) {
       const friend = await FriendCollection.acceptRequest(requestingUser, user);
       res.status(200).json({

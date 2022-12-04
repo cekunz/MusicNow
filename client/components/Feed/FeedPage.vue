@@ -4,38 +4,36 @@
   <main>
     <!-- what you see before you log in -->
     <section class="general" v-if="!$store.state.username">
-      <h3 class="welcome" >Welcome to MusicNow</h3>
-      <h3>The app for finding new music with your friends through a daily prompted mixtape.</h3>
+      <h3 class="welcome">Welcome to MusicNow</h3>
+      <h3>
+        The app for finding new music with your friends through a daily prompted
+        mixtape.
+      </h3>
       <article class="logins">
-          <button @click="$router.push('/login')">Log In</button>
-          <button @click="$router.push('/register')">Register</button>
+        <button @click="$router.push('/login')">Sign in or register</button>
       </article>
     </section>
 
     <!-- what you see after logging in before you post a mixtape-->
-    <section v-if="!$store.state.mixtapePosted && $store.state.username">
+    <section v-if="!$store.state.mixtapePosted">
       <MakeMixtapePage />
     </section>
 
     <!-- what you see after logging in after you post a mixtape-->
-    <section v-if="$store.state.mixtapePosted && $store.state.username">
+    <section v-if="$store.state.mixtapePosted">
       <header>
         <div class="center">
           <h2>Welcome @{{ $store.state.username }}</h2>
         </div>
       </header>
-      <section
-        v-if="$store.state.mixtapes.length"
-      >
+      <section v-if="$store.state.mixtapes.length">
         <MixtapeComponent
           v-for="mixtape in $store.state.mixtapes"
           :key="mixtape.id"
           :mixtape="mixtape"
         />
       </section>
-      <article
-        v-else
-      >
+      <article v-else>
         <h3>Your friends haven't posted any mixtapes yet!</h3>
       </article>
     </section>
@@ -50,9 +48,21 @@ import MakeMixtapePage from '@/components/Mixtape/MakeMixtapePage.vue';
 
 export default {
   name: 'FeedPage',
-  components: {MixtapeComponent, CreateFreetForm, MakeMixtapePage, MusicNowHeader},
+  components: {
+    MixtapeComponent,
+    CreateFreetForm,
+    MakeMixtapePage,
+    MusicNowHeader
+  },
+  beforeCreate() {
+    if (!this.$store.state.username) {
+      this.$router.push('/login');
+    }
+  },
   mounted() {
-    this.$store.commit('refreshFeed');
+    if (this.$store.state.username) {
+      this.$store.commit('refreshFeed');
+    }
   }
 };
 </script>
@@ -75,10 +85,11 @@ section {
   align-items: center;
 }
 
-header, header > * {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+header,
+header > * {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .welcome {
@@ -87,16 +98,16 @@ header, header > * {
 }
 
 h3 {
-  font-size:20px;
+  font-size: 20px;
   margin-bottom: 40px;
 }
 
 button {
-    margin-right: 10px;
-    width: 200px;
-    height: 80px;
-    margin-bottom: 10px;
-    font-size: 30px;
+  margin-right: 10px;
+  width: 200px;
+  height: 80px;
+  margin-bottom: 10px;
+  font-size: 30px;
 }
 
 section .scrollbox {
@@ -105,4 +116,3 @@ section .scrollbox {
   overflow-y: scroll;
 }
 </style>
-

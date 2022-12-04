@@ -35,6 +35,8 @@ export default {
       .then((response) => {
         if (response.status !== 404) {
           this.$store.commit('postMixtape');
+        } else {
+          this.$store.commit('resetMixtape');
         }
       })
       .then(() => {

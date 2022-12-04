@@ -171,11 +171,9 @@ export default {
           const res = await r.json();
           throw new Error(res.error);
         }
-        console.log('before', this.$store.state)
         this.$store.commit('refreshFriends'); 
         this.$store.commit('refreshFriendRequests'); 
         this.$store.commit('refreshPossibleFriends'); 
-         console.log('after', this.$store.state)
         params.callback();
       } catch (e) {
         this.$set(this.alerts, e, 'error');
@@ -193,6 +191,11 @@ export default {
   justify-content: center;
 }
 
+.right {
+  display: flex;
+  flex-direction: row;
+  justify-content: right;
+}
 .friend {
   padding: 10px;
   margin-bottom: 20px;

@@ -26,12 +26,15 @@
             <h2 class="">Memories</h2>
             <div class="rectangle">
               <div class="rectangle-inner">
+                <MemoryComponent
+                  v-for="mixtape in $store.state.profileMixtapes"
+                  :key="mixtape.id"
+                  :mixtape="mixtape"
+                />  
               </div>
             </div>
           </section>
-        </div>
-        
-        
+        </div>     
       </header>
     </section>
   </main>
@@ -40,16 +43,17 @@
 
 
 <script>
+import MemoryComponent from '@/components/Profile/MemoryComponent.vue';
 import FriendComponent from '@/components/FindFriends/FriendComponent.vue';
 import FriendPopUp from '@/components/Profile/FriendPopUp.vue';
 
 export default {
   name: 'ProfilePage',
-  components: {FriendComponent, FriendPopUp},
+  components: {FriendComponent, FriendPopUp, MemoryComponent},
   data() {
     return {
       isOpen: false,
-      list: this.friends
+      friendsList: this.friends
     };
   },
   beforeMount() {
@@ -72,6 +76,8 @@ export default {
         this.$store.commit('setProfileFullname', resProfile.fullName);
         this.$store.commit('setProfileCircle', resProfile.fullName[0]);
         this.$store.commit('setProfileFriends', resProfile.friends);
+        this.$store.commit('setProfileMixtapes', resProfile.mixtapes);
+        console.log($store.state.profileMixtapes);
       } catch (e) {
 
       }
@@ -153,9 +159,12 @@ button:hover {
 }
 
 .rectangle-inner {
+  margin: 2%;
   color: black;
   height: 400px;
   width: 800px;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .user-info {

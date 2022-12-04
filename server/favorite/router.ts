@@ -1,6 +1,6 @@
 import type {NextFunction, Request, Response} from 'express';
 import express from 'express';
-import UserCollection from 'server/user/collection';
+import UserCollection from '../user/collection';
 import * as userValidator from '../user/middleware';
 import FavoriteCollection from './collection';
 import * as songValidator from '../song/middleware';

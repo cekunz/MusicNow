@@ -1,5 +1,5 @@
 /* eslint-disable max-params */
-import type {HydratedDocument} from 'mongoose';
+import type {HydratedDocument, Types} from 'mongoose';
 import type {Song} from 'server/song/model';
 import type {Mixtape} from './model';
 import MixtapeModel from './model';
@@ -40,6 +40,16 @@ class MixtapeCollection {
     });
     await mixtape.save(); // Saves mixtape to MongoDB
     return mixtape;
+  }
+
+  /**
+   * Find a mixtape with given mixtapeId.
+   *
+   * @param {string} mixtapeId - The mixtapeId of mixtape to find
+   * @return {Promise<HydratedDocument<Mixtape>> | Promise<null>} - The mixtape with the given mixtapeId, if any
+   */
+   static async findOneById(mixtapeId: Types.ObjectId | string): Promise<HydratedDocument<Mixtape>> {
+    return MixtapeModel.findOne({_id: mixtapeId});
   }
 
   /**

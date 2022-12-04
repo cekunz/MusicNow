@@ -14,6 +14,7 @@ const store = new Vuex.Store({
     profileFullname: null, // Full Name of the profile
     profileCircle: null, // First Initial to be displayed on profile page
     profileFriends: [], // Friends of profile page
+    profileMixtapes: [], // Mixtapes of profile page
     alerts: {}, // global success/error messages encountered during submissions to non-visible forms
     mixtapePosted: false,
     mixtapes: [],
@@ -54,6 +55,30 @@ const store = new Vuex.Store({
        * @param profileFullname - new profileFullname to set
        */
       state.profileFullname = profileFullname;
+    },
+    setProfileMixtapes(state, profileMixtapes) {
+      /**
+       * Update the stored profileMixtapes to the specified one.
+       * @param profileMixtapes - new profileMixtapes to set
+       */
+      state.profileMixtapes = profileMixtapes;
+    },
+    setReactions(state, likes) {
+      /**
+       * Set the stored likes to the provided likes.
+       * @param likes - likes to store
+       */
+      const newLikes = Object.create(null);
+      // Group likes by their corresponding object Ids
+      for (const like of likes) {
+        const object = `${like.object}`;
+        if (object in newLikes) {
+          newLikes[object].push(like);
+        } else {
+          newLikes[object] = [like];
+        }
+      }
+      state.likes = newLikes;
     },
     setProfileCircle(state, profileCircle) {
       /**
@@ -118,7 +143,7 @@ const store = new Vuex.Store({
       /**
        * Update all of a users' friends
        */
-      const url = `/api/friend/${state.username}?confirmed=true`;
+      const url = `/api/friend/${state.username}`;
       const res = await fetch(url).then(async (r) => r.json());
       state.friends = res;
     },
@@ -126,15 +151,16 @@ const store = new Vuex.Store({
       /**
        * Update all of a users' friends requests
        */
-      const url = `/api/friend/${state.username}?confirmed=false`;
+      const url = `/api/friend/requests/${state.username}`;
       const res = await fetch(url).then(async (r) => r.json());
+      console.log('returned', res);
       state.friendRequests = res;
     },
     async refreshPossibleFriends(state) {
       /**
        * Update all of a users' friends requests
        */
-      const url = `/api/friend/${state.username}`;
+      const url = `/api/friend/potentialFriends/${state.username}`;
       const res = await fetch(url).then(async (r) => r.json());
 
       state.nonFriends = res;

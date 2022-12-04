@@ -35,6 +35,8 @@ export default {
       .then((response) => {
         if (response.status !== 404) {
           this.$store.commit('postMixtape');
+        } else {
+          this.$store.commit('resetMixtape');
         }
       })
       .then(() => {
@@ -43,7 +45,7 @@ export default {
         this.$store.commit('refreshFeed');
         this.$store.commit('refreshFriends');
         this.$store.commit('refreshFriendRequests');
-         this.$store.commit('refreshPossibleFriends');
+        this.$store.commit('refreshPossibleFriends');
       });
 
     // Clear alerts on page refresh

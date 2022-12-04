@@ -3,6 +3,7 @@ import SongModel, { Song } from 'server/song/model';
 import type {Profile} from './model';
 import ProfileModel from './model';
 import UserCollection from '../user/collection';
+import type { User } from '../user/model';
 import FavoriteCollection from '../favorite/collection';
 import MixtapeCollection from '../mixtape/collection';
 import FriendCollection from '../friend/collection';
@@ -70,7 +71,7 @@ class ProfileCollection {
    */
    static async updateOne(username: string): Promise<HydratedDocument<Profile>> {
     const profile = await ProfileModel.findOne({username: username});
-    const user  = await UserCollection.findOneByUsername(username);
+    const user: User  = await UserCollection.findOneByUsername(username);
     const favorites = await FavoriteCollection.findFavoritesByUser(username);
     const mixtapes = await MixtapeCollection.findAllbyCreator(username);
     const friends = await FriendCollection.findFriends(username);

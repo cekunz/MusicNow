@@ -36,11 +36,11 @@
 
 
     </div>
-     <div class="friends" v-if="yourFriends===true" >
+     <div v-if="yourFriends===true" >
       <header>
         Your Friends
       </header>
-      <div  v-if="$store.state.friends.length>0">
+      <div  class="friends" v-if="$store.state.friends.length>0">
          <FriendComponent
           v-for="user in $store.state.friends"
           :key="user"
@@ -48,7 +48,7 @@
           :confirmed="true"
         />
       </div>
-      <div  v-else>
+      <div class="friends" v-else>
         <h2> You currently haven't added any friends, send a friend request to get started! </h2>
       </div>
     </div>
@@ -56,7 +56,7 @@
       <header>
         Friend Requests
       </header>
-      <div v-if="$store.state.friendRequests.length>0" >
+      <div class="friends" v-if="$store.state.friendRequests.length>0" >
          <FriendComponent
           v-for="user in $store.state.friendRequests"
           :key="user"

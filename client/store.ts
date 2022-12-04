@@ -125,7 +125,7 @@ const store = new Vuex.Store({
       /**
        * Update all of a users' friends
        */
-      const url = `/api/friend/${state.username}?confirmed=true`;
+      const url = `/api/friend/${state.username}`;
       const res = await fetch(url).then(async (r) => r.json());
       state.friends = res;
     },
@@ -133,15 +133,16 @@ const store = new Vuex.Store({
       /**
        * Update all of a users' friends requests
        */
-      const url = `/api/friend/${state.username}?confirmed=false`;
+      const url = `/api/friend/requests/${state.username}`;
       const res = await fetch(url).then(async (r) => r.json());
+      console.log('returned', res);
       state.friendRequests = res;
     },
     async refreshPossibleFriends(state) {
       /**
        * Update all of a users' friends requests
        */
-      const url = `/api/friend/${state.username}`;
+      const url = `/api/friend/potentialFriends/${state.username}`;
       const res = await fetch(url).then(async (r) => r.json());
 
       state.nonFriends = res;

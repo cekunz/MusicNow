@@ -14,6 +14,7 @@ const store = new Vuex.Store({
     profileFullname: null, // Full Name of the profile
     profileCircle: null, // First Initial to be displayed on profile page
     profileFriends: [], // Friends of profile page
+    profileMixtapes: [], // Mixtapes of profile page
     alerts: {}, // global success/error messages encountered during submissions to non-visible forms
     mixtapePosted: false,
     mixtapes: [],
@@ -54,6 +55,13 @@ const store = new Vuex.Store({
        * @param profileFullname - new profileFullname to set
        */
       state.profileFullname = profileFullname;
+    },
+    setProfileMixtapes(state, profileMixtapes) {
+      /**
+       * Update the stored profileMixtapes to the specified one.
+       * @param profileMixtapes - new profileMixtapes to set
+       */
+      state.profileMixtapes = profileMixtapes;
     },
     setReactions(state, likes) {
       /**

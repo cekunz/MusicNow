@@ -7,13 +7,12 @@
           X
         </button>
         <div class="modal-body1">
-          <ul v-for="friend in friends">
-            <FriendComponent 
+          <FriendComponent 
+            v-for="friend in friends"
             :key="user"
             :friend="friend"
             :confirmed="false"
-            />
-          </ul>
+          />
         </div>
       </div>
     </div>

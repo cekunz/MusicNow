@@ -47,33 +47,6 @@ router.get(
 );
 
 /**
- * Create a new profile.
- *
- * @name POST /api/profile/:username?
- *
- * @param {string} username - The name of the creator
- * 
- * @return {ProfileResponse} - The created profile
- * @throws {403} - If the user is not logged in
- */
-router.post(
-  '/:username?',
-  [
-    userValidator.isUserLoggedIn,
-  ],
-  async (req: Request, res: Response) => {
-    const username = req.params.username as string;
-    const profile = await ProfileCollection.addOne(username);
-
-    res.status(201).json({
-      message: 'Your profile was created successfully.',
-      profile: util.constructProfileResponse(profile)
-    });
-  }
-);
-
-
-/**
  * Update a user's profile.
  *
  * @name PATCH /api/profile

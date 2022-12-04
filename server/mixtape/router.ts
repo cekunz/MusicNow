@@ -63,6 +63,7 @@ router.get(
     const response = allUserMixtapes.map(util.constructMixtapeResponse);
     res.status(200).json(response);
   },
+  [mixtapeValidator.isMixtapeExists],
   async (req: Request, res: Response, next: NextFunction) => {
     if (req.query.feed) {
       next();
@@ -72,8 +73,9 @@ router.get(
     // Get mixtape by creator by date
     const mixtape = await MixtapeCollection.findOneByCreatorByDate(
       req.params.username,
-      new Date(req.query.date as string)
+      req.query.date as string
     );
+
     const response = util.constructMixtapeResponse(mixtape);
     res.status(200).json(response);
   },

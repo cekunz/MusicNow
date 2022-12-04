@@ -22,7 +22,23 @@ export default {
       .then((res) => {
         const user = res.user;
         this.$store.commit('setUsername', user ? user.username : null);
-        this.$store.commit('resetMixtape');
+      });
+
+    // Check if the user has created a post today or not
+    const date = new Date();
+    const day = date.getDate();
+    const month = date.toLocaleString('default', {month: 'long'});
+    const year = date.getFullYear();
+    const formattedDate = `${month} ${day}, ${year}`;
+
+    fetch(`/api/mixtape/${this.$store.state.username}?date=${formattedDate}`)
+      .then((response) => {
+        if (response.status !== 404) {
+          this.$store.commit('postMixtape');
+        }
+      })
+      .then(() => {
+        // Get feed ready for user
         this.$store.commit('refreshPrompt');
         this.$store.commit('refreshFeed');
         this.$store.commit('refreshFriends');

@@ -4,6 +4,7 @@ import FreetCollection from '../freet/collection';
 import UserCollection from './collection';
 import * as userValidator from '../user/middleware';
 import * as util from './util';
+import ProfileCollection from '../profile/collection';
 
 const router = express.Router();
 
@@ -58,10 +59,10 @@ router.get(
     res.status(200).json(usernameResponse);
   },
   [
-    userValidator.isValidUsername,
-    userValidator.isAccountExists
+    userValidator.isValidUsernameQuery,
+    userValidator.isAccountExistsQuery
   ],
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: Request, res: Response) => {
     const user = await UserCollection.findOneByUsername(req.query.username as string);
     const response = util.constructUserResponse(user);
     res.status(200).json(response);
@@ -151,6 +152,7 @@ router.post(
       req.body.fullName,
       req.body.password
     );
+    await ProfileCollection.addOne(req.body.username);
     req.session.userId = user._id.toString();
     res.status(201).json({
       message: `Your account was created successfully. You have been logged in as ${user.username}`,

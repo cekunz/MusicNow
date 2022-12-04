@@ -10,8 +10,10 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
   state: {
     username: null, // Username of the logged in user
+    profileUsername: null, // Username of the profile 
+    profileFullname: null, // Full Name of the profile
     alerts: {}, // global success/error messages encountered during submissions to non-visible forms
-    mixtapePosted: false, 
+    mixtapePosted: false,
     mixtapes: [],
     friends: [],
     friendRequests: [],
@@ -35,6 +37,20 @@ const store = new Vuex.Store({
        */
       state.username = username;
     },
+    setProfileUsername(state, profileUsername) {
+      /**
+       * Update the stored profileUsername to the specified one.
+       * @param profileUsername - new profileUsername to set
+       */
+      state.profileUsername = profileUsername;
+    },
+    setProfileFullname(state, profileFullname) {
+      /**
+       * Update the stored profileFullname to the specified one.
+       * @param profileFullname - new profileFullname to set
+       */
+      state.profileFullname = profileFullname;
+    },
     postMixtape(state) {
       /**
        * Update status if Mixtape has been posted for the day
@@ -42,33 +58,32 @@ const store = new Vuex.Store({
       state.mixtapePosted = true;
     },
     resetMixtape(state) {
-    /**
-     * Update status if Mixtape has been posted for the day
-     */
+      /**
+       * Update status if Mixtape has been posted for the day
+       */
       state.mixtapePosted = false;
     },
     async refreshFeed(state) {
-    /**
-     * Update prompt of the day
-     */
-     const date = new Date();
-     const day = date.getDate();
-     const month = date.toLocaleString('default', { month: 'long'})
-     const year = date.getFullYear();
-     // Formatted as Month Day, Year (Nov 21, 2022 for example)
-     
-     const today = `${month} ${day}, ${year}`;
-      const url = `/api/mixtape/${state.username}?date=${today}&feed=true`
-      const res = await fetch(url).then(async r => r.json());
-      state.mixtapes = res;
+      /**
+       * Update prompt of the day
+       */
+      const date = new Date();
+      const day = date.getDate();
+      const month = date.toLocaleString('default', {month: 'long'});
+      const year = date.getFullYear();
+      // Formatted as Month Day, Year (Nov 21, 2022 for example)
 
+      const today = `${month} ${day}, ${year}`;
+      const url = `/api/mixtape/${state.username}?date=${today}&feed=true`;
+      const res = await fetch(url).then(async (r) => r.json());
+      state.mixtapes = res;
     },
     async refreshFriends(state) {
       /**
        * Update all of a users' friends
-      */
-      const url = `/api/friend/${state.username}?confirmed=true`
-      const res = await fetch(url).then(async r => r.json());
+       */
+      const url = `/api/friend/${state.username}?confirmed=true`;
+      const res = await fetch(url).then(async (r) => r.json());
       state.friends = res;
     },
     async refreshFriendRequests(state) {
@@ -93,22 +108,20 @@ const store = new Vuex.Store({
      console.log(state);
     },
     async refreshPrompt(state) {
-    /**
-     * Update prompt of the day
-     */
+      /**
+       * Update prompt of the day
+       */
       const date = new Date();
       const day = date.getDate();
-      const month = date.toLocaleString('default', { month: 'long'})
+      const month = date.toLocaleString('default', {month: 'long'});
       const year = date.getFullYear();
       // Formatted as Month Day, Year (Nov 21, 2022 for example)
-      
+
       const today = `${month} ${day}, ${year}`;
       const url = `/api/prompt?date=${today}`;
-      const res = await fetch(url).then(async r => r.json());
+      const res = await fetch(url).then(async (r) => r.json());
       state.prompt = res[0];
-    },
-   
-   
+    }
   },
   // Store data across page refreshes, only discard on browser close
   plugins: [createPersistedState()]

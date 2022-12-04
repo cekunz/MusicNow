@@ -9,63 +9,58 @@ const router = express.Router();
 /**
  * Get all potential friends for a user (users with no existing request or friendship)
  *
- * @name GET /api/friend/:username
+ * @name GET /api/friend/potentialFriends/:username
  *
  * @return {FriendResponse[]} - A list of all of a users' potential friends
  * @throws {400} - If author is not given
  */
+ router.get(
+  '/potentialFriends/:username?',
+  [userValidator.isUserLoggedIn],
+  async (req: Request, res: Response) => {
+    // possible friends
+    const username = (req.params.username as string) ?? undefined;
+    const possibleFriends = await FriendCollection.findPotentialFriends(username);
+    res.status(200).json(possibleFriends);
+  })
+
 /**
  * Get all friends for a user
  *
- * @name GET /api/friend/:username?confirmed=true
+ * @name GET /api/friend/:username
  *
  * @return {FriendResponse[]} - A list of all of a users' friends
  * @throws {400} - If author is not given
  */
-/**
- * Get all friend requests for a user
- *
- * @name GET /api/friend/:username?confirmed=false
- *
- * @return {FriendResponse} - friend request
- *
- */
 router.get(
   '/:username?',
   [userValidator.isUserLoggedIn],
-  async (req: Request, res: Response, next: NextFunction) => {
-    // Go to next function if song arguments are given
-    if (req.query.confirmed !== undefined) {
-      next();
-      return;
-    }
-
-    // Friend requests
-    const username = (req.params.username as string) ?? undefined;
-    const possibleFriends = await FriendCollection.findPotentialFriends(username);
-    res.status(200).json(possibleFriends);
-  },
-  [userValidator.isUserLoggedIn],
-  async (req: Request, res: Response, next: NextFunction) => {
-    // Go to next function if song arguments are given
-    if (req.query.confirmed) {
-      next();
-      return;
-    }
-
-    // Friend requests
-    const username = (req.params.username as string) ?? undefined;
-    const friendRequests = await FriendCollection.findFriendRequests(username);
-    res.status(200).json(friendRequests);
-  },
-  [userValidator.isUserLoggedIn],
-  // Friends
   async (req: Request, res: Response) => {
+    // Friends
     const username = (req.params.username as string) ?? undefined;
     const friend = await FriendCollection.findFriends(username);
     res.status(200).json(friend);
   }
 );
+
+/**
+* Get all friend requests for a user
+*
+* @name GET /api/friend/:username?confirmed=false
+*
+* @return {FriendResponse} - friend request
+*
+*/
+router.get(
+  '/requests/:username?',
+  [userValidator.isUserLoggedIn],
+  async (req: Request, res: Response) => {
+    // Friend requests
+    const username = (req.params.username as string) ?? undefined;
+    const friendRequests = await FriendCollection.findFriendRequests(username);
+    res.status(200).json(friendRequests);
+  })
+
 
 /**
  * Send a new friend request.

@@ -119,12 +119,12 @@ class MixtapeCollection {
    * Find a song with given creator and date.
    *
    * @param {string} username - The username of creator of the mixtape to delete
-   * @param {Date} date - The date of the mixtape to delete
+   * @param {string} date - The date of the mixtape to delete
    * @return {Promise<HydratedDocument<Mixtape>>} - the mixtape in question
    */
   static async findOneByCreatorByDate(
     username: string,
-    date: Date
+    date: string
   ): Promise<HydratedDocument<Mixtape>> {
     const mixtape = await MixtapeModel.findOne({creator: username, date});
     return mixtape;

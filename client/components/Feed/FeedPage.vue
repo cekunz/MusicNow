@@ -54,7 +54,7 @@ export default {
     MakeMixtapePage,
     MusicNowHeader
   },
-  beforeCreate() {
+  async beforeCreate() {
     if (!this.$store.state.username) {
       this.$router.push('/login');
     }

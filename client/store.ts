@@ -133,18 +133,10 @@ const store = new Vuex.Store({
       /**
        * Update all of a users' friends requests
        */
-      const url = `/api/users`;
+      const url = `/api/friend/${state.username}`;
       const res = await fetch(url).then(async (r) => r.json());
 
-      const allOtherUsers = res;
-      const diff = [...allOtherUsers].filter(
-        (user) => !state.friendRequests.includes(user)
-      );
-      const nonFriendUsers = [...diff].filter(
-        (user) => !state.friends.includes(user)
-      );
-      state.nonFriends = nonFriendUsers;
-      console.log(state);
+      state.nonFriends = res;
     },
     async refreshPrompt(state) {
       /**

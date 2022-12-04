@@ -1,4 +1,5 @@
 import type {HydratedDocument, Types} from 'mongoose';
+import UserCollection from '../user/collection';
 import type {Friend} from './model';
 import FriendModel from './model';
 
@@ -43,7 +44,7 @@ class FriendCollection {
    * @param {string} username - The username of the given user
    * @return {Promise<Array<String>>} - An array of all of the current friend requests a user has
    */
-  static async findFriendRequests(username: string): Promise<Array<String>> {
+  static async findFriendRequests(username: string): Promise<Array<string>> {
     const friendRequests = await FriendModel.find({
       user: username,
       confirmed: false
@@ -51,6 +52,50 @@ class FriendCollection {
     const usernames: string[] = friendRequests.map((x) => x.requestingUser);
     return usernames;
   }
+
+  /**
+   * Get all of a users' friend requests that they've sent
+   *
+   * @param {string} username - The username of the given user
+   * @return {Promise<Array<String>>} - An array of all of the current friend requests a user has
+   */
+   static async findFriendRequestsSent(username: string): Promise<Array<string>> {
+    const friendRequests = await FriendModel.find({
+      requestingUser: username,
+      confirmed: false
+    });
+    const usernames: string[] = friendRequests.map((x) => x.user);
+    return usernames;
+  }
+
+  /**
+   * Get all of a users' friend requests that they've sent
+   *
+   * @param {string} username - The username of the given user
+   * @return {Promise<Array<String>>} - An array of all of the possible users to friend
+   */
+   static async findPotentialFriends(username: string): Promise<Array<string>> {
+    const requests = await FriendCollection.findFriendRequests(username);
+    const sentRequests = await FriendCollection.findFriendRequestsSent(username);
+    const friends = await FriendCollection.findFriends(username);
+
+    const user = await UserCollection.findOneByUsername(username);
+    const allUsers = await UserCollection.findAllExcept(user._id);
+    const allUsernames = allUsers.map((x) => x.username);
+
+    const diff1 = [...allUsernames].filter(
+      (user) => !requests.includes(user)
+    );
+    const diff2 = [...diff1].filter(
+      (user) => !sentRequests.includes(user)
+    );
+    const possibleFriends = [...diff2].filter(
+      (user) => !friends.includes(user)
+    );
+
+    return possibleFriends;
+  }
+
 
   /**
    * Create a friend request

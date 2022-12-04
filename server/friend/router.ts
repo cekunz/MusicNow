@@ -7,6 +7,14 @@ import * as util from './util';
 const router = express.Router();
 
 /**
+ * Get all potential friends for a user (users with no existing request or friendship)
+ *
+ * @name GET /api/friend/:username
+ *
+ * @return {FriendResponse[]} - A list of all of a users' potential friends
+ * @throws {400} - If author is not given
+ */
+/**
  * Get all friends for a user
  *
  * @name GET /api/friend/:username?confirmed=true
@@ -24,6 +32,19 @@ const router = express.Router();
  */
 router.get(
   '/:username?',
+  [userValidator.isUserLoggedIn],
+  async (req: Request, res: Response, next: NextFunction) => {
+    // Go to next function if song arguments are given
+    if (req.query.confirmed !== undefined) {
+      next();
+      return;
+    }
+
+    // Friend requests
+    const username = (req.params.username as string) ?? undefined;
+    const possibleFriends = await FriendCollection.findPotentialFriends(username);
+    res.status(200).json(possibleFriends);
+  },
   [userValidator.isUserLoggedIn],
   async (req: Request, res: Response, next: NextFunction) => {
     // Go to next function if song arguments are given

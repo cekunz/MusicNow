@@ -5,6 +5,7 @@ import UserCollection from './collection';
 import * as userValidator from '../user/middleware';
 import * as util from './util';
 import ProfileCollection from '../profile/collection';
+import FriendCollection from '../friend/collection';
 
 const router = express.Router();
 

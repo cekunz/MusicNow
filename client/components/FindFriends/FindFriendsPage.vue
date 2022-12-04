@@ -11,7 +11,7 @@
             class="searchbar"
             rows="1"
             @input="usernameQuery = $event.target.value"
-            placeholder="Search for Friends"
+            placeholder="Search for Users..."
             style="resize: none"
           />
          <button 
@@ -20,7 +20,9 @@
           🔎
          </button>
         </center>
-        <div class="friends">
+        <div class="friends"
+        v-if="friendsToShow.length>0"
+        >
         <FriendComponent
           v-for="user in friendsToShow"
           :key="user"
@@ -28,25 +30,48 @@
           :confirmed="false"
         />
         </div>
+        <div class="friends" v-else>
+          <h2> There are currently no other users to add as friends, check back later! </h2>
+        </div>
+
 
     </div>
-     <div v-if="yourFriends===true" >
+     <div class="friends" v-if="yourFriends===true" >
       <header>
         Your Friends
       </header>
-        <!-- <center class ="search">
-         
-        </center> -->
+      <div  v-if="$store.state.friends.length>0">
+         <FriendComponent
+          v-for="user in $store.state.friends"
+          :key="user"
+          :friend="user"
+          :confirmed="true"
+        />
+      </div>
+      <div  v-else>
+        <h2> You currently haven't added any friends, send a friend request to get started! </h2>
+      </div>
     </div>
     <div v-if="requestsPage===true" >
       <header>
         Friend Requests
       </header>
-        <!-- <center class ="search">
-         
-        </center> -->
+      <div v-if="$store.state.friendRequests.length>0" >
+         <FriendComponent
+          v-for="user in $store.state.friendRequests"
+          :key="user"
+          :friend="user"
+          :confirmed="false"
+         />
+        </div>
+        <div class="friends" v-else>
+          <h2> You currently have no friend requests, check back later! </h2>
+      </div>
     </div>
-      <footer>
+    
+
+
+     <footer>
         <center>
          <button class="inactive"
          v-if="!searchPage"

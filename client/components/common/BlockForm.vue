@@ -101,6 +101,20 @@ export default {
 
         if (this.resetMixtape) {
           this.$store.commit('resetMixtape');
+          // Check if the user has created a post today or not
+          const date = new Date();
+          const day = date.getDate();
+          const month = date.toLocaleString('default', {month: 'long'});
+          const year = date.getFullYear();
+          const formattedDate = `${month} ${day}, ${year}`;
+
+          fetch(
+            `/api/mixtape/${this.$store.state.username}?date=${formattedDate}`
+          ).then((response) => {
+            if (response.status !== 404) {
+              this.$store.commit('postMixtape');
+            }
+          });
         }
 
         if (this.callback) {

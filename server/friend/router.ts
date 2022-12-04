@@ -24,24 +24,21 @@ const router = express.Router();
  */
 router.get(
   '/:username?',
-  [
-    userValidator.isUserLoggedIn
-  ],
+  [userValidator.isUserLoggedIn],
   async (req: Request, res: Response, next: NextFunction) => {
-    // got to next function if song arguments are given
+    // Go to next function if song arguments are given
     if (req.query.confirmed) {
-        next();
-        return;
+      next();
+      return;
     }
-    // friend requests
+
+    // Friend requests
     const username = (req.params.username as string) ?? undefined;
     const friendRequests = await FriendCollection.findFriendRequests(username);
     res.status(200).json(friendRequests);
   },
-  [
-    userValidator.isUserLoggedIn
-  ],
-  // friends 
+  [userValidator.isUserLoggedIn],
+  // Friends
   async (req: Request, res: Response) => {
     const username = (req.params.username as string) ?? undefined;
     const friend = await FriendCollection.findFriends(username);
@@ -53,21 +50,22 @@ router.get(
  * Send a new friend request.
  *
  * @name POST /api/friend/:username?user=username
- * 
+ *
  * @param {string} username - The name of the user being requested
- * 
+ *
  * @return {FriendResponse} - The created friend request
  * @throws {403} - If the user is not logged in
  */
 router.post(
   '/:username?',
-  [
-    userValidator.isUserLoggedIn,
-  ],
+  [userValidator.isUserLoggedIn],
   async (req: Request, res: Response) => {
-    const requestingUser = req.params.username as string;
+    const requestingUser = req.params.username;
     const user = req.query.user as string;
-    const friend = await FriendCollection.sendFriendRequest(requestingUser, user)
+    const friend = await FriendCollection.sendFriendRequest(
+      requestingUser,
+      user
+    );
 
     res.status(201).json({
       message: 'Your friend request was created successfully.',
@@ -75,7 +73,6 @@ router.post(
     });
   }
 );
-
 
 /**
  * Accept/reject a friend request
@@ -85,32 +82,28 @@ router.post(
  * @return {FriendResponse || Boolean} - the updated friend or a boolean confirming a rejection
  * @throws {403} - if the user is not logged in
  */
- router.patch(
-    '/:username?',
-    [
-      userValidator.isUserLoggedIn,
-    ],
-    async (req: Request, res: Response) => {
-      const requestingUser = req.query.user as string;
-      const user = req.params.user as string;
-      const confirmed = req.query.confirmed as string;
-
-      if (confirmed) {
-        const friend = await FriendCollection.acceptRequest(requestingUser, user);
-        res.status(200).json({
-            message: 'Your friend request was accepted.',
-            friend: util.constructFriendResponse(friend)
-          });
-      }
-      else {
-        const friend = await FriendCollection.rejectRequest(requestingUser, user);
-        res.status(200).json({
-            message: 'Your friend request was rejected successfully.',
-          });
-      }
-     
+router.patch(
+  '/:username?',
+  [userValidator.isUserLoggedIn],
+  async (req: Request, res: Response) => {
+    const requestingUser = req.query.user as string;
+    const user = req.params.username;
+    const confirmed = req.query.confirmed as string;
+    console.log(requestingUser, user, confirmed);
+    if (confirmed) {
+      const friend = await FriendCollection.acceptRequest(requestingUser, user);
+      res.status(200).json({
+        message: 'Your friend request was accepted.',
+        friend: util.constructFriendResponse(friend)
+      });
+    } else {
+      const friend = await FriendCollection.rejectRequest(requestingUser, user);
+      res.status(200).json({
+        message: 'Your friend request was rejected successfully.'
+      });
     }
-  );
+  }
+);
 
 /**
  * Remove a friend
@@ -122,15 +115,13 @@ router.post(
  */
 router.delete(
   '/:username?',
-  [
-    userValidator.isUserLoggedIn,
-  ],
+  [userValidator.isUserLoggedIn],
   async (req: Request, res: Response) => {
     const requestingUser = req.params.username as string;
     const user = req.query.user as string;
-    await FriendCollection.removeFriend(requestingUser, user)
+    await FriendCollection.removeFriend(requestingUser, user);
     res.status(200).json({
-      message: 'Your friend was removed successfully.',
+      message: 'Your friend was removed successfully.'
     });
   }
 );

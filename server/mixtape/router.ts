@@ -5,18 +5,21 @@ import * as userValidator from '../user/middleware';
 import * as mixtapeValidator from './middleware';
 import MixtapeCollection from './collection';
 import * as util from './util';
-import FriendCollection from '../friend/collection';
 
 const router = express.Router();
 
+/**
+ *
+ * @returns current date formatted as month, day, year
+ */
 function formatDate() {
   const date = new Date();
-    const day = date.getDate();
-    const month = date.toLocaleString('default', { month: 'long'})
-    const year = date.getFullYear();
-    // Formatted as Month Day, Year (Nov 21, 2022 for example)
-    
-    return `${month} ${day}, ${year}`;
+  const day = date.getDate();
+  const month = date.toLocaleString('default', {month: 'long'});
+  const year = date.getFullYear();
+  // Formatted as Month Day, Year (Nov 21, 2022 for example)
+
+  return `${month} ${day}, ${year}`;
 }
 
 /**
@@ -38,41 +41,49 @@ function formatDate() {
  * @throws {405} - If the date is invalid
  *
  */
- /**
+/**
  * Get all mixtapes for a user's feed
  *
  * @name GET /api/mixtape/:username?date=date&feed=true
  *
- * @return {MixtapeResponse[]} - A list of all mixtapes created by username
+ * @return {MixtapeResponse[]} - A list of all mixtapes needed for a user's feed
  * @throws {400} - If author is not given
  */
 router.get(
   '/:username?',
   async (req: Request, res: Response, next: NextFunction) => {
-    if (req.query.date !== undefined && !req.query.feed) {
-        next();
-        return;
+    if (req.query.date !== undefined) {
+      next();
+      return;
     }
-    // get all mixtapes by a user
-    const username = (req.params.username as string) ?? undefined;
+
+    // Get all mixtapes by a user
+    const username = req.params.username ?? undefined;
     const allUserMixtapes = await MixtapeCollection.findAllbyCreator(username);
     const response = allUserMixtapes.map(util.constructMixtapeResponse);
     res.status(200).json(response);
   },
   async (req: Request, res: Response, next: NextFunction) => {
-    if (req.query.date !== undefined && req.query.feed) {
-        next();
-        return;
+    if (req.query.feed) {
+      next();
+      return;
     }
-    // get mixtape by creator by date
-    const mixtape = await MixtapeCollection.findOneByCreatorByDate(req.params.username as string, new Date(req.query.date as string));
+
+    // Get mixtape by creator by date
+    const mixtape = await MixtapeCollection.findOneByCreatorByDate(
+      req.params.username,
+      new Date(req.query.date as string)
+    );
     const response = util.constructMixtapeResponse(mixtape);
     res.status(200).json(response);
   },
+  [userValidator.isUserLoggedIn],
   async (req: Request, res: Response) => {
-    // get all feed mixtapes --> TODO: filter by friends
-    const mixtape = await MixtapeCollection.findAllByDate(req.query.date as string);
-    const response = mixtape.map(util.constructMixtapeResponse);
+    // Get all mixtapes needed for a user's feed
+    const mixtapes = await MixtapeCollection.findAllForFeed(
+      req.params.username
+    );
+    const response = mixtapes.map(util.constructMixtapeResponse);
     res.status(200).json(response);
   }
 );
@@ -81,28 +92,32 @@ router.get(
  * Create a new mixtape.
  *
  * @name POST /api/mixtape/:username?
- * 
+ *
  * Body: 3 song IDs
  *
  * @param {string} song1Id - The track Id of the song on spotify
  * @param {string} song2Id - The track Id of the song on spotify
  * @param {string} song3Id - The track Id of the song on spotify
  * @param {string} username - The name of the creator
- * 
+ *
  * @return {MixtapeResponse} - The created song
  * @throws {403} - If the user is not logged in
  */
 router.post(
   '/:username?',
-  [
-    userValidator.isUserLoggedIn,
-  ],
+  [userValidator.isUserLoggedIn],
   async (req: Request, res: Response) => {
     const song1 = await SongCollection.findOne(req.body.song1);
     const song2 = await SongCollection.findOne(req.body.song2);
     const song3 = await SongCollection.findOne(req.body.song3);
-    const username = req.params.username as string;
-    const mixtape = await MixtapeCollection.addOne(song1, song2, song3, username, formatDate())
+    const {username} = req.params;
+    const mixtape = await MixtapeCollection.addOne(
+      song1,
+      song2,
+      song3,
+      username,
+      formatDate()
+    );
 
     res.status(201).json({
       message: 'Your song was created successfully.',
@@ -122,13 +137,10 @@ router.post(
  */
 router.delete(
   '/:username?',
-  [
-    userValidator.isUserLoggedIn,
-    mixtapeValidator.isMixtapeExists,
-  ],
+  [userValidator.isUserLoggedIn, mixtapeValidator.isMixtapeExists],
   async (req: Request, res: Response) => {
-    const username = req.params.username as string
-    const date = req.query.date as string
+    const {username} = req.params;
+    const date = req.query.date as string;
     await MixtapeCollection.deleteOneByCreatorByDate(username, new Date(date));
     res.status(200).json({
       message: 'Your Song was deleted successfully.'
@@ -136,4 +148,4 @@ router.delete(
   }
 );
 
-export {router as mixtapeRouter};
+export {formatDate, router as mixtapeRouter};

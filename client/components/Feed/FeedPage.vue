@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/max-attributes-per-line -->
 <!-- Default page that also displays freets -->
 
 <template>
@@ -26,12 +27,13 @@
           <h2>Welcome @{{ $store.state.username }}</h2>
         </div>
       </header>
-      <section v-if="$store.state.mixtapes.length">
+      <section v-if="$store.state.mixtapes.length" class="post-container">
         <MixtapeComponent
           v-for="mixtape in $store.state.mixtapes"
           :key="mixtape.id"
           :mixtape="mixtape"
         />
+        <LikeComponent />
       </section>
       <article v-else>
         <h3>Your friends haven't posted any mixtapes yet!</h3>
@@ -45,6 +47,7 @@ import MixtapeComponent from '@/components/Mixtape/MixtapeComponent.vue';
 import CreateFreetForm from '@/components/Feed/CreateFreetForm.vue';
 import MusicNowHeader from '@/components/common/MusicNowHeader.vue';
 import MakeMixtapePage from '@/components/Mixtape/MakeMixtapePage.vue';
+import LikeComponent from '@/components/Likes/LikeComponent.vue';
 
 export default {
   name: 'FeedPage',
@@ -52,7 +55,8 @@ export default {
     MixtapeComponent,
     CreateFreetForm,
     MakeMixtapePage,
-    MusicNowHeader
+    MusicNowHeader,
+    LikeComponent
   },
   async beforeCreate() {
     if (!this.$store.state.username) {
@@ -114,5 +118,9 @@ section .scrollbox {
   flex: 1 0 50vh;
   padding: 3%;
   overflow-y: scroll;
+}
+
+.post-container {
+  position: relative;
 }
 </style>

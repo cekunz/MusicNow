@@ -1,10 +1,9 @@
-import type {NextFunction, Request, Response} from 'express';
+import type {Request, Response} from 'express';
 import express from 'express';
 import * as userValidator from '../user/middleware';
-import * as likedValidator from './middleware'
+import * as likedValidator from './middleware';
 import likedObjectCollection from './collection';
 import * as util from './util';
-
 
 const router = express.Router();
 
@@ -12,47 +11,44 @@ const router = express.Router();
  * Get the likes for a given ID
  *
  * @name GET /api/likes/
- * 
+ *
  * @param {string} id - the id of the liked object
  *
  * @return {likeResponse} - A list of all faovrites sent by username
  * @throws {404} - If an object with the given id does not exist
  */
 router.get(
-    '/',
-    [
-        likedValidator.isLikedExists
-    ],
-    async (req: Request, res: Response, next: NextFunction) => {
-        const likedId = (req.body.id as string) ?? undefined;
-        const liked = await likedObjectCollection.findOne(likedId);
-        const response = util.constructLikeResponse(liked);
-        res.status(200).json(response);
-});
+  '/',
+  [likedValidator.isLikedExists],
+  async (req: Request, res: Response) => {
+    const likedId = (req.body.id as string) ?? undefined;
+    const liked = await likedObjectCollection.findOne(likedId);
+    const response = util.constructLikeResponse(liked);
+    res.status(200).json(response);
+  }
+);
 
 /**
  * Create a new likedObject.
  *
  * @name POST /api/likes/
- * 
+ *
  * @param {string} id - The id of the object being liked
- * 
+ *
  * @return {likeResponse} - The created favorite
  * @throws {403} - If the object being liked already exists in the DB
  */
 router.post(
-    '/',
-    [
-        likedValidator.isLikedDoesntExist
-    ],
-    async (req: Request, res: Response) => {
-        const likedId = req.body.id as string;
-        const liked = await likedObjectCollection.addOne(likedId);
-        res.status(201).json({
-        message: 'likedObject created successfully.',
-        prompt: util.constructLikeResponse(liked)
-        });
-    }
+  '/',
+  [likedValidator.isLikedDoesntExist],
+  async (req: Request, res: Response) => {
+    const likedId = req.body.id as string;
+    const liked = await likedObjectCollection.addOne(likedId);
+    res.status(201).json({
+      message: 'likedObject created successfully.',
+      prompt: util.constructLikeResponse(liked)
+    });
+  }
 );
 
 /**
@@ -67,45 +63,44 @@ router.post(
  * @throws {404} - If likedObject does not exist
  */
 router.patch(
-    '/',
-    [
-        userValidator.isUserLoggedIn,
-        likedValidator.isLikedExists
-    ],
-    async (req: Request, res: Response) => {
-        const userId = (req.session.userId as string) ?? ''; // Will not be an empty string since its validated in isUserLoggedIn
-        const liked = await likedObjectCollection.updateOne(req.body.id, userId, req.body.remove==="true")
-        res.status(200).json({
-        message: 'likedObject was updated successfully.',
-        user: util.constructLikeResponse(liked)
-        });
-    }
+  '/',
+  [userValidator.isUserLoggedIn, likedValidator.isLikedExists],
+  async (req: Request, res: Response) => {
+    const userId = (req.session.userId as string) ?? ''; // Will not be an empty string since its validated in isUserLoggedIn
+    const liked = await likedObjectCollection.updateOne(
+      req.body.id,
+      userId,
+      req.body.remove === 'true'
+    );
+    res.status(200).json({
+      message: 'likedObject was updated successfully.',
+      user: util.constructLikeResponse(liked)
+    });
+  }
 );
 
 /**
- * Delete a favorite
+ * Delete a like
  *
  * @name DELETE /api/likes/
  *
  * @param {string} id - the Id of the object that is liked
- * 
+ *
  * @return {string} - A success message
  * @throws {404} - If an object with the Id does not exist
- * 
+ *
  */
 router.delete(
-    '/',
-    [
-        likedValidator.isLikedExists
-    ],
-    async (req: Request, res: Response) => {
-        const likedId = (req.body.id as string) ?? undefined;
-        const liked = await likedObjectCollection.deleteOne(likedId);
+  '/',
+  [likedValidator.isLikedExists],
+  async (req: Request, res: Response) => {
+    const likedId = (req.body.id as string) ?? undefined;
+    await likedObjectCollection.deleteOne(likedId);
 
-        res.status(200).json({
-        message: 'likedObject deleted successfully.'
-        });
-    }
+    res.status(200).json({
+      message: 'likedObject deleted successfully.'
+    });
+  }
 );
 
 export {router as likeRouter};

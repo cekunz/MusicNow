@@ -1,9 +1,11 @@
-import type {HydratedDocument, Types} from 'mongoose';
-import FriendCollection from '../friend/collection';
-import SongModel, { Song } from '../song/model';
+/* eslint-disable max-params */
+import type {HydratedDocument} from 'mongoose';
+import type {Song} from 'server/song/model';
 import type {Mixtape} from './model';
 import MixtapeModel from './model';
-// import SongModel from './model';
+import FriendCollection from '../friend/collection';
+import {formatDate} from './router';
+import UserCollection from '../user/collection';
 
 /**
  * This files contains a class that has the functionality to explore songs
@@ -24,55 +26,73 @@ class MixtapeCollection {
    * @param {string} username - The username of the creator of the mixtape
    * @return {Promise<HydratedDocument<Mixtape>>} - The newly created song
    */
-  static async addOne(song1: Song, song2: Song, song3: Song, username: string, date: string): Promise<HydratedDocument<Mixtape>> {
+  static async addOne(
+    song1: Song,
+    song2: Song,
+    song3: Song,
+    username: string,
+    date: string
+  ): Promise<HydratedDocument<Mixtape>> {
     const mixtape = new MixtapeModel({
-      songs:[song1, song2, song3],
+      songs: [song1, song2, song3],
       creator: username,
-      date: date
+      date
     });
     await mixtape.save(); // Saves mixtape to MongoDB
     return mixtape;
   }
 
   /**
-   * Get all the m ixtapes in the database
+   * Get all the mixtapes in the database
    *
    * @return {Promise<HydratedDocument<Mixtape>[]>} - An array of all of the mixtapes
    */
-   static async findAll(): Promise<Array<HydratedDocument<Mixtape>>> {
+  static async findAll(): Promise<Array<HydratedDocument<Mixtape>>> {
     // Retrieves all mixtapes
     return MixtapeModel.find({});
   }
 
   /**
-   * Get all the m ixtapes in the database
+   * Get all the mixtapes in the database
    * @param {string} date - the day to get mixtapes for
    * @return {Promise<HydratedDocument<Mixtape>[]>} - An array of all of the mixtapes
    */
-   static async findAllByDate(date:string): Promise<Array<HydratedDocument<Mixtape>>> {
+  static async findAllByDate(
+    date: string
+  ): Promise<Array<HydratedDocument<Mixtape>>> {
     // Retrieves all mixtapes for a day
     return MixtapeModel.find({date});
   }
 
   /**
-   * Find a mixtape by creator
+   * Find all mixtapes by creator
    *
    * @param {string} username - The username of the creator of the mixtapes
    * @return {Promise<Array<HydratedDocument<Mixtape>>> | Promise<null> } - The mixtapes created by the given user, if any
    */
-  static async findAllbyCreator(username: string): Promise<Array<HydratedDocument<Mixtape>>> {
+  static async findAllbyCreator(
+    username: string
+  ): Promise<Array<HydratedDocument<Mixtape>>> {
     return MixtapeModel.find({creator: username});
   }
 
-
   /**
-   * Find a mixtape by date
+   * Find all mixtapes needed for a feed.
    *
-   * @param {Date} date - The date to search for
-   * @return {Promise<Array<HydratedDocument<Mixtape>>> | Promise<null> } - The mixtapes created by the given user, if any
+   * @param {string} username - The user to create a feed for
+   * @return {Promise<Array<HydratedDocument<Mixtape>>> | Promise<null> } - The mixtapes created by the user's friends, if any
    */
-   static async findAllbyDate(date: Date): Promise<Array<HydratedDocument<Mixtape>>> {
-    return MixtapeModel.find({date});
+  static async findAllForFeed(
+    username: string
+  ): Promise<Array<HydratedDocument<Mixtape>>> {
+    const friends = await FriendCollection.findFriends(username);
+    const today = formatDate();
+    const feedMixtapes = await MixtapeModel.find({
+      date: today,
+      creator: {$in: friends}
+    });
+
+    return feedMixtapes;
   }
 
   /**
@@ -102,11 +122,13 @@ class MixtapeCollection {
    * @param {Date} date - The date of the mixtape to delete
    * @return {Promise<HydratedDocument<Mixtape>>} - the mixtape in question
    */
-   static async findOneByCreatorByDate(username: string, date: Date): Promise<HydratedDocument<Mixtape>> {
+  static async findOneByCreatorByDate(
+    username: string,
+    date: Date
+  ): Promise<HydratedDocument<Mixtape>> {
     const mixtape = await MixtapeModel.findOne({creator: username, date});
     return mixtape;
   }
-
 
   /**
    * Delete a song with given creator and date.
@@ -115,12 +137,13 @@ class MixtapeCollection {
    * @param {Date} date - The date of the mixtape to delete
    * @return {Promise<Boolean>} - true if the song has been deleted, false otherwise
    */
-   static async deleteOneByCreatorByDate(username: string, date: Date): Promise<boolean> {
+  static async deleteOneByCreatorByDate(
+    username: string,
+    date: Date
+  ): Promise<boolean> {
     const mixtape = await MixtapeModel.deleteOne({creator: username, date});
     return mixtape !== null;
   }
-
-  
 }
 
 export default MixtapeCollection;

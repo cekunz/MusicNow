@@ -1,3 +1,4 @@
+/* eslint-disable arrow-parens */
 import type {HydratedDocument} from 'mongoose';
 import type {likedObject} from './model';
 
@@ -24,7 +25,6 @@ const constructLikeResponse = (
   };
 
   return {
-    ...likeCopy,
     _id: likeCopy._id.toString(),
     likers: likeCopy.likers.map((liker) => liker.toString()),
     likedObjectId: likeCopy.object

@@ -106,7 +106,7 @@ router.delete(
     const favorite = await FavoriteCollection.deleteOne(trackId, username)
 
     res.status(200).json({
-      message: 'Your prompt was deleted successfully.'
+      message: 'Your favorite was deleted successfully.'
     });
   }
 );

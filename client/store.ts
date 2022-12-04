@@ -20,6 +20,7 @@ const store = new Vuex.Store({
     friends: [],
     friendRequests: [],
     nonFriends: [],
+    favorites: [],
     prompt: '', // the daily prompt
     likes: Object.create(null) // All likes from friends
   },
@@ -159,6 +160,14 @@ const store = new Vuex.Store({
       const url = `/api/prompt?date=${today}`;
       const res = await fetch(url).then(async (r) => r.json());
       state.prompt = res[0];
+    },
+    async refreshFavorites(state) {
+      /**
+       * Update favorited songs
+       */
+      const url = `/api/favorite/:${state.username}`
+      const res = await fetch(url).then(async (r) => r.json());
+      state.favorites = res;
     }
   },
   // Store data across page refreshes, only discard on browser close

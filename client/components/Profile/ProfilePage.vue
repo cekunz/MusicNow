@@ -11,9 +11,14 @@
             </div>
             <h2 class="info"> {{$store.state.profileFullname}} </h2>
             <h2 class="info"> @{{$store.state.profileUsername}} </h2>
-            <button class="inactive"> 
+            <button @click="open"> 
               {{$store.state.profileFriends.length}} Friends
             </button>
+            <FriendPopUp 
+              v-if="this.isOpen == true"
+              @close="close"
+              :friends="$store.state.profileFriends"
+            />
           </section>
         </div>
         <div class="right">
@@ -35,13 +40,16 @@
 
 
 <script>
+import FriendComponent from '@/components/FindFriends/FriendComponent.vue';
+import FriendPopUp from '@/components/Profile/FriendPopUp.vue';
 
 export default {
   name: 'ProfilePage',
-  components: {},
+  components: {FriendComponent, FriendPopUp},
   data() {
     return {
-      alerts: {}, 
+      isOpen: false,
+      list: this.friends
     };
   },
   beforeMount() {
@@ -67,6 +75,12 @@ export default {
       } catch (e) {
 
       }
+    },
+    open() {
+      this.isOpen = true;
+    },
+    close() {
+      this.isOpen = false;
     }
   }
 }

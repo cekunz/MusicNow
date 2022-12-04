@@ -8,7 +8,7 @@
         @{{ friend }} 
       </h3>
       <div
-        v-if="!confirmed"
+        v-if="confirmed"
         class="actions"
       >
         <!-- <button @click="deleteMixtape">
@@ -117,10 +117,11 @@ export default {
   justify-content: center;
 }
 
-.mixtape {
+.friend {
   padding: 10px;
   margin-bottom: 20px;
   border: solid 3px rgb(24, 23, 23);
   border-radius: 2px;
+  width: 50%;
 }
 </style>

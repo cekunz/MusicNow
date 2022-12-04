@@ -54,8 +54,8 @@ router.get(
 
     const allUsers = await UserCollection.findAllExcept(req.session.userId);
     const response = allUsers.map(util.constructUserResponse);
-    console.log(response);
-    res.status(200).json(response);
+    const usernameResponse = response.map(x => x.username);
+    res.status(200).json(usernameResponse);
   },
   [
     userValidator.isValidUsername,
@@ -64,7 +64,6 @@ router.get(
   async (req: Request, res: Response, next: NextFunction) => {
     const user = await UserCollection.findOneByUsername(req.query.username as string);
     const response = util.constructUserResponse(user);
-    console.log(response);
     res.status(200).json(response);
   }
 );

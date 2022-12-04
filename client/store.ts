@@ -2,7 +2,6 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import createPersistedState from 'vuex-persistedstate';
 
-
 Vue.use(Vuex);
 
 /**
@@ -16,6 +15,7 @@ const store = new Vuex.Store({
     mixtapes: [],
     friends: [],
     friendRequests: [],
+    nonFriends: [],
     prompt: '', // the daily prompt 
   },
   mutations: {
@@ -78,7 +78,20 @@ const store = new Vuex.Store({
         const url = `/api/friend/${state.username}?confirmed=false`
         const res = await fetch(url).then(async r => r.json());
         state.friendRequests = res;
-      },
+    },
+    async refreshPossibleFriends(state) {
+    /**
+     * Update all of a users' friends requests
+     */
+      const url = `/api/users`
+      const res = await fetch(url).then(async r => r.json());
+      
+     const allOtherUsers = res;
+     const diff =  [...allOtherUsers].filter((user) => !state.friendRequests.includes(user));
+     const nonFriendUsers =  [...diff].filter((user) => !state.friends.includes(user));
+     state.nonFriends = nonFriendUsers;
+     console.log(state);
+    },
     async refreshPrompt(state) {
     /**
      * Update prompt of the day

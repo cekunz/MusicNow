@@ -20,6 +20,15 @@
           🔎
          </button>
         </center>
+        <div class="friends">
+        <FriendComponent
+          v-for="user in friendsToShow"
+          :key="user"
+          :friend="user"
+          :confirmed="false"
+        />
+        </div>
+
     </div>
      <div v-if="yourFriends===true" >
       <header>
@@ -86,10 +95,11 @@
 
 <script>
 import GetFriendsForm from '@/components/FindFriends/GetFriendsForm.vue';
+import FriendComponent from '@/components/FindFriends/FriendComponent.vue';
 
 export default { 
   name: 'FindFriendsPage',
-  components: {GetFriendsForm},
+  components: {GetFriendsForm, FriendComponent},
   data() {
     return {
       usernameQuery: '',
@@ -97,7 +107,13 @@ export default {
       searchPage: true,
       yourFriends: false,
       requestsPage: false, 
+      
     };
+  },
+  computed: {
+    friendsToShow() {
+      return this.$store.state.nonFriends.splice(0,5); 
+    }
   },
   mounted() {
       this.$store.commit('refreshFriends');
@@ -152,6 +168,12 @@ header {
   flex-direction: row;
   justify-content: center;
   padding-bottom: 2rem;
+}
+
+.friends {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 .searchbar {
   /* text-align: center; */

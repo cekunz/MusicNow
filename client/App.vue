@@ -27,6 +27,7 @@ export default {
         this.$store.commit('refreshFeed');
         this.$store.commit('refreshFriends');
         this.$store.commit('refreshFriendRequests');
+         this.$store.commit('refreshPossibleFriends');
       });
 
     // Clear alerts on page refresh

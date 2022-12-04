@@ -8,7 +8,6 @@ import MixtapeCollection from '../mixtape/collection';
 import FriendCollection from '../friend/collection';
 
 
-
 /**
  * This files contains a class that has the functionality to explore songs
  * stored in MongoDB, including adding, finding, and deleting songs.
@@ -32,6 +31,7 @@ class ProfileCollection {
     const friendRequests = await FriendCollection.findFriendRequests(username);
     const profile = new ProfileModel({
       username: username,
+      fullName: user.fullName,
       user: user,
       favorites: favorites,
       mixtapes: mixtapes,
@@ -76,6 +76,7 @@ class ProfileCollection {
     const friends = await FriendCollection.findFriends(username);
     const friendRequests = await FriendCollection.findFriendRequests(username);
     profile.user = user;
+    profile.fullName = user.fullName;
     profile.favorites = favorites;
     profile.mixtapes = mixtapes;
     profile.friends = friends;

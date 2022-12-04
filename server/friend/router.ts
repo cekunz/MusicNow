@@ -84,7 +84,7 @@ router.post(
  */
 router.patch(
   '/:username?',
-  [userValidator.isUserLoggedIn],
+  // [userValidator.isUserLoggedIn],
   async (req: Request, res: Response) => {
     const requestingUser = req.query.user as string;
     const user = req.params.username;

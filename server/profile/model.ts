@@ -14,6 +14,7 @@ import type { Friend } from '../friend/model';
 export type Profile = {
   _id: Types.ObjectId; // MongoDB assigns each object this ID on creation
   username: string;
+  fullName: string;
   user: User;
   favorites: Favorite[];
   mixtapes: Mixtape[];
@@ -27,6 +28,10 @@ export type Profile = {
 const ProfileSchema = new Schema({
     // The username of the user that the profile belongs to
   username: {
+    type: String,
+    required: true
+  },
+  fullName: {
     type: String,
     required: true
   },

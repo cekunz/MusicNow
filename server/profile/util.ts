@@ -8,6 +8,7 @@ import type {Mixtape} from '../mixtape/model';
 type ProfileResponse = {
   _id: String;
   username: String;
+  fullName: String;
   user: User;
   favorites: Favorite[];
   mixtapes: Mixtape[];
@@ -32,6 +33,7 @@ const constructProfileResponse = (profile: HydratedDocument<Profile>): ProfileRe
     ...profileCopy,
     _id: profileCopy._id.toString(),
     username: profileCopy.username,
+    fullName: profileCopy.fullName,
     user: profileCopy.user,
     favorites: profileCopy.favorites,
     mixtapes: profileCopy.mixtapes,

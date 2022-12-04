@@ -18,7 +18,7 @@ const router = express.Router();
 /**
  * Get the profile of a given user
  *
- * @name GET /api/profile/:username?
+ * @name GET /api/profile?username=USERNAME
  *
  * @return {ProfileResponse} - Profile of the User
  * @throws {400} - If author is not given
@@ -33,44 +33,71 @@ router.get(
         return;
     }
     // get all profiles in the database
-    const username = (req.params.username as string) ?? undefined;
     const allProfiles = await ProfileCollection.findAll();
     const response = allProfiles.map(util.constructProfileResponse);
     res.status(200).json(response);
   },
   async (req: Request, res: Response) => {
     // get profile of the given user
-    const profile = await ProfileCollection.findOneByUsername(req.params.username as string);
+    await ProfileCollection.findOneByUsername(req.query.username as string);
+    const profile = await ProfileCollection.updateOne(req.query.username as string);
     const response = util.constructProfileResponse(profile);
     res.status(200).json(response);
   }
 );
 
 /**
- * Update a user's profile.
+ * Create a new profile.
  *
- * @name PATCH /api/profile
+ * @name POST /api/profile/:username?
  *
- * @param {string} username - The profile user's username 
- * @return {UserResponse} - The updated user
- * @throws {403} - If user is not logged in
+ * @param {string} username - The name of the creator
+ * 
+ * @return {ProfileResponse} - The created profile
+ * @throws {403} - If the user is not logged in
  */
- router.patch(
-    '/',
-    [
-      userValidator.isUserLoggedIn,
-    ],
-    async (req: Request, res: Response) => {
-      const userId = (req.session.userId as string) ?? ''; // Will not be an empty string since its validated in isUserLoggedIn
-      const user = await UserCollection.findOneByUserId(userId);
-      const username = user.username;
-      const profile = await ProfileCollection.updateOne(username);
-      res.status(200).json({
-        message: 'Your profile was updated successfully.',
-        profile: util.constructProfileResponse(profile)
-      });
-    }
-  );
+router.post(
+  '/:username?',
+  [
+    // userValidator.isUserLoggedIn,
+  ],
+  async (req: Request, res: Response) => {
+    const username = req.params.username as string;
+    const profile = await ProfileCollection.addOne(username);
+
+    res.status(201).json({
+      message: 'Your profile was created successfully.',
+      profile: util.constructProfileResponse(profile)
+    });
+  }
+);
+
+
+// /**
+//  * Update a user's profile.
+//  *
+//  * @name PATCH /api/profile
+//  *
+//  * @param {string} username - The profile user's username 
+//  * @return {UserResponse} - The updated user
+//  * @throws {403} - If user is not logged in
+//  */
+//  router.patch(
+//     '/',
+//     [
+//       userValidator.isUserLoggedIn,
+//     ],
+//     async (req: Request, res: Response) => {
+//       const userId = (req.session.userId as string) ?? ''; // Will not be an empty string since its validated in isUserLoggedIn
+//       const user = await UserCollection.findOneByUserId(userId);
+//       const username = user.username;
+//       const profile = await ProfileCollection.updateOne(username);
+//       res.status(200).json({
+//         message: 'Your profile was updated successfully.',
+//         profile: util.constructProfileResponse(profile)
+//       });
+//     }
+//   );
 
 
 /**

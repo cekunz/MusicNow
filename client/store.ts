@@ -12,6 +12,8 @@ const store = new Vuex.Store({
     username: null, // Username of the logged in user
     profileUsername: null, // Username of the profile 
     profileFullname: null, // Full Name of the profile
+    profileCircle: null, // First Initial to be displayed on profile page
+    profileFriends: [], // Friends of profile page
     alerts: {}, // global success/error messages encountered during submissions to non-visible forms
     mixtapePosted: false,
     mixtapes: [],
@@ -50,6 +52,20 @@ const store = new Vuex.Store({
        * @param profileFullname - new profileFullname to set
        */
       state.profileFullname = profileFullname;
+    },
+    setProfileCircle(state, profileCircle) {
+      /**
+       * Update the stored profileCircle to the specified one.
+       * @param profileCircle - new profileCircle to set
+       */
+      state.profileCircle = profileCircle;
+    },
+    setProfileFriends(state, profileFriends) {
+      /**
+       * Update the stored profileFriends to the specified ones.
+       * @param profileFriends - new profileFriends to set
+       */
+      state.profileFriends = profileFriends;
     },
     postMixtape(state) {
       /**

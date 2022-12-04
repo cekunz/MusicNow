@@ -7,11 +7,13 @@
         <div class="left">
           <section class="user-info">
             <div class="circle">
-              <p class="circle-inner">RL</p>
+              <p class="circle-inner">{{$store.state.profileCircle}}</p>
             </div>
             <h2 class="info"> {{$store.state.profileFullname}} </h2>
             <h2 class="info"> @{{$store.state.profileUsername}} </h2>
-            <p>Friends</p>
+            <button class="inactive"> 
+              {{$store.state.profileFriends.length}} Friends
+            </button>
           </section>
         </div>
         <div class="right">
@@ -19,7 +21,6 @@
             <h2 class="">Memories</h2>
             <div class="rectangle">
               <div class="rectangle-inner">
-
               </div>
             </div>
           </section>
@@ -44,28 +45,25 @@ export default {
     };
   },
   beforeMount() {
-    // if (!this.$route.params.name) {
-    //   this.updating(this.$route.params.name);
-    // }
     this.updating();
-    // this.$store.commit('setProfileUsername', this.$route.params.name);
-
   },
   methods: {
     async updating() {
-      const urlUser = this.$route.params.name ? `/api/users?username=${this.$route.params.name}` 
-                                              : `/api/users?username=${this.$store.state.username}`;
+      const urlProfile = this.$route.params.name ? `/api/profile?username=${this.$route.params.name}` 
+                                              : `/api/profile?username=${this.$store.state.username}`;
 
       try {
-        const rUser = await fetch(urlUser);
-        const resUser = await rUser.json();
+        const rProfile = await fetch(urlProfile);
+        const resProfile = await rProfile.json();
 
-        if (!rUser.ok) {
-          throw new Error(resUser.error);
+        if (!rProfile.ok) {
+          throw new Error(resProfile.error);
         }
 
-        this.$store.commit('setProfileUsername', resUser.username);
-        this.$store.commit('setProfileFullname', resUser.fullName);
+        this.$store.commit('setProfileUsername', resProfile.username);
+        this.$store.commit('setProfileFullname', resProfile.fullName);
+        this.$store.commit('setProfileCircle', resProfile.fullName[0]);
+        this.$store.commit('setProfileFriends', resProfile.friends);
       } catch (e) {
 
       }
@@ -87,6 +85,23 @@ header, header > * {
   align-items: center;
 }
 
+button {
+  padding: 10px;
+  font-size: 20px;
+  align-self: center;
+  margin-top: 30px;
+  border: solid 1px #ccc;
+  background-color: #ccc;
+  border-radius: 2px;
+  width: 50%;
+}
+
+button:hover {
+  background-color: rgb(54, 54, 54);
+  color: white;
+  border-color: rgb(54, 54, 54);
+}
+
 .info{
   margin: 0px;
 }
@@ -103,6 +118,7 @@ header, header > * {
   display: inline-block;
   background-color: #ccc;
   margin: 10px;
+  margin-bottom: 30px;
   border-radius: 50%;
 }
 
@@ -114,7 +130,7 @@ header, header > * {
   text-decoration: none;
   height: 250px;
   width: 250px;  
-  font-size: 30px;
+  font-size: 120px;
 }
 
 .rectangle {

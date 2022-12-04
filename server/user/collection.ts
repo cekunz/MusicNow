@@ -25,7 +25,6 @@ class UserCollection {
     password: string
   ): Promise<HydratedDocument<User>> {
     const dateJoined = new Date();
-
     const user = new UserModel({username, fullName, password, dateJoined});
     await user.save(); // Saves user to MongoDB
     return user;

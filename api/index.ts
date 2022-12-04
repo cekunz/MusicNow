@@ -15,6 +15,7 @@ import { promptRouter } from '../server/prompt/router';
 import { favoriteRouter } from '../server/favorite/router';
 import { friendRouter } from '../server/friend/router';
 import { likeRouter } from '../server/likes/router';
+import { profileRouter } from '../server/profile/router';
 import MongoStore from 'connect-mongo';
 
 // Load environmental variables
@@ -82,6 +83,7 @@ app.use('/api/prompt', promptRouter);
 app.use('/api/favorite', favoriteRouter);
 app.use('/api/friend', friendRouter);
 app.use('/api/likes', likeRouter);
+app.use('/api/profile', profileRouter);
 
 // Catch all the other routes and display error message
 app.all('*', (req: Request, res: Response) => {

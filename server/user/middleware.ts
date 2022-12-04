@@ -38,6 +38,21 @@ const isValidUsername = (req: Request, res: Response, next: NextFunction) => {
 };
 
 /**
+ * Checks if a username in req.query is valid, that is, it matches the username regex
+ */
+ const isValidUsernameQuery = (req: Request, res: Response, next: NextFunction) => {
+  const usernameRegex = /^\w+$/i;
+  if (!usernameRegex.test(req.query.username as string)) {
+    res.status(400).json({
+      error: 'Username must be a nonempty alphanumeric string.'
+    });
+    return;
+  }
+
+  next();
+};
+
+/**
  * Checks if a password in req.body is valid, that is, at 6-50 characters long without any spaces
  */
 const isValidPassword = (req: Request, res: Response, next: NextFunction) => {
@@ -71,6 +86,19 @@ const isAccountExists = async (req: Request, res: Response, next: NextFunction) 
     next();
   } else {
     res.status(401).json({error: 'Invalid user login credentials provided.'});
+  }
+};
+
+/**
+ * Checks if a user with username and password in req.query exists
+ */
+ const isAccountExistsQuery = async (req: Request, res: Response, next: NextFunction) => {
+  const user = await UserCollection.findOneByUsername(req.query.username as string);
+
+  if (user) {
+    next();
+  } else {
+    res.status(404).json({error: 'Invalid user login credentials provided.'});
   }
 };
 
@@ -150,7 +178,9 @@ export {
   isUserLoggedOut,
   isUsernameNotAlreadyInUse,
   isAccountExists,
+  isAccountExistsQuery,
   isAuthorExists,
   isValidUsername,
+  isValidUsernameQuery,
   isValidPassword
 };

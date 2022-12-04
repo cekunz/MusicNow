@@ -58,5 +58,5 @@ const ProfileSchema = new Schema({
   }
 });
 
-const ProfileModel = model<Profile>('User', ProfileSchema);
+const ProfileModel = model<Profile>('Profile', ProfileSchema);
 export default ProfileModel;

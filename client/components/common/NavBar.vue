@@ -24,9 +24,11 @@
       </router-link>
       <router-link
         v-if="$store.state.username"
-        to="/profile"
+        :to="{name: 'Profile', params: {name: $store.state.username}}"
       >
-        <img class="profile" src="../../public/musicnow-logos/profile.png">
+        <span v-on:click="goToProfile">
+          <img class="profile" src="../../public/musicnow-logos/profile.png">
+        </span>
       </router-link>
       <router-link
         v-if="$store.state.username"
@@ -52,6 +54,22 @@
     </section>
   </nav>
 </template>
+
+<script>
+export default {
+  name: 'NavBar',
+  props: {},
+  data () {
+    return {};
+  },
+  created() {},
+  methods: {
+    goToProfile() {
+      this.$store.commit('setProfileUsername', this.$store.state.username);
+    }
+  }
+}
+</script>
 
 <style scoped>
 nav {

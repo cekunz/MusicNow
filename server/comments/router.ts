@@ -21,7 +21,7 @@ const router = express.Router();
  *
  * @name GET /api/comments?author=username
  *
- * @return {CommenttResponse[]} - An array of comments created by user with username, author
+ * @return {CommentResponse[]} - An array of comments created by user with username, author
  * @throws {400} - If author is not given
  * @throws {404} - If no user has given author
  *
@@ -31,7 +31,7 @@ const router = express.Router();
  *
  * @name GET /api/comments?mixtape=mixtapeId
  *
- * @return {CommenttResponse[]} - An array of comments made on a mixtape with the given mixtapeId
+ * @return {CommentResponse[]} - An array of comments made on a mixtape with the given mixtapeId
  * @throws {400} - If author is not given
  * @throws {404} - If no mixtape has given mixtapeId
  *
@@ -131,7 +131,7 @@ router.delete(
  * @name PATCH /api/comments/:id
  *
  * @param {string} content - the new content for the comment
- * @return {FreetResponse} - the updated comment
+ * @return {CommentResponse} - the updated comment
  * @throws {403} - if the user is not logged in or not the author of
  *                 of the comment
  * @throws {404} - If the commentId is not valid

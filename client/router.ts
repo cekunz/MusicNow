@@ -15,7 +15,7 @@ const routes = [
   {path: '/account', name: 'Settings', component: AccountPage},
   {path: '/login', name: 'Login', component: LoginPage},
   {path: '/register', name: 'Register', component: RegisterPage},
-  {path: '/profile', name: 'Profile', component: ProfilePage},
+  {path: '/profile', name: 'Profile', component: ProfilePage, params: true},
   {path: '/findFriends', name: 'Find Friends', component: FindFriendsPage},
   {path: '*', name: 'Not Found', component: NotFound}
 ];

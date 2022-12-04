@@ -11,6 +11,8 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
   state: {
     username: null, // Username of the logged in user
+    profileUsername: null, // Username of the profile 
+    profileFullname: null, // Full Name of the profile
     alerts: {}, // global success/error messages encountered during submissions to non-visible forms
     mixtapePosted: false, 
     mixtapes: [],
@@ -34,6 +36,20 @@ const store = new Vuex.Store({
        * @param username - new username to set
        */
       state.username = username;
+    },
+    setProfileUsername(state, profileUsername) {
+      /**
+       * Update the stored profileUsername to the specified one.
+       * @param profileUsername - new profileUsername to set
+       */
+      state.profileUsername = profileUsername;
+    },
+    setProfileFullname(state, profileFullname) {
+      /**
+       * Update the stored profileFullname to the specified one.
+       * @param profileFullname - new profileFullname to set
+       */
+      state.profileFullname = profileFullname;
     },
     postMixtape(state) {
       /**

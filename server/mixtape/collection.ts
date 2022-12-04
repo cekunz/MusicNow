@@ -96,6 +96,26 @@ class MixtapeCollection {
   }
 
   /**
+   * Find a mixtape by date
+   *
+   * @param {string} username - The user whose friends we are showing
+   * @param {Date} date - The date to search for
+   * @return {Promise<Array<HydratedDocument<Mixtape>>> | Promise<null> } - The mixtapes created by the given user, if any
+   */
+   static async findAllbyFriendsbyDate(username: string, date: Date): Promise<Array<HydratedDocument<Mixtape>>> {
+    const friends = await FriendCollection.findFriends(username);
+    const mixtapes = [];
+
+    for (const friend in friends) {
+      const post = await MixtapeModel.find({date, creator:friend});
+      if (post !== null) {
+        mixtapes.push(post[0]);
+      }
+    }
+    return mixtapes;
+  }
+
+  /**
    * Find a song with given creator and date.
    *
    * @param {string} username - The username of creator of the mixtape to delete

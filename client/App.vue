@@ -41,6 +41,8 @@ export default {
         // Get feed ready for user
         this.$store.commit('refreshPrompt');
         this.$store.commit('refreshFeed');
+        this.$store.commit('refreshFriends');
+        this.$store.commit('refreshFriendRequests');
       });
 
     // Clear alerts on page refresh

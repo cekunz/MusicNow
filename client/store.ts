@@ -13,6 +13,8 @@ const store = new Vuex.Store({
     alerts: {}, // global success/error messages encountered during submissions to non-visible forms
     mixtapePosted: false,
     mixtapes: [],
+    friends: [],
+    friendRequests: [],
     prompt: '' // the daily prompt
   },
   mutations: {
@@ -58,6 +60,22 @@ const store = new Vuex.Store({
       const url = `/api/mixtape/${state.username}?date=${today}&feed=true`;
       const res = await fetch(url).then(async (r) => r.json());
       state.mixtapes = res;
+    },
+    async refreshFriends(state) {
+      /**
+       * Update all of a users' friends
+       */
+      const url = `/api/friend/${state.username}?confirmed=true`;
+      const res = await fetch(url).then(async (r) => r.json());
+      state.friends = res;
+    },
+    async refreshFriendRequests(state) {
+      /**
+       * Update all of a users' friends requests
+       */
+      const url = `/api/friend/${state.username}?confirmed=false`;
+      const res = await fetch(url).then(async (r) => r.json());
+      state.friendRequests = res;
     },
     async refreshPrompt(state) {
       /**

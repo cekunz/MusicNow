@@ -99,6 +99,10 @@ export default {
       requestsPage: false, 
     };
   },
+  mounted() {
+      this.$store.commit('refreshFriends');
+      this.$store.commit('refreshFriendRequests');
+  },
   methods: {
     filterUsers() {
       if (this.usernameQuery.length === 0) {
@@ -120,11 +124,13 @@ export default {
       this.searchPage = false;
       this.yourFriends = true;
       this.requestsPage = false;
+      this.$store.commit('refreshFriends');   
     },
     requestsPageToggle() {
       this.searchPage = false;
       this.yourFriends = false;
       this.requestsPage = true;
+      this.$store.commit('refreshFriendRequests');
     }
   }
 }

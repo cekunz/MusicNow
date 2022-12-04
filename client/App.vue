@@ -25,6 +25,8 @@ export default {
         this.$store.commit('resetMixtape');
         this.$store.commit('refreshPrompt');
         this.$store.commit('refreshFeed');
+        this.$store.commit('refreshFriends');
+        this.$store.commit('refreshFriendRequests');
       });
 
     // Clear alerts on page refresh

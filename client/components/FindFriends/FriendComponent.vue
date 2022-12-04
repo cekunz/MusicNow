@@ -1,26 +1,21 @@
 
 <template>
   <article
-    class="mixtape"
+    class="friend"
   >
     <header>
       <h3 class="author">
-        @{{ mixtape.creator }}
+        @{{ friend }} 
       </h3>
       <div
-        v-if="$store.state.username === mixtape.creator"
+        v-if="!confirmed"
         class="actions"
       >
-        <button @click="deleteMixtape">
+        <!-- <button @click="deleteMixtape">
           🗑️ Delete
-        </button>
+        </button> -->
       </div>
     </header>
-    <div class="content">
-      <SongComponent :song="mixtape.songs[0]" />
-      <SongComponent :song="mixtape.songs[1]" />
-      <SongComponent :song="mixtape.songs[2]" />
-    </div>
     
 
     <section class="alerts">
@@ -41,14 +36,18 @@
 import SongComponent from '@/components/Song/SongComponent.vue';
 
 export default {
-  name: 'MixtapeComponent',
+  name: 'FriendComponent',
   components: {SongComponent},
   props: {
     // Data from the stored mixtape
-    mixtape: {
-      type: Object,
+    friend: {
+      type: String,
       required: true
-    }
+    },
+    confirmed: {
+      type: Boolean,
+      required: true
+    },
   },
   data() {
     return {
@@ -56,7 +55,7 @@ export default {
     };
   },
   methods: {
-    deleteMixtape() {
+    delete() {
       /**
        * Deletes this mixtape.
        */

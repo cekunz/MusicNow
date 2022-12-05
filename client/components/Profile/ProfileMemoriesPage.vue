@@ -2,10 +2,37 @@
 
 <template>
   <main>
-    <MemoryComponent 
-      v-for="mixtape in this.$store.state.profileMixtapes"
-      :mixtape="mixtape"
-    />
+    <section class="memory-info">
+      <h2>
+        <router-link
+          style="text-decoration: none; color: black"
+          :to="{name: 'Profile', params: {username: this.$store.state.profileUsername}}"
+        >
+          <i class="fas fa-arrow-left left-side"></i>
+        </router-link>
+        Memories
+      </h2>
+      <div class="rectangle">
+        <div class="memory-rectangle">
+          <MemoryComponent 
+            class="memory-page"
+            v-for="mixtape in this.$store.state.profileMixtapes"
+            :mixtape="mixtape"
+          />
+        </div>
+        <div 
+          class="show-more"
+          v-if="this.showMoreMemories"
+        >
+        <router-link
+          style="text-decoration: none; color: black"
+          :to="{name: 'Memories'}"
+        >
+          View All →
+        </router-link>
+      </div>
+      </div>
+    </section>
   </main>
 </template>
 
@@ -22,27 +49,8 @@ export default {
     };
   },
   beforeMount() {
-    // this.updating();
   },
   methods: {
-    // async updating() {
-    //   const urlMixtape = this.$route.params.username && this.$route.params.date
-    //                      ? `/api/mixtape/${this.$route.params.username}?date=${this.$route.params.date}` 
-    //                      : `/api/profile?username=${this.$store.state.username}`;
-
-    //   try {
-    //     const rMixtape = await fetch(urlMixtape);
-    //     const resMixtape = await rMixtape.json();
-
-    //     if (!rMixtape.ok) {
-    //       throw new Error(resMixtape.error);
-    //     }
-
-    //     this.mixtape = resMixtape;
-    //   } catch (e) {
-
-    //   }
-    // }
   }
 }
 
@@ -122,7 +130,30 @@ button:hover {
   flex-wrap: wrap;
 }
 
+.memory-rectangle {
+  margin: 2%;
+  color: black;
+  /* height: 50vh; */
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+}
+
 .user-info {
   text-align: center;
+}
+
+.memory-info {
+  text-align: center;
+  width: 100%;
+}
+
+.memory-page {
+  height: 24vh;
+  width: 24vh;
+}
+
+.left-side {
+  float: left;
 }
 </style>

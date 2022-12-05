@@ -32,9 +32,6 @@
                   :mixtape="mixtape"
                 />
               </div>
-              <div class="show-more" v-if="this.showMoreMemories">
-                View All →
-              </div>
               <div 
                 class="show-more"
                 v-if="this.showMoreMemories"

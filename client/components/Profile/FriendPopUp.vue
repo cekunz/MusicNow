@@ -11,7 +11,7 @@
             v-for="friend in friends"
             :key="user"
             :friend="friend"
-            :confirmed="false"
+            :confirmed="true"
           />
         </div>
       </div>

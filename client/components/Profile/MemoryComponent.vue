@@ -53,7 +53,7 @@ export default {
   border: solid 3px rgb(176, 176, 176);
   background-color: rgb(176, 176, 176);
   border-radius: 2px;
-  height: 42%;
+  height: 44%;
   width: 20%;
 }
 .memory:hover {

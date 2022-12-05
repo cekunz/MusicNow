@@ -1,6 +1,6 @@
 import type {HydratedDocument} from 'mongoose';
 import moment from 'moment';
-import type {Favorite} from './model';
+import type {Favorite, PopulatedFavorite} from './model';
 import type {Song} from '../song/model';
 import { User } from '../user/model';
 
@@ -18,7 +18,7 @@ type FavoriteResponse = {
  * @returns {FavoriteResponse} - The Favorite object formatted for the frontend
  */
 const constructFavoriteResponse = (favorite: HydratedDocument<Favorite>): FavoriteResponse => {
-  const favoriteCopy: Favorite = {
+  const favoriteCopy: PopulatedFavorite = {
     ...favorite.toObject({
       versionKey: false // Cosmetics; prevents returning of __v property
     })

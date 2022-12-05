@@ -15,6 +15,7 @@ const store = new Vuex.Store({
     profileCircle: null, // First Initial to be displayed on profile page
     profileFriends: [], // Friends of profile page
     profileMixtapes: [], // Mixtapes of profile page
+    profileFavorites: [], // Saved songs (favorites) of profile page
     alerts: {}, // global success/error messages encountered during submissions to non-visible forms
     mixtapePosted: false,
     mixtapes: [],
@@ -93,6 +94,13 @@ const store = new Vuex.Store({
        * @param profileFriends - new profileFriends to set
        */
       state.profileFriends = profileFriends;
+    },
+    setProfileFavorites(state, profileFavorites) {
+      /**
+       * Update the stored profileFavorites to the specified ones.
+       * @param profileFavorites - new profileFavorites to set
+       */
+      state.profileFavorites = profileFavorites;
     },
     setLikes(state, likes) {
       /**

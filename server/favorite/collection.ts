@@ -30,7 +30,7 @@ import SongModel from '../song/model';
     */
       static async findFavoritesByUser(username: string): Promise<Array<Favorite>> {
         const user = await UserCollection.findOneByUsername(username);
-        const favorites: Favorite[] = await FavoriteModel.find({user: user});
+        const favorites: Favorite[] = await FavoriteModel.find({user: user}).populate('song');
         return favorites;
     }
 
@@ -43,12 +43,13 @@ import SongModel from '../song/model';
      */
     static async addOne(trackId: string, username: string): Promise<HydratedDocument<Favorite>> {
         const song = await SongModel.findOne({trackId});
+        console.log(song);
         const user: User = await UserCollection.findOneByUsername(username);
 
         const favorite = new FavoriteModel({user: user, song:song,});
         await favorite.save()
         
-        return favorite;
+        return favorite.populate('song');
     }
 
     /**

@@ -94,6 +94,21 @@ const store = new Vuex.Store({
        */
       state.profileFriends = profileFriends;
     },
+    setLikes(state, likes) {
+      /**
+       * Set the stored likes to the provided likes.
+       * @param likes - likes to store
+       */
+      const newLikes = Object.create(null);
+      // Group likes by their corresponding object Ids
+      for (const like of likes) {
+        const objectId = `${like.likedObjectId}`;
+        if (!(objectId in newLikes)) {
+          newLikes[objectId] = like;
+        }
+      }
+      state.likes = newLikes;
+    },
     postMixtape(state) {
       /**
        * Update status if Mixtape has been posted for the day
@@ -120,6 +135,9 @@ const store = new Vuex.Store({
       const url = `/api/mixtape/${state.username}?date=${today}&feed=true`;
       const res = await fetch(url).then(async (r) => r.json());
       state.mixtapes = res;
+
+      // Refresh likes after getting new mixtapes
+      this.commit('refreshLikes');
     },
     async refreshFriends(state) {
       /**
@@ -165,9 +183,53 @@ const store = new Vuex.Store({
       /**
        * Update favorited songs
        */
-      const url = `/api/favorite/:${state.username}`
+      const url = `/api/favorite/:${state.username}`;
       const res = await fetch(url).then(async (r) => r.json());
       state.favorites = res;
+    },
+    async refreshLikes(state) {
+      /**
+       * Update all of the likes
+       */
+      const requests = state.mixtapes.map((mixtape) => {
+        const url = `/api/likes/${mixtape._id}`;
+        const res = fetch(url).then(async (r) => r.json());
+        return res;
+      });
+
+      const likes = await Promise.all(requests); // wait for all requests to finish
+      this.commit('setLikes', likes);
+    },
+    removeLike(state, like) {
+      /**
+       * Remove the user's name from the list of likers on an object.
+       * @param like - The like object to modify
+       */
+      const newLikes = JSON.parse(JSON.stringify(state.likes)); // Copy to ensure no alliasing occurs;
+      const objectId = like.likedObjectId;
+      const user = state.username;
+      if (objectId in newLikes) {
+        const likers = newLikes[objectId].likers;
+
+        // Remove liker with a matching username
+        newLikes[objectId].likers = likers.filter((liker) => {
+          liker !== user;
+        });
+      }
+      state.likes = newLikes;
+    },
+    addLike(state, like) {
+      /**
+       * Add the user's name to the list of likers on an object.
+       * @param like - The new like to store
+       */
+      const newLikes = JSON.parse(JSON.stringify(state.likes)); // Copy to ensure no alliasing occurs;
+      const objectId = like.likedObjectId;
+      const user = state.username;
+      if (objectId in newLikes) {
+        newLikes[objectId].likers.push(user); // add user to list of likers
+      }
+      state.likes = newLikes;
     }
   },
   // Store data across page refreshes, only discard on browser close

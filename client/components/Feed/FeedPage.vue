@@ -33,7 +33,6 @@
           :key="mixtape.id"
           :mixtape="mixtape"
         />
-        <LikeComponent />
       </section>
       <article v-else>
         <h3>Your friends haven't posted any mixtapes yet!</h3>
@@ -47,7 +46,6 @@ import MixtapeComponent from '@/components/Mixtape/MixtapeComponent.vue';
 import CreateFreetForm from '@/components/Feed/CreateFreetForm.vue';
 import MusicNowHeader from '@/components/common/MusicNowHeader.vue';
 import MakeMixtapePage from '@/components/Mixtape/MakeMixtapePage.vue';
-import LikeComponent from '@/components/Likes/LikeComponent.vue';
 
 export default {
   name: 'FeedPage',
@@ -55,8 +53,7 @@ export default {
     MixtapeComponent,
     CreateFreetForm,
     MakeMixtapePage,
-    MusicNowHeader,
-    LikeComponent
+    MusicNowHeader
   },
   async beforeCreate() {
     if (!this.$store.state.username) {

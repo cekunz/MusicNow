@@ -1,19 +1,9 @@
-
 <template>
-  <article
-    class="mixtape"
-  >
+  <article class="mixtape">
     <header>
-      <h3 class="author">
-        @{{ mixtape.creator }}
-      </h3>
-      <div
-        v-if="$store.state.username === mixtape.creator"
-        class="actions"
-      >
-        <button @click="deleteMixtape">
-          🗑️ Delete
-        </button>
+      <h3 class="author">@{{ mixtape.creator }}</h3>
+      <div v-if="$store.state.username === mixtape.creator" class="actions">
+        <button @click="deleteMixtape">🗑️ Delete</button>
       </div>
     </header>
     <div class="content">
@@ -21,7 +11,6 @@
       <SongComponent :song="mixtape.songs[1]" />
       <SongComponent :song="mixtape.songs[2]" />
     </div>
-    
 
     <section class="alerts">
       <article
@@ -32,17 +21,19 @@
         <p>{{ alert }}</p>
       </article>
     </section>
+    <LikeComponent :liked-object-id="mixtape._id" />
   </article>
 </template>
 
 <script>
 // create song component that will show the image of the album ,
-// loop over that 
+// loop over that
 import SongComponent from '@/components/Song/SongComponent.vue';
+import LikeComponent from '@/components/Likes/LikeComponent.vue';
 
 export default {
   name: 'MixtapeComponent',
-  components: {SongComponent},
+  components: {SongComponent, LikeComponent},
   props: {
     // Data from the stored mixtape
     mixtape: {
@@ -64,7 +55,8 @@ export default {
         method: 'DELETE',
         callback: () => {
           this.$store.commit('alert', {
-            message: 'Successfully deleted mixtape!', status: 'success'
+            message: 'Successfully deleted mixtape!',
+            status: 'success'
           });
         }
       };
@@ -86,14 +78,18 @@ export default {
        * @param params.callback - Function to run if the the request succeeds
        */
       const options = {
-        method: params.method, headers: {'Content-Type': 'application/json'}
+        method: params.method,
+        headers: {'Content-Type': 'application/json'}
       };
       if (params.body) {
         options.body = params.body;
       }
 
       try {
-        const r = await fetch(`/api/mixtape/${this.mixtape.creator}?date=${this.todayDate()}`, options);
+        const r = await fetch(
+          `/api/mixtape/${this.mixtape.creator}?date=${this.todayDate()}`,
+          options
+        );
         if (!r.ok) {
           const res = await r.json();
           throw new Error(res.error);

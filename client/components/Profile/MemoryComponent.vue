@@ -1,15 +1,15 @@
 
 <template>
-  <article
-    class="mixtape"
-  >
-    <div class="square">
-
-    </div>
-    <div class="content">
-      {{this.displayDate}}
-    </div>
-  </article>
+  <router-link 
+    class="memory"
+    style="text-decoration: none; color: black;" 
+    :to="{name: 'Mixtape', params: {username: this.mixtape.creator, date: this.mixtape.date}}"> 
+      <div class="square">
+      </div>
+      <div class="content">
+        {{this.displayDate}}
+      </div>
+  </router-link>
 </template>
 
 <script>
@@ -48,13 +48,18 @@ export default {
   justify-content: center;
 }
 
-.mixtape {
+.memory {
   margin: 2%;
   border: solid 3px rgb(176, 176, 176);
   background-color: rgb(176, 176, 176);
   border-radius: 2px;
   height: 42%;
   width: 20%;
+}
+.memory:hover {
+  background-color: rgb(84, 84, 84);
+  color: white;
+  border-color: rgb(84, 84, 84);
 }
 
 .square {

@@ -4,6 +4,7 @@ import SongCollection from '../song/collection';
 import * as userValidator from '../user/middleware';
 import * as mixtapeValidator from './middleware';
 import MixtapeCollection from './collection';
+import likedObjectCollection from '../likes/collection';
 import * as util from './util';
 
 const router = express.Router();
@@ -121,6 +122,9 @@ router.post(
       username,
       formatDate()
     );
+
+    // Create a new like object to go along with the mixtape
+    await likedObjectCollection.addOne(mixtape._id, []);
 
     res.status(201).json({
       message: 'Your song was created successfully.',

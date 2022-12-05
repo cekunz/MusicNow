@@ -10,18 +10,18 @@ const router = express.Router();
 /**
  * Get the likes for a given ID
  *
- * @name GET /api/likes/
+ * @name GET /api/likes/:id
  *
  * @param {string} id - the id of the liked object
  *
- * @return {likeResponse} - A list of all faovrites sent by username
+ * @return {likeResponse} - A list of all favorites sent by username
  * @throws {404} - If an object with the given id does not exist
  */
 router.get(
-  '/',
+  '/:id',
   [likedValidator.isLikedExists],
   async (req: Request, res: Response) => {
-    const likedId = (req.body.id as string) ?? undefined;
+    const likedId = req.params.id ?? undefined;
     const liked = await likedObjectCollection.findOne(likedId);
     const response = util.constructLikeResponse(liked);
     res.status(200).json(response);
@@ -64,7 +64,7 @@ router.post(
  */
 router.patch(
   '/',
-  [userValidator.isUserLoggedIn, likedValidator.isLikedExists],
+  [likedValidator.isLikedExists],
   async (req: Request, res: Response) => {
     const userId = (req.session.userId as string) ?? ''; // Will not be an empty string since its validated in isUserLoggedIn
     const liked = await likedObjectCollection.updateOne(

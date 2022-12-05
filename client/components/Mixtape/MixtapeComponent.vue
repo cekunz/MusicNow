@@ -11,18 +11,21 @@
         :trackName="mixtape.songs[0].songTitle"
         :artist="mixtape.songs[0].songArtist"
         :trackId="mixtape.songs[0].trackId" 
+        :albumCover="mixtape.songs[0].albumCover" 
         :simpleCover="true"
       />
       <SongComponent 
         :trackName="mixtape.songs[1].songTitle"
         :artist="mixtape.songs[1].songArtist"
         :trackId="mixtape.songs[1].trackId"
+        :albumCover="mixtape.songs[1].albumCover" 
         :simpleCover="true"
       />
       <SongComponent 
         :trackName="mixtape.songs[2].songTitle"
         :artist="mixtape.songs[2].songArtist"
         :trackId="mixtape.songs[2].trackId"
+        :albumCover="mixtape.songs[2].albumCover" 
         :simpleCover="true"
       />
     </div>

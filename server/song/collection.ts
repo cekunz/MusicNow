@@ -19,11 +19,12 @@ class SongCollection {
    * @param {string} trackId - The track Id of the song on spotify
    * @return {Promise<HydratedDocument<Song>>} - The newly created song
    */
-  static async addOne(songTitle: string, songArtist: string, trackId: string): Promise<HydratedDocument<Song>> {
+  static async addOne(songTitle: string, songArtist: string, trackId: string, albumCover:string): Promise<HydratedDocument<Song>> {
     const song = new SongModel({
       songTitle,
       songArtist,
-      trackId
+      trackId,
+      albumCover
     });
     await song.save(); // Saves song to MongoDB
     return song;

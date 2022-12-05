@@ -26,13 +26,14 @@ class ProfileCollection {
    */
   static async addOne(username: string): Promise<HydratedDocument<Profile>> {
     const user  = await UserCollection.findOneByUsername(username);
+    const fullName = (user.fullName === null) ? user.fullName : "fullname";
     const favorites = await FavoriteCollection.findFavoritesByUser(username);
     const mixtapes = await MixtapeCollection.findAllbyCreator(username);
     const friends = await FriendCollection.findFriends(username);
     const friendRequests = await FriendCollection.findFriendRequests(username);
     const profile = new ProfileModel({
       username: username,
-      fullName: user.fullName,
+      fullName: fullName,
       user: user,
       favorites: favorites,
       mixtapes: mixtapes,

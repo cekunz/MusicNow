@@ -10,6 +10,7 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
   state: {
     username: null, // Username of the logged in user
+    userId: null,
     profileUsername: null, // Username of the profile
     profileFullname: null, // Full Name of the profile
     profileCircle: null, // First Initial to be displayed on profile page
@@ -42,6 +43,13 @@ const store = new Vuex.Store({
        */
       state.username = username;
     },
+    setUserId(state, userId) {
+      /**
+       * Update the stored userId to the specified one.
+       * @param userId - new userId to set
+       */
+      state.userId = userId;
+    },
     setProfileUsername(state, profileUsername) {
       /**
        * Update the stored profileUsername to the specified one.
@@ -62,23 +70,6 @@ const store = new Vuex.Store({
        * @param profileMixtapes - new profileMixtapes to set
        */
       state.profileMixtapes = profileMixtapes;
-    },
-    setReactions(state, likes) {
-      /**
-       * Set the stored likes to the provided likes.
-       * @param likes - likes to store
-       */
-      const newLikes = Object.create(null);
-      // Group likes by their corresponding object Ids
-      for (const like of likes) {
-        const object = `${like.object}`;
-        if (object in newLikes) {
-          newLikes[object].push(like);
-        } else {
-          newLikes[object] = [like];
-        }
-      }
-      state.likes = newLikes;
     },
     setProfileCircle(state, profileCircle) {
       /**
@@ -153,7 +144,6 @@ const store = new Vuex.Store({
        */
       const url = `/api/friend/requests/${state.username}`;
       const res = await fetch(url).then(async (r) => r.json());
-      console.log('returned', res);
       state.friendRequests = res;
     },
     async refreshPossibleFriends(state) {
@@ -201,6 +191,19 @@ const store = new Vuex.Store({
       const likes = await Promise.all(requests); // wait for all requests to finish
       this.commit('setLikes', likes);
     },
+    addLike(state, like) {
+      /**
+       * Add the user's name to the list of likers on an object.
+       * @param like - The new like to store
+       */
+      const newLikes = JSON.parse(JSON.stringify(state.likes)); // Copy to ensure no alliasing occurs;
+      const objectId = like.likedObjectId;
+      const user = state.userId;
+      if (objectId in newLikes) {
+        newLikes[objectId].likers.push(user); // add user to list of likers
+      }
+      state.likes = newLikes;
+    },
     removeLike(state, like) {
       /**
        * Remove the user's name from the list of likers on an object.
@@ -216,19 +219,6 @@ const store = new Vuex.Store({
         newLikes[objectId].likers = likers.filter((liker) => {
           liker !== user;
         });
-      }
-      state.likes = newLikes;
-    },
-    addLike(state, like) {
-      /**
-       * Add the user's name to the list of likers on an object.
-       * @param like - The new like to store
-       */
-      const newLikes = JSON.parse(JSON.stringify(state.likes)); // Copy to ensure no alliasing occurs;
-      const objectId = like.likedObjectId;
-      const user = state.username;
-      if (objectId in newLikes) {
-        newLikes[objectId].likers.push(user); // add user to list of likers
       }
       state.likes = newLikes;
     }

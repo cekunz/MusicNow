@@ -97,6 +97,8 @@ export default {
             'setUsername',
             res.user ? res.user.username : null
           );
+          // dont forget to set the user Id
+          this.$store.commit('setUserId', res.user ? res.user._id : null);
         }
 
         if (this.resetMixtape) {

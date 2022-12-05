@@ -34,7 +34,7 @@ export default {
      */
     userHasLiked() {
       return this.like !== undefined
-        ? this.like.likers.includes(this.$store.state.username)
+        ? this.like.likers.includes(this.$store.state.userId)
         : false;
     }
   },

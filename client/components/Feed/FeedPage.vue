@@ -1,5 +1,4 @@
 <!-- eslint-disable vue/max-attributes-per-line -->
-<!-- Default page that also displays freets -->
 
 <template>
   <main>
@@ -43,7 +42,6 @@
 
 <script>
 import MixtapeComponent from '@/components/Mixtape/MixtapeComponent.vue';
-import CreateFreetForm from '@/components/Feed/CreateFreetForm.vue';
 import MusicNowHeader from '@/components/common/MusicNowHeader.vue';
 import MakeMixtapePage from '@/components/Mixtape/MakeMixtapePage.vue';
 
@@ -51,7 +49,6 @@ export default {
   name: 'FeedPage',
   components: {
     MixtapeComponent,
-    CreateFreetForm,
     MakeMixtapePage,
     MusicNowHeader
   },

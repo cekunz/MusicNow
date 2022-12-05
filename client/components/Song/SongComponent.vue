@@ -2,11 +2,11 @@
 
 <template>
     <div class="info">
-      <!-- <img src="albumCover"> -->
+      <img src="albumCover">
       <h3 class='track'> {{shortenedTrack}} </h3>
       <h4 class='artist'> {{artist}} </h4>
 
-      <button
+      <button v-if="!simpleCover || simpleCover===null"
        @click="$emit('select', {songTitle: trackName, songArtist: artist, trackId: trackId})">
         Select
       </button>
@@ -19,19 +19,23 @@ export default {
   props: {
     trackName: {
         type: String,
-        required: true
+        required: false
     },
     artist: {
         type: String,
-        required: true
+        required: false
     },
     trackId: {
         type: String,
-        required: true
+        required: false
     },
     albumCover: {
         type: String,
-        required: true
+        required: false
+    },
+    simpleCover: {
+        type: Boolean,
+        required: false
     }
   },
   computed: {

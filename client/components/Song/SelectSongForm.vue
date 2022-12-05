@@ -14,17 +14,17 @@
         <div v-if="editing" class="song"> 
             <textarea
             @input="searchQuery = $event.target.value"
-            placeholder="Enter the Album or Song title"
+            placeholder="Search for a song title..."
             />
-            <label for="type">Search type:</label>
+            <!-- <label for="type">Search type:</label>
             <select name="searchType" id="searchType">
               <option value="track">Song</option>
               <option value="album">Album</option>
-            </select>
+            </select> -->
             <button class ='submit'
             @click="submitSong"
             >
-            Submit
+            Search
             </button>
         </div>
         <div v-if="selecting" class="songPicture"> 
@@ -83,11 +83,14 @@ export default {
       this.$emit('submit', {songTitle: this.trackName, songArtist: this.artist, trackId: songInfo.trackId})
     },
     formatSongs(result) {
+      /**
+       * puts search results into a usable format
+       */
       for (const s of result) {
         const trackId = '' + s.id ;
         const artist = s.artists[0].name;
         const trackName = s.name;
-        const albumCover = s.album.images[0].url.substring(8,);
+        const albumCover = s.album.images[0].url //.substring(8,);
         this.searchResults.push({artist:artist, trackName:trackName, albumCover:albumCover, trackId: trackId});
       }
       return;
@@ -118,20 +121,23 @@ export default {
        * Finds song for mixtape
        * - first get the song objects, then ping the mixtape endpoint
        */
-      const searchType = document.getElementById("searchType").value;
-      if (this.searchQuery === '') {
-        const error = 'Error: Search cannot be empty.';
-        this.$set(this.alerts, error, 'error'); // Set an alert to be the error text, timeout of 3000 ms
-        setTimeout(() => this.$delete(this.alerts, error), 3000);
-        return;
-      }
-      if (searchType !== "track" && searchType !== "album") {
-        const error = 'Error: Search type cannot be empty.';
-        this.$set(this.alerts, error, 'error'); // Set an alert to be the error text, timeout of 3000 ms
-        setTimeout(() => this.$delete(this.alerts, error), 3000);
-        return;
-      }
-      const url = `api/song/search?q=${this.searchQuery}&type=${searchType}`
+      // const searchType = document.getElementById("searchType").value;
+      // if (this.searchQuery === '') {
+      //   const error = 'Error: Search cannot be empty.';
+      //   this.$set(this.alerts, error, 'error'); // Set an alert to be the error text, timeout of 3000 ms
+      //   setTimeout(() => this.$delete(this.alerts, error), 3000);
+      //   return;
+      // }
+      // if (searchType  !== "track" && searchType !== "album") {
+      //   searchType = "track";
+      // }
+      // //   const error = 'Error: Search type cannot be empty.';
+      // //   this.$set(this.alerts, error, 'error'); // Set an alert to be the error text, timeout of 3000 ms
+      // //   setTimeout(() => this.$delete(this.alerts, error), 3000);
+      // //   return;
+      // // }
+      // if 
+      const url = `api/song/search?q=${this.searchQuery}&type=track`
       const params = {
         url: url,
         method: 'GET',

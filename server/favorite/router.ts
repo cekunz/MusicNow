@@ -69,7 +69,7 @@ router.get(
 router.post(
   '/:username?',
   [
-    userValidator.isUserLoggedIn,
+    // userValidator.isUserLoggedIn,
     songValidator.istrackIdExistsQuery
   ],
   async (req: Request, res: Response) => {

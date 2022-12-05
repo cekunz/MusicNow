@@ -6,21 +6,20 @@ import {Schema, model} from 'mongoose';
  */
 
 export type likedObject = {
-    _id: Types.ObjectId;
-    object: string;
-    likers: Types.Array<string>;
-}
+  _id: Types.ObjectId;
+  object: string;
+  likers: string[];
+};
 
 const likeSchema = new Schema({
-    object: {
-        type: String,
-        required: true,
-
-    },
-    likers: {
-        type: Array,
-        required: true
-    }
+  object: {
+    type: String,
+    required: true
+  },
+  likers: {
+    type: Array,
+    required: true
+  }
 });
 
 const LikeModel = model<likedObject>('Likes', likeSchema);

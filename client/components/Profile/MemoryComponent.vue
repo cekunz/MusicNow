@@ -1,14 +1,13 @@
-
 <template>
-  <router-link 
+  <router-link
     class="memory"
-    style="text-decoration: none; color: black;" 
-    :to="{name: 'Mixtape', params: {username: this.mixtape.creator, date: this.mixtape.date}}"> 
-      <div class="square">
-      </div>
-      <div class="content">
-        {{this.displayDate}}
-      </div>
+    style="text-decoration: none; color: black"
+    :to="{name: 'Mixtape', params: {mixtapeId: mixtape._id}}"
+  >
+    <div class="square"></div>
+    <div class="content">
+      {{ this.displayDate }}
+    </div>
   </router-link>
 </template>
 
@@ -53,7 +52,7 @@ export default {
   border: solid 3px rgb(176, 176, 176);
   background-color: rgb(176, 176, 176);
   border-radius: 2px;
-  height: 42%;
+  height: 44%;
   width: 20%;
 }
 .memory:hover {

@@ -4,6 +4,7 @@ import SongCollection from '../song/collection';
 import * as userValidator from '../user/middleware';
 import * as mixtapeValidator from './middleware';
 import MixtapeCollection from './collection';
+import likedObjectCollection from '../likes/collection';
 import * as util from './util';
 
 const router = express.Router();
@@ -109,6 +110,7 @@ router.post(
   '/:username?',
   [userValidator.isUserLoggedIn],
   async (req: Request, res: Response) => {
+    console.log('BODY', req.body);
     const song1 = await SongCollection.findOne(req.body.song1);
     const song2 = await SongCollection.findOne(req.body.song2);
     const song3 = await SongCollection.findOne(req.body.song3);
@@ -120,6 +122,9 @@ router.post(
       username,
       formatDate()
     );
+
+    // Create a new like object to go along with the mixtape
+    await likedObjectCollection.addOne(mixtape._id, []);
 
     res.status(201).json({
       message: 'Your song was created successfully.',

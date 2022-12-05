@@ -1,28 +1,31 @@
-
 <template>
-  <article
-    class="mixtape"
-  >
+  <article class="mixtape">
     <header>
-      <h3 class="author">
-        @{{ mixtape.creator }}
-      </h3>
-      <div
-        v-if="$store.state.username === mixtape.creator"
-        class="actions"
-      >
-        <button @click="deleteMixtape">
-          🗑️ Delete
-        </button>
+      <h3 class="author">@{{ mixtape.creator }}</h3>
+      <div v-if="$store.state.username === mixtape.creator" class="actions">
+        <button @click="deleteMixtape">🗑️ Delete</button>
       </div>
     </header>
     <div class="content">
-      <SongComponent :song="mixtape.songs[0]" />
-      <SongComponent :song="mixtape.songs[1]" />
-      <SongComponent :song="mixtape.songs[2]" />
+      <SongComponent 
+        :trackName="mixtape.songs[0].songTitle"
+        :artist="mixtape.songs[0].songArtist"
+        :trackId="mixtape.songs[0].trackId" 
+        :simpleCover="true"
+      />
+      <SongComponent 
+        :trackName="mixtape.songs[1].songTitle"
+        :artist="mixtape.songs[1].songArtist"
+        :trackId="mixtape.songs[1].trackId"
+        :simpleCover="true"
+      />
+      <SongComponent 
+        :trackName="mixtape.songs[2].songTitle"
+        :artist="mixtape.songs[2].songArtist"
+        :trackId="mixtape.songs[2].trackId"
+        :simpleCover="true"
+      />
     </div>
-    
-
     <section class="alerts">
       <article
         v-for="(status, alert, index) in alerts"
@@ -32,17 +35,19 @@
         <p>{{ alert }}</p>
       </article>
     </section>
+    <LikeComponent :liked-object-id="mixtape._id" />
   </article>
 </template>
 
 <script>
 // create song component that will show the image of the album ,
-// loop over that 
+// loop over that
 import SongComponent from '@/components/Song/SongComponent.vue';
+import LikeComponent from '@/components/Likes/LikeComponent.vue';
 
 export default {
   name: 'MixtapeComponent',
-  components: {SongComponent},
+  components: {SongComponent, LikeComponent},
   props: {
     // Data from the stored mixtape
     mixtape: {
@@ -64,7 +69,8 @@ export default {
         method: 'DELETE',
         callback: () => {
           this.$store.commit('alert', {
-            message: 'Successfully deleted mixtape!', status: 'success'
+            message: 'Successfully deleted mixtape!',
+            status: 'success'
           });
         }
       };
@@ -86,14 +92,18 @@ export default {
        * @param params.callback - Function to run if the the request succeeds
        */
       const options = {
-        method: params.method, headers: {'Content-Type': 'application/json'}
+        method: params.method,
+        headers: {'Content-Type': 'application/json'}
       };
       if (params.body) {
         options.body = params.body;
       }
 
       try {
-        const r = await fetch(`/api/mixtape/${this.mixtape.creator}?date=${this.todayDate()}`, options);
+        const r = await fetch(
+          `/api/mixtape/${this.mixtape.creator}?date=${this.todayDate()}`,
+          options
+        );
         if (!r.ok) {
           const res = await r.json();
           throw new Error(res.error);
@@ -119,6 +129,7 @@ export default {
 }
 
 .mixtape {
+  position: relative;
   padding: 10px;
   margin-bottom: 20px;
   border: solid 3px rgb(24, 23, 23);

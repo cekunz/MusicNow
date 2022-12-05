@@ -16,6 +16,8 @@
     >
       Submit
     </button>
+
+
 </div>
 </template>
 
@@ -36,23 +38,26 @@ export default {
   },
   methods: {
     updateSong1(song1){
-        this.song1 = song1;
+      this.song1 = song1.trackId;
     },
     updateSong2(song2){
-        this.song2 = song2;
+      this.song2 = song2.trackId;
     },
     updateSong3(song3){
-        this.song3 = song3;
+      this.song3 = song3.trackId;
     },
 
     submitMixtape() {
       /**
        * puts together mixtape
        */
+
+      // only pass in the trackId
+      const body = JSON.stringify({song1: this.song1, song2: this.song2, song3:this.song3});
       const params = {
         method: 'POST',
         message: 'Successfully created mixtape!',
-        body: JSON.stringify({song1: this.song1, song2: this.song2, song3:this.song3}),
+        body: body,
         callback: () => {
           this.$set(this.alerts, params.message, 'success');
           setTimeout(() => this.$delete(this.alerts, params.message), 3000);

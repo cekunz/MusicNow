@@ -22,6 +22,7 @@ export default {
       .then((res) => {
         const user = res.user;
         this.$store.commit('setUsername', user ? user.username : null);
+        this.$store.commit('setUserId', user ? user._id : null);
       });
 
     // Check if the user has created a post today or not

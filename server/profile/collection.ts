@@ -76,7 +76,7 @@ class ProfileCollection {
     const mixtapes = await MixtapeCollection.findAllbyCreator(username);
     const friends = await FriendCollection.findFriends(username);
     const friendRequests = await FriendCollection.findFriendRequests(username);
-    profile.user = user;
+    // profile.user = user; // testing keeping the user the same as before
     profile.fullName = user.fullName;
     profile.favorites = favorites;
     profile.mixtapes = mixtapes;

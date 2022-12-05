@@ -3,7 +3,7 @@
 <template>
 <div>
     <section v-if="!submitted">
-        <div v-if="!editing">
+        <div v-if="!editing && !selecting">
             <button class='plus'
             v-if="!editing"
             @click="startEditing"  
@@ -11,37 +11,45 @@
             +
             </button> 
         </div>
-        <div v-if="editing" class="song">
+        <div v-if="editing" class="song"> 
             <textarea
-            @input="songArtist = $event.target.value"
-            placeholder="Enter the Song Artist"
+            @input="searchQuery = $event.target.value"
+            placeholder="Search for a song title..."
             />
-             <textarea
-            @input="songTitle = $event.target.value"
-            placeholder="Enter the Song Title"
-            />
-             <textarea
-            @input="trackId = $event.target.value"
-            placeholder="Enter the Song Spotify ID"
-            />
+            <!-- <label for="type">Search type:</label>
+            <select name="searchType" id="searchType">
+              <option value="track">Song</option>
+              <option value="album">Album</option>
+            </select> -->
             <button class ='submit'
             @click="submitSong"
             >
-            Submit
+            Search
             </button>
         </div>
+        <div v-if="selecting" class="songPicture"> 
+          <SongComponent 
+          v-for="result in searchResults"
+          @select="selected"
+          :key="result.index"
+          :trackName="result.trackName"
+          :artist="result.artist"
+          :trackId="result.trackId"
+          :albumCover="result.albumCover"/>
+        </div>
     </section>
-    <section v-if="submitted">
-      <h1> {{songTitle}} </h1>
-      <h3> {{songArtist}} </h3>
+    <section class='submitted' v-if="submitted">
+      <h1> {{trackName}} </h1>
+      <h3> {{artist}} </h3>
     </section>
 </div>
 </template>
 
 <script>
-
+import SongComponent from '@/components/Song/SongComponent.vue';
 export default {
   name: 'SelectSongForm',
+  components: {SongComponent},
   props: {
     prompt: {
         type: Object,
@@ -51,9 +59,11 @@ export default {
   data() {
     return {
       editing: false, // Whether or not this song is in edit mode
-      songArtist: '',
-      songTitle: '', 
-      trackId: '',
+      selecting: false,
+      artist: '',
+      trackName: '', 
+      searchQuery: '',
+      searchResults: [],
       submitted: false,
       alerts: {} // Displays success/error messages encountered during freet modification
     };
@@ -65,47 +75,81 @@ export default {
        */
        this.editing = true; 
     },
-    async createSong() {
+    async selected(songInfo) {
+      this.trackName = songInfo.songTitle;
+      this.artist = songInfo.songArtist;
+      await this.createSong(songInfo)
+      this.submitted = true;
+      this.$emit('submit', {songTitle: this.trackName, songArtist: this.artist, trackId: songInfo.trackId})
+    },
+    formatSongs(result) {
       /**
-       * Submits a request to the song's endpoint
-       * @param params - Options for the request
-       * @param params.body - Body for the request, if it exists
-       * @param params.callback - Function to run if the the request succeeds
+       * puts search results into a usable format
        */
-      const params = {
-        url: `/api/song`,
-        method: 'POST',
-        message: 'Successfully created song!',
-        body: JSON.stringify({songTitle: this.songTitle,  songArtist: this.songArtist, trackId: this.trackId}),
-        callback: () => {
-          this.$set(this.alerts, params.message, 'success');
-          setTimeout(() => this.$delete(this.alerts, params.message), 3000);
-        }
+      for (const s of result) {
+        const trackId = '' + s.id ;
+        const artist = s.artists[0].name;
+        const trackName = s.name;
+        const albumCover = s.album.images[0].url //.substring(8,);
+        this.searchResults.push({artist:artist, trackName:trackName, albumCover:albumCover, trackId: trackId});
+      }
+      return;
+    },
+    async createSong(songDetails) {
+      /**
+       * Create song object in db
+       */
+      const options = {
+        method: 'POST', 
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(songDetails)
       };
-      this.sendRequest(params);
+      
+       try {
+        const r = await fetch('api/song', options);
+        if (!r.ok) {
+          const res = await r.json();
+          throw new Error(res.error);
+        }
+      } catch (e) {
+        this.$set(this.alerts, e, 'error');
+        setTimeout(() => this.$delete(this.alerts, e), 3000);
+      }
     },
     submitSong() {
       /**
        * Finds song for mixtape
        * - first get the song objects, then ping the mixtape endpoint
        */
+      // const searchType = document.getElementById("searchType").value;
+      // if (this.searchQuery === '') {
+      //   const error = 'Error: Search cannot be empty.';
+      //   this.$set(this.alerts, error, 'error'); // Set an alert to be the error text, timeout of 3000 ms
+      //   setTimeout(() => this.$delete(this.alerts, error), 3000);
+      //   return;
+      // }
+      // if (searchType  !== "track" && searchType !== "album") {
+      //   searchType = "track";
+      // }
+      // //   const error = 'Error: Search type cannot be empty.';
+      // //   this.$set(this.alerts, error, 'error'); // Set an alert to be the error text, timeout of 3000 ms
+      // //   setTimeout(() => this.$delete(this.alerts, error), 3000);
+      // //   return;
+      // // }
+      // if 
+      const url = `api/song/search?q=${this.searchQuery}&type=track`
       const params = {
-        url:`/api/song?songTitle=${this.songTitle}&songArtist=${this.songArtist}`,
+        url: url,
         method: 'GET',
-        message: 'Successfully found song!',
+        message: 'Successfully found search results!',
         callback: () => {
           this.$set(this.alerts, params.message, 'success');
           setTimeout(() => this.$delete(this.alerts, params.message), 3000);
         }
       };
-     
-     // to do, first check if the song already exists, then create if needed
-     // this would likely require a change to the backend, maybe a patch?
-        this.createSong();
-        this.submitted = true;
-        this.$emit(`submit`, this.trackId);
+     this.request(params);
     },
-    async sendRequest(params) {
+    async request(params) {
       /**
        * Submits a request to the song's endpoint
        * @param params - Options for the request
@@ -126,8 +170,10 @@ export default {
           throw new Error(res.error);
         }
 
-        this.editing = false;
         const returned = await r.json();
+        this.formatSongs(returned.tracks.items);
+        this.editing = false;
+        this.selecting = true;
 
         params.callback();
       } catch (e) {
@@ -143,7 +189,7 @@ export default {
 
 .plus {
   font-size: 30px;
-  padding: 50px;
+  padding: 70px;
   margin: 10px;
   border: solid 4px rgb(192, 192, 192);
   border-radius: 2px;
@@ -154,6 +200,14 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: center;
+}
+
+.submitted {
+  text-align: center;
+  margin: 10px;
+  padding: 40px;
+  border: solid 4px rgb(192, 192, 192);
+  border-radius: 2px;
 }
 
 button:hover {

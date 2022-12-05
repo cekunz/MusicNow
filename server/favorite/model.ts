@@ -11,6 +11,12 @@ import type {Song} from '../song/model';
 export type Favorite = {
   _id: Types.ObjectId; // MongoDB assigns each object this ID on creation
   user: User;
+  song: Types.ObjectId;
+};
+
+export type PopulatedFavorite = {
+  _id: Types.ObjectId; // MongoDB assigns each object this ID on creation
+  user: User;
   song: Song;
 };
 

@@ -1,17 +1,76 @@
+<!-- eslint-disable vue/max-attributes-per-line -->
 <!-- eslint-disable vue/singleline-html-element-content-newline -->
 <!-- Reusable component for displaying the Music Now header that shows today's date -->
 
 <template>
   <section class="like-container">
-    <i class="fas fa-fire fa-lg" />
+    <div v-if="userHasLiked" class="liked" @click="removeLike">
+      <i class="fas fa-fire fa-2x" />
+    </div>
+    <div v-else class="notLiked" @click="addLike">
+      <i class="fas fa-fire fa-2x" />
+    </div>
   </section>
 </template>
 
 <script>
 export default {
-  name: 'MusicNowHeader',
+  name: 'LikeComponent',
+  props: {
+    likedObjectId: {type: String, required: true}
+  },
   data() {
     return {};
+  },
+  computed: {
+    /**
+     * The Like object associated with the given likedObjectId
+     */
+    like() {
+      return this.$store.state.likes[this.likedObjectId];
+    },
+    /**
+     * Compute if the user has liked the object with this.likedObjectId
+     */
+    userHasLiked() {
+      return this.like !== undefined
+        ? this.like.likers.includes(this.$store.state.userId)
+        : false;
+    }
+  },
+  methods: {
+    addLike() {
+      this.$store.commit('addLike', this.like);
+      this.submit(false);
+    },
+    removeLike() {
+      this.$store.commit('removeLike', this.like);
+      this.submit(true);
+    },
+    async submit(remove = false) {
+      /**
+       * Submits a form with the specified options from data().
+       */
+      const options = {
+        method: 'PATCH',
+        headers: {'Content-Type': 'application/json'},
+        credentials: 'same-origin' // Sends express-session credentials with request
+      };
+
+      options.body = JSON.stringify({id: this.likedObjectId, remove: remove});
+
+      try {
+        const r = await fetch('/api/likes', options);
+        if (!r.ok) {
+          // If response is not okay, we throw an error and enter the catch block
+          const res = await r.json();
+          throw new Error(res.error);
+        }
+      } catch (e) {
+        this.$set(this.alerts, e, 'error');
+        setTimeout(() => this.$delete(this.alerts, e), 3000);
+      }
+    }
   }
 };
 </script>
@@ -37,14 +96,84 @@ export default {
   margin: 5px 5px;
 }
 .like-container {
-  color: rgb(0, 0, 0);
   position: absolute;
   z-index: 1;
   right: 40px;
   top: 40px;
 }
+.liked {
+  color: rgb(255, 126, 28);
+  -webkit-animation-name: wiggle;
+  -ms-animation-name: wiggle;
+  -ms-animation-duration: 1000ms;
+  -webkit-animation-duration: 1000ms;
+  -webkit-animation-iteration-count: 1;
+  -ms-animation-iteration-count: 1;
+  -webkit-animation-timing-function: ease-in-out;
+  -ms-animation-timing-function: ease-in-out;
+}
+.liked:hover {
+  color: rgb(223, 100, 0);
+}
 
-.like-container:hover {
-  color: rgb(216, 12, 12);
+.notLiked {
+  color: rgb(0, 0, 0);
+}
+.notLiked:hover {
+  color: rgb(255, 143, 92);
+}
+
+@-webkit-keyframes wiggle {
+  0% {
+    -webkit-transform: rotate(10deg);
+  }
+  25% {
+    -webkit-transform: rotate(-10deg);
+  }
+  50% {
+    -webkit-transform: rotate(20deg);
+  }
+  75% {
+    -webkit-transform: rotate(-5deg);
+  }
+  100% {
+    -webkit-transform: rotate(0deg);
+  }
+}
+
+@-ms-keyframes wiggle {
+  0% {
+    -ms-transform: rotate(1deg);
+  }
+  25% {
+    -ms-transform: rotate(-1deg);
+  }
+  50% {
+    -ms-transform: rotate(1.5deg);
+  }
+  75% {
+    -ms-transform: rotate(-5deg);
+  }
+  100% {
+    -ms-transform: rotate(0deg);
+  }
+}
+
+@keyframes wiggle {
+  0% {
+    transform: rotate(10deg);
+  }
+  25% {
+    transform: rotate(-10deg);
+  }
+  50% {
+    transform: rotate(20deg);
+  }
+  75% {
+    transform: rotate(-5deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
 }
 </style>

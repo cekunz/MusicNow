@@ -32,9 +32,17 @@
                   :mixtape="mixtape"
                 />
               </div>
-              <div class="show-more" v-if="this.showMoreMemories">
+              <div 
+                class="show-more"
+                v-if="this.showMoreMemories"
+              >
+              <router-link
+                style="text-decoration: none; color: black"
+                :to="{name: 'Memories'}"
+              >
                 View All →
-              </div>
+              </router-link>
+            </div>
             </div>
           </section>
         </div>
@@ -56,7 +64,12 @@
                 class="view-all-box profile-song"
                 v-if="this.showMoreFavorites"
               >
-                View All →
+                <router-link
+                  style="text-decoration: none; color: black"
+                  :to="{name: 'Favorites'}"
+                >
+                  View All →
+                </router-link>
               </div>
             </div>
           </div>
@@ -216,6 +229,7 @@ button:hover {
 
 .profile-song {
   width: 12.5%;
+  height: 100%;
 }
 
 .view-all-box {
@@ -223,7 +237,7 @@ button:hover {
   flex-direction: column;
   justify-content: center;
   text-align: center;
-  height: 110px;
+  /* height: 110px; */
   border: solid 3px rgb(24, 23, 23);
   border-radius: 2px;
 }

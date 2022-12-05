@@ -16,11 +16,6 @@
             @input="searchQuery = $event.target.value"
             placeholder="Search for a song title..."
             />
-            <!-- <label for="type">Search type:</label>
-            <select name="searchType" id="searchType">
-              <option value="track">Song</option>
-              <option value="album">Album</option>
-            </select> -->
             <button class ='submit'
             @click="submitSong"
             >
@@ -39,8 +34,13 @@
         </div>
     </section>
     <section class='submitted' v-if="submitted">
-      <h1> {{trackName}} </h1>
-      <h3> {{artist}} </h3>
+       <SongComponent 
+        :trackName="trackName"
+        :artist="artist"
+        :trackId="trackId"
+        :albumCover="albumCover"
+        :simpleCover="true"
+        />
     </section>
 </div>
 </template>
@@ -62,6 +62,8 @@ export default {
       selecting: false,
       artist: '',
       trackName: '', 
+      trackId: '',
+      albumCover: '',
       searchQuery: '',
       searchResults: [],
       submitted: false,
@@ -78,6 +80,8 @@ export default {
     async selected(songInfo) {
       this.trackName = songInfo.songTitle;
       this.artist = songInfo.songArtist;
+      this.trackId = songInfo.trackId;
+      this.albumCover = songInfo.albumCover;
       await this.createSong(songInfo)
       this.submitted = true;
       this.$emit('submit', {songTitle: this.trackName, songArtist: this.artist, trackId: songInfo.trackId})
@@ -90,10 +94,12 @@ export default {
         const trackId = '' + s.id ;
         const artist = s.artists[0].name;
         const trackName = s.name;
-        const albumCover = s.album.images[0].url //.substring(8,);
+        const albumCover = s.album.images[1].url 
         this.searchResults.push({artist:artist, trackName:trackName, albumCover:albumCover, trackId: trackId});
       }
+      
       return;
+
     },
     async createSong(songDetails) {
       /**
@@ -121,22 +127,6 @@ export default {
        * Finds song for mixtape
        * - first get the song objects, then ping the mixtape endpoint
        */
-      // const searchType = document.getElementById("searchType").value;
-      // if (this.searchQuery === '') {
-      //   const error = 'Error: Search cannot be empty.';
-      //   this.$set(this.alerts, error, 'error'); // Set an alert to be the error text, timeout of 3000 ms
-      //   setTimeout(() => this.$delete(this.alerts, error), 3000);
-      //   return;
-      // }
-      // if (searchType  !== "track" && searchType !== "album") {
-      //   searchType = "track";
-      // }
-      // //   const error = 'Error: Search type cannot be empty.';
-      // //   this.$set(this.alerts, error, 'error'); // Set an alert to be the error text, timeout of 3000 ms
-      // //   setTimeout(() => this.$delete(this.alerts, error), 3000);
-      // //   return;
-      // // }
-      // if 
       const url = `api/song/search?q=${this.searchQuery}&type=track`
       const params = {
         url: url,
@@ -205,9 +195,9 @@ export default {
 .submitted {
   text-align: center;
   margin: 10px;
-  padding: 40px;
-  border: solid 4px rgb(192, 192, 192);
-  border-radius: 2px;
+  /* padding: 40px; */
+  /* border: solid 4px rgb(192, 192, 192); */
+  /* border-radius: 2px; */
 }
 
 button:hover {

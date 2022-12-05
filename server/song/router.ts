@@ -28,11 +28,6 @@ const router = express.Router();
  * @throws {404} - If no user has given author
  *
  */
-/**
- * Get song information from Spotify API
- * @name GET /api/song?trackId=number
- *
- */
 router.get(
   '/',
   async (req: Request, res: Response, next: NextFunction) => {
@@ -60,6 +55,11 @@ router.get(
   }
 );
 
+/**
+ * Get song information from Spotify API
+ * @name GET /api/song/search?q=query
+ *
+ */
 router.get(
   '/search',
   async (req: Request, res: Response) => {

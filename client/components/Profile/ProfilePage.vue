@@ -64,7 +64,12 @@
                 class="view-all-box profile-song"
                 v-if="this.showMoreFavorites"
               >
-                View All →
+                <router-link
+                  style="text-decoration: none; color: black"
+                  :to="{name: 'Favorites'}"
+                >
+                  View All →
+                </router-link>
               </div>
             </div>
           </div>

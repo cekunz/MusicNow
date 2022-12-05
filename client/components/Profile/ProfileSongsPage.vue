@@ -2,7 +2,7 @@
 
 <template>
   <main>
-    <section class="memory-info">
+    <section class="user-info">
       <h2>
         <router-link
           style="text-decoration: none; color: black"
@@ -10,14 +10,17 @@
         >
           <i class="fas fa-arrow-left left-side"></i>
         </router-link>
-        Memories
+        Saved Songs
       </h2>
       <div class="rectangle">
-        <div class="memory-rectangle">
-          <MemoryComponent 
-            class="memory-page"
-            v-for="mixtape in this.$store.state.profileMixtapes"
-            :mixtape="mixtape"
+        <div class="favorites-rectangle">
+          <SongComponent 
+            class="favorites-page"
+            v-for="favorite in this.$store.state.profileFavorites"
+              :trackName="favorite.song.songTitle"
+              :artist="favorite.song.songArtist"
+              :trackId="favorite.song.trackId"
+              :albumCover="favorite.song.songTitle"
           />
         </div>
       </div>
@@ -28,11 +31,11 @@
 
 
 <script>
-import MemoryComponent from '@/components/Profile/MemoryComponent.vue';
+import SongComponent from '@/components/Song/SongComponent.vue';
 
 export default {
-  name: 'ProfileMemoriesPage',
-  components: {MemoryComponent},
+  name: 'ProfileSongsPage',
+  components: {SongComponent},
   data() {
     return {
     };
@@ -128,6 +131,15 @@ button:hover {
   flex-wrap: wrap;
 }
 
+.favorites-rectangle {
+  margin: 2%;
+  color: black;
+  width: 96%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2%;
+}
+
 .user-info {
   text-align: center;
 }
@@ -137,9 +149,10 @@ button:hover {
   width: 100%;
 }
 
-.memory-page {
-  height: 24vh;
-  width: 24vh;
+.favorites-page {
+  height: 100%;
+  width: 18.4%;
+  margin-bottom: 2%;
 }
 
 .left-side {

@@ -135,7 +135,6 @@ const store = new Vuex.Store({
        */
       const url = `/api/friend/requests/${state.username}`;
       const res = await fetch(url).then(async (r) => r.json());
-      console.log('returned', res);
       state.friendRequests = res;
     },
     async refreshPossibleFriends(state) {

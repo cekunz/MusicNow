@@ -7,6 +7,7 @@ import RegisterPage from './components/Login/RegisterPage.vue';
 import ProfilePage from './components/Profile/ProfilePage.vue';
 import FindFriendsPage from './components/FindFriends/FindFriendsPage.vue';
 import MixtapePage from './components/Mixtape/MixtapePage.vue';
+import ProfileMemoriesPage from './components/Profile/ProfileMemoriesPage.vue';
 import NotFound from './NotFound.vue';
 
 Vue.use(VueRouter);
@@ -19,6 +20,7 @@ const routes = [
   {path: '/profile', name: 'Profile', component: ProfilePage, params: true},
   {path: '/findFriends', name: 'Find Friends', component: FindFriendsPage},
   {path: '/mixtape', name: 'Mixtape', component: MixtapePage, params: true},
+  {path: '/profile/memories', name: 'Memories', component: ProfileMemoriesPage},
   {path: '*', name: 'Not Found', component: NotFound}
 ];
 

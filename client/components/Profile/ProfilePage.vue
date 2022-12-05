@@ -36,7 +36,12 @@
                 class="show-more"
                 v-if="this.showMoreMemories"
               >
-              View All →
+              <router-link
+                style="text-decoration: none; color: black"
+                :to="{name: 'Memories'}"
+              >
+                View All →
+              </router-link>
             </div>
             </div>
           </section>
@@ -215,6 +220,7 @@ button:hover {
 
 .profile-song {
   width: 12.5%;
+  height: 100%;
 }
 
 .view-all-box {
@@ -222,7 +228,7 @@ button:hover {
   flex-direction: column;
   justify-content: center;
   text-align: center;
-  height: 110px;
+  /* height: 110px; */
   border: solid 3px rgb(24, 23, 23);
   border-radius: 2px;
 }

@@ -1,15 +1,13 @@
-
 <template>
-  <router-link 
+  <router-link
     class="memory"
-    style="text-decoration: none; color: black;" 
-    :to="{name: 'Mixtape', params: {username: this.mixtape.creator, date: this.mixtape.date}}"
-  > 
-      <div class="square">
-      </div>
-      <div class="content">
-        {{this.displayDate}}
-      </div>
+    style="text-decoration: none; color: black"
+    :to="{name: 'Mixtape', params: {mixtapeId: mixtape._id}}"
+  >
+    <div class="square"></div>
+    <div class="content">
+      {{ this.displayDate }}
+    </div>
   </router-link>
 </template>
 

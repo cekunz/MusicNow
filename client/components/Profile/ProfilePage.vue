@@ -7,14 +7,14 @@
         <div class="left">
           <section class="user-info">
             <div class="circle">
-              <p class="circle-inner">{{$store.state.profileCircle}}</p>
+              <p class="circle-inner">{{ $store.state.profileCircle }}</p>
             </div>
-            <h2 class="info"> {{$store.state.profileFullname}} </h2>
-            <h2 class="info"> @{{$store.state.profileUsername}} </h2>
-            <button @click="open"> 
-              {{$store.state.profileFriends.length}} Friends
+            <h2 class="info">{{ $store.state.profileFullname }}</h2>
+            <h2 class="info">@{{ $store.state.profileUsername }}</h2>
+            <button @click="open">
+              {{ $store.state.profileFriends.length }} Friends
             </button>
-            <FriendPopUp 
+            <FriendPopUp
               v-if="this.isOpen == true"
               @close="close"
               :friends="$store.state.profileFriends"
@@ -30,7 +30,10 @@
                   v-for="mixtape in this.memoriesToShow"
                   :key="mixtape.id"
                   :mixtape="mixtape"
-                />  
+                />
+              </div>
+              <div class="show-more" v-if="this.showMoreMemories">
+                View All →
               </div>
               <div 
                 class="show-more"
@@ -45,14 +48,14 @@
             </div>
             </div>
           </section>
-        </div>     
+        </div>
       </header>
       <footer>
         <section class="user-info">
           <h2>Saved Songs</h2>
           <div class="rectangle">
             <div class="favorites-rectangle">
-              <SongComponent 
+              <SongComponent
                 v-for="favorite in this.favoritesToShow"
                 class="profile-song"
                 :trackName="favorite.song.songTitle"
@@ -64,7 +67,7 @@
                 class="view-all-box profile-song"
                 v-if="this.showMoreFavorites"
               >
-              View All →
+                View All →
               </div>
             </div>
           </div>
@@ -73,8 +76,6 @@
     </section>
   </main>
 </template>
-
-
 
 <script>
 import MemoryComponent from '@/components/Profile/MemoryComponent.vue';
@@ -89,12 +90,16 @@ export default {
     return {
       isOpen: false,
       friendsList: this.friends,
-      memoriesToShow: this.$store.state.profileMixtapes.length > 8 
-                      ? this.$store.state.profileMixtapes.slice(0,8) : this.$store.state.profileMixtapes,
+      memoriesToShow:
+        this.$store.state.profileMixtapes.length > 8
+          ? this.$store.state.profileMixtapes.slice(0, 8)
+          : this.$store.state.profileMixtapes,
       showMoreMemories: this.$store.state.profileMixtapes.length > 8,
-      favoritesToShow: this.$store.state.profileFavorites.length > 7 
-                    ? this.$store.state.profileFavorites.slice(0,6) : this.$store.state.profileFavorites,
-      showMoreFavorites: this.$store.state.profileFavorites.length > 7        
+      favoritesToShow:
+        this.$store.state.profileFavorites.length > 7
+          ? this.$store.state.profileFavorites.slice(0, 6)
+          : this.$store.state.profileFavorites,
+      showMoreFavorites: this.$store.state.profileFavorites.length > 7
     };
   },
   beforeMount() {
@@ -102,8 +107,9 @@ export default {
   },
   methods: {
     async updating() {
-      const urlProfile = this.$route.params.name ? `/api/profile?username=${this.$route.params.name}` 
-                                              : `/api/profile?username=${this.$store.state.username}`;
+      const urlProfile = this.$route.params.name
+        ? `/api/profile?username=${this.$route.params.name}`
+        : `/api/profile?username=${this.$store.state.username}`;
 
       try {
         const rProfile = await fetch(urlProfile);
@@ -118,10 +124,11 @@ export default {
         this.$store.commit('setProfileCircle', resProfile.fullName[0]);
         this.$store.commit('setProfileFriends', resProfile.friends);
         this.$store.commit('setProfileMixtapes', resProfile.mixtapes.reverse());
-        this.$store.commit('setProfileFavorites', resProfile.favorites.reverse());
-      } catch (e) {
-
-      }
+        this.$store.commit(
+          'setProfileFavorites',
+          resProfile.favorites.reverse()
+        );
+      } catch (e) {}
     },
     open() {
       this.isOpen = true;
@@ -130,8 +137,7 @@ export default {
       this.isOpen = false;
     }
   }
-}
-
+};
 </script>
 
 <style scoped>
@@ -141,7 +147,8 @@ section {
   gap: 0;
 }
 
-header, header > * {
+header,
+header > * {
   display: flex;
   align-items: center;
 }
@@ -164,12 +171,12 @@ button:hover {
   cursor: pointer;
 }
 
-.info{
+.info {
   margin: 0px;
 }
 
 .left {
-  width: 30%; 
+  width: 30%;
 }
 
 .right {
@@ -188,11 +195,11 @@ button:hover {
 .circle-inner {
   color: black;
   display: table-cell;
-  vertical-align: middle; 
+  vertical-align: middle;
   text-align: center;
   text-decoration: none;
   height: 250px;
-  width: 250px;  
+  width: 250px;
   font-size: 120px;
 }
 

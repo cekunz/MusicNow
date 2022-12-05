@@ -50,7 +50,10 @@
               <SongComponent 
                 v-for="favorite in this.favoritesToShow"
                 class="profile-song"
-                :song="favorite.song"
+                :trackName="favorite.song.songTitle"
+                :artist="favorite.song.songArtist"
+                :trackId="favorite.song.trackId"
+                :albumCover="favorite.song.songTitle"
               />
               <div
                 class="view-all-box profile-song"

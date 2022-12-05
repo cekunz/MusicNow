@@ -115,7 +115,7 @@ export default {
 }
 
 .mixtape {
-  display: relative;
+  position: relative;
   padding: 10px;
   margin-bottom: 20px;
   border: solid 3px rgb(24, 23, 23);

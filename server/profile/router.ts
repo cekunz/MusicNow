@@ -72,34 +72,6 @@ router.post(
   }
 );
 
-
-// /**
-//  * Update a user's profile.
-//  *
-//  * @name PATCH /api/profile
-//  *
-//  * @param {string} username - The profile user's username 
-//  * @return {UserResponse} - The updated user
-//  * @throws {403} - If user is not logged in
-//  */
-//  router.patch(
-//     '/',
-//     [
-//       userValidator.isUserLoggedIn,
-//     ],
-//     async (req: Request, res: Response) => {
-//       const userId = (req.session.userId as string) ?? ''; // Will not be an empty string since its validated in isUserLoggedIn
-//       const user = await UserCollection.findOneByUserId(userId);
-//       const username = user.username;
-//       const profile = await ProfileCollection.updateOne(username);
-//       res.status(200).json({
-//         message: 'Your profile was updated successfully.',
-//         profile: util.constructProfileResponse(profile)
-//       });
-//     }
-//   );
-
-
 /**
  * Delete a profile
  *

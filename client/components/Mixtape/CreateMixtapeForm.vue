@@ -10,7 +10,7 @@
         <SelectSongForm style='margin-right:30px' @submit="updateSong2"/>
         <SelectSongForm @submit="updateSong3"/>
     </section>
-     <button
+     <button class='submit'
       v-if="song1!==null && song2!==null && song3!==null"
       @click="submitMixtape"
     >
@@ -120,13 +120,13 @@ h2 {
   display: flex;
   flex-direction: row;
   justify-content: center;
-  padding-bottom: 2rem;
+  padding-bottom: 50px;
   
 }
-
-/* SelectSongForm {
-  padding: 10px;
-} */
+.submit {
+  width: 300px;
+  text-align: center;
+} 
 
 
 

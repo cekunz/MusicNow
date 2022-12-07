@@ -12,6 +12,7 @@ export type Song = {
   songTitle: string;
   songArtist: string;
   trackId: string;
+  albumCover: string;
 };
 
 
@@ -33,7 +34,12 @@ const SongSchema = new Schema<Song>({
   trackId: {
     type: String,
     required: true
+  },
+  albumCover: {
+    type: String,
+    required: true
   }
+
 });
 
 const SongModel = model<Song>('Song', SongSchema);

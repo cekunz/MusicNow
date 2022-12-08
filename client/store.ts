@@ -25,7 +25,8 @@ const store = new Vuex.Store({
     nonFriends: [],
     favorites: [],
     prompt: '', // the daily prompt
-    likes: Object.create(null) // All likes from friends
+    likes: Object.create(null), // All likes from friends
+    comments: []
   },
   mutations: {
     alert(state, payload) {
@@ -108,6 +109,27 @@ const store = new Vuex.Store({
         }
       }
       state.likes = newLikes;
+    },
+    async setComments(state, mixtapeId) {
+      /**
+       * Update the stored comments to the specified ones.
+       * @param mixtapeId - mixtapeId associated with the comments we want to get
+       */
+      fetch(`/api/comments?mixtape=${mixtapeId}`, {
+        credentials: 'same-origin' // Sends express-session credentials with request
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          const comments = res;
+          state.comments = comments;
+          console.log(state.comments);
+        });
+    },
+    clearComments(state) {
+      /**
+       *  Remove all comments stored in Vuex
+       */
+      state.comments = [];
     },
     postMixtape(state) {
       /**

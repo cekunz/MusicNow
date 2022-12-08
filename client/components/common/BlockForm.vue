@@ -55,6 +55,7 @@ export default {
       hasBody: false, // Whether or not form request has a body
       setUsername: false, // Whether or not stored username should be updated after form submission
       resetMixtape: false, // Whether or not stored freets should be updated after form submission
+      refreshComments: '', // mixtapeId for respective comments. Exists if stored comments should be updated after form submission
       alerts: {}, // Displays success/error messages encountered during form submission
       callback: null, // Function to run after successful form submission
       showTitle: true
@@ -117,6 +118,11 @@ export default {
               this.$store.commit('postMixtape');
             }
           });
+        }
+
+        if (this.refreshComments && this.refreshComments.length > 0) {
+          const mixtapeId = this.refreshComments;
+          this.$store.commit('setComments', mixtapeId);
         }
 
         if (this.callback) {

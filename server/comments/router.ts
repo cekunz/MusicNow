@@ -39,7 +39,6 @@ const router = express.Router();
 router.get(
   '/',
   async (req: Request, res: Response, next: NextFunction) => {
-    console.log('starts');
     // Check if author or mixtape query parameter was supplied
     if (req.query.author !== undefined || req.query.mixtape !== undefined) {
       next();
@@ -51,31 +50,28 @@ router.get(
     res.status(200).json(response);
   },
   async (req: Request, res: Response, next: NextFunction) => {
-    console.log('second', req.query);
     // Check if mixtape query parameter was supplied
     if (req.query.mixtape !== undefined) {
       next();
       return;
     }
 
-    //TODO: test this when MongoDB is back online
     // Perform middleware check now that we know this is the 'author'case
-    // await userValidator.isAuthorExists(req, res, next);
+    await userValidator.isAuthorExists(req, res, next);
     const authorComments = await CommentCollection.findAllByUsername(
       req.query.author as string
     );
     const response = authorComments.map(util.constructCommentResponse);
     res.status(200).json(response);
   },
-  [mixtapeValidator.isMixtapeExists],
+  [mixtapeValidator.isMixtapeExistsById],
   async (req: Request, res: Response) => {
-    console.log('made it to here');
     const mixtapeComments = await CommentCollection.findAllByMixtape(
       req.query.mixtape as string
     );
 
     const response = mixtapeComments.map(util.constructCommentResponse);
-    console.log(response);
+
     res.status(200).json(response);
   }
 );

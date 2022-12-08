@@ -43,7 +43,11 @@ export default {
   },
   computed: {
     mixtape() {
-      for (const mixtape of this.$store.state.mixtapes) {
+      // look for mixtapes in current feed and profile
+      const allMixtapes = this.$store.state.mixtapes.concat(
+        this.$store.state.profileMixtapes
+      );
+      for (const mixtape of allMixtapes) {
         if (this.$route.params.mixtapeId === mixtape._id) {
           return mixtape;
         }

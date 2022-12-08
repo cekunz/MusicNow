@@ -8,15 +8,14 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import * as userValidator from '../server/user/middleware';
 import {userRouter} from '../server/user/router';
-import {freetRouter} from '../server/freet/router';
 import {songRouter} from '../server/song/router';
 import {mixtapeRouter} from '../server/mixtape/router';
 import {promptRouter} from '../server/prompt/router';
 import {favoriteRouter} from '../server/favorite/router';
 import {friendRouter} from '../server/friend/router';
 import {likeRouter} from '../server/likes/router';
-import {commentRouter} from '../server/comments/router';
 import {profileRouter} from '../server/profile/router';
+import {commentRouter} from '../server/comments/router';
 import MongoStore from 'connect-mongo';
 
 // Load environmental variables
@@ -79,7 +78,6 @@ app.use(userValidator.isCurrentSessionUserExists);
 
 // Add routers from routes folder
 app.use('/api/users', userRouter);
-app.use('/api/freets', freetRouter);
 app.use('/api/song', songRouter);
 app.use('/api/mixtape', mixtapeRouter);
 app.use('/api/prompt', promptRouter);

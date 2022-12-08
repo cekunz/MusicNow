@@ -1,5 +1,4 @@
 import type {HydratedDocument} from 'mongoose';
-import moment from 'moment';
 import type {Song} from './model';
 
 type SongResponse = {
@@ -7,6 +6,7 @@ type SongResponse = {
   songTitle: string;
   songArtist: string;
   trackId: string;
+  albumCover: string;
 };
 
 /**
@@ -27,7 +27,8 @@ const constructSongResponse = (song: HydratedDocument<Song>): SongResponse => {
     _id: songCopy._id.toString(),
     songTitle: songCopy.songTitle,
     songArtist: songCopy.songArtist,
-    trackId: songCopy.trackId
+    trackId: songCopy.trackId,
+    albumCover: songCopy.albumCover
   };
 };
 

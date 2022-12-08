@@ -7,11 +7,28 @@
       </div>
     </header>
     <div class="content">
-      <SongComponent :song="mixtape.songs[0]" />
-      <SongComponent :song="mixtape.songs[1]" />
-      <SongComponent :song="mixtape.songs[2]" />
+      <SongComponent 
+        :trackName="mixtape.songs[0].songTitle"
+        :artist="mixtape.songs[0].songArtist"
+        :trackId="mixtape.songs[0].trackId" 
+        :albumCover="mixtape.songs[0].albumCover" 
+        :simpleCover="true"
+      />
+      <SongComponent 
+        :trackName="mixtape.songs[1].songTitle"
+        :artist="mixtape.songs[1].songArtist"
+        :trackId="mixtape.songs[1].trackId"
+        :albumCover="mixtape.songs[1].albumCover" 
+        :simpleCover="true"
+      />
+      <SongComponent 
+        :trackName="mixtape.songs[2].songTitle"
+        :artist="mixtape.songs[2].songArtist"
+        :trackId="mixtape.songs[2].trackId"
+        :albumCover="mixtape.songs[2].albumCover" 
+        :simpleCover="true"
+      />
     </div>
-
     <section class="alerts">
       <article
         v-for="(status, alert, index) in alerts"

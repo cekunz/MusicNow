@@ -28,11 +28,6 @@ const router = express.Router();
  * @throws {404} - If no user has given author
  *
  */
-/**
- * Get song information from Spotify API
- * @name GET /api/song?trackId=number
- *
- */
 router.get(
   '/',
   async (req: Request, res: Response, next: NextFunction) => {
@@ -51,10 +46,6 @@ router.get(
   },
   [songValidator.isSongExists],
   async (req: Request, res: Response, next: NextFunction) => {
-    // if (req.query.trackId !== undefined) {
-    //   next();
-    //   return;
-    // }
     const song = await SongCollection.findOneByTitleAndSong(
       req.query.songTitle as string,
       req.query.songArtist as string
@@ -62,17 +53,13 @@ router.get(
     const response = util.constructSongResponse(song);
     res.status(200).json(response);
   }
-  // async (req: Request, res: Response) => {
-  //   const url = `https://api.spotify.com/v1/tracks/${req.query.trackId}?market=US`;
-  //   const accessToken = 'BQBUMD_9C7ObTa57qKGnPndLW1Oqv556znkzIgWSgGUObI9BZZrC0Xuj2VDhKJJXsCmisbuSdJaAmhToQAa5vdz-a36iGpNgwwm8Bdz2sdRPSezfZsZ2PbYKhAzRIzvxGQ2xf31Q-YQqbvjFPqcsfoDcUDYBbeNIKwdw4s0Y8Q';
-  //   const response = await fetch(url, {method: 'GET', headers: {'Accept': 'application/json',
-  //                                                               'Content-Type': 'application/json',
-  //                                                               'Authorization': `Bearer ${accessToken}`}})
-  //                                                               .then(async r => r.json());
-  //   res.status(200).json(response);
-  // }
 );
 
+/**
+ * Get song information from Spotify API
+ * @name GET /api/song/search?q=query
+ *
+ */
 router.get(
   '/search',
   async (req: Request, res: Response) => {
@@ -91,24 +78,6 @@ router.get(
     res.status(200).json(response);
 });
 
-
-router.get('/testing', async (req: Request, res: Response) => {
-  const token: string = await getAuthToken();
-
-  const url =
-    'https://api.spotify.com/v1/tracks/6BCDqoo8pgN4wsLyRVm5RB?market=US';
-  const response = await fetch(url, {
-    method: 'GET',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`
-    }
-    // eslint-disable-next-line arrow-parens
-  }).then(async (r) => r.json());
-  res.status(200).json(response);
-});
-
 /**
  * Create a new song.
  *
@@ -117,6 +86,7 @@ router.get('/testing', async (req: Request, res: Response) => {
  * @param {string} songTitle - The title of the song
  * @param {string} songArtist - The artist of the song
  * @param {string} trackId - The track Id of the song on spotify
+ * @param {string} albumCover - the cover art link
  * @return {SongResponse} - The created song
  * @throws {403} - If the user is not logged in
  * @throws {400} - If the song title, artist or trackId is empty or a stream of empty spaces
@@ -128,7 +98,8 @@ router.post(
     const song = await SongCollection.addOne(
       req.body.songTitle,
       req.body.songArtist,
-      req.body.trackId
+      req.body.trackId,
+      req.body.albumCover
     );
 
     res.status(201).json({

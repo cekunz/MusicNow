@@ -10,7 +10,7 @@
         <SelectSongForm style='margin-right:30px' @submit="updateSong2"/>
         <SelectSongForm @submit="updateSong3"/>
     </section>
-     <button
+     <button class='submit'
       v-if="song1!==null && song2!==null && song3!==null"
       @click="submitMixtape"
     >
@@ -38,13 +38,13 @@ export default {
   },
   methods: {
     updateSong1(song1){
-      this.song1 = song1;
+      this.song1 = song1.trackId;
     },
     updateSong2(song2){
-      this.song2 = song2;
+      this.song2 = song2.trackId;
     },
     updateSong3(song3){
-      this.song3 = song3;
+      this.song3 = song3.trackId;
     },
 
     submitMixtape() {
@@ -52,7 +52,7 @@ export default {
        * puts together mixtape
        */
 
-      // ISSUE HERE!
+      // only pass in the trackId
       const body = JSON.stringify({song1: this.song1, song2: this.song2, song3:this.song3});
       const params = {
         method: 'POST',
@@ -120,13 +120,13 @@ h2 {
   display: flex;
   flex-direction: row;
   justify-content: center;
-  padding-bottom: 2rem;
+  padding-bottom: 50px;
   
 }
-
-/* SelectSongForm {
-  padding: 10px;
-} */
+.submit {
+  width: 300px;
+  text-align: center;
+} 
 
 
 

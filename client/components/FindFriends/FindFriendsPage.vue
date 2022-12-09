@@ -6,19 +6,17 @@
       <header>
         Find Friends
       </header>
+    <div>
+      </div>
+
         <center class ="search">
          <textarea
             class="searchbar"
             rows="1"
             @input="usernameQuery = $event.target.value"
-            placeholder="Search for Users..."
+            placeholder="Start typing to search for users..."
             style="resize: none"
           />
-         <button 
-          @click="filterUsers"
-         > 
-          🔎
-         </button>
         </center>
         <div class="friends"
         v-if="friendsToShow.length>0"
@@ -30,8 +28,13 @@
           :confirmed="false"
         />
         </div>
-        <div class="friends" v-else>
-          <h2> There are currently no other users to add as friends, check back later! </h2>
+        <div v-else>
+          <div class="friends" v-if="usernameQuery===''">>
+            <h2> There are currently no other users to add as friends, check back later! </h2>
+          </div>
+          <div class="friends" v-if="usernameQuery!==''">
+            <h2> There are no users by that username! </h2>
+          </div>
         </div>
 
 
@@ -64,13 +67,11 @@
           :confirmed="false"
          />
         </div>
-        <div class="friends" v-else>
+        <div class="friends">
           <h2> You currently have no friend requests, check back later! </h2>
-      </div>
+        </div>
     </div>
     
-
-
      <footer>
         <center>
          <button class="inactive"
@@ -132,29 +133,39 @@ export default {
       searchPage: true,
       yourFriends: false,
       requestsPage: false, 
-      
+      searchResult: undefined,
     };
   },
   computed: {
     friendsToShow() {
-      return this.$store.state.nonFriends.splice(0,5); 
+      if (this.usernameQuery === '') {
+       return this.$store.state.nonFriends.splice(0,5); 
+       
+      } else {
+        const filtered = this.$store.state.nonFriends.filter((username) => username.includes(this.usernameQuery));
+        return filtered
+      }
     }
   },
-  mounted() {
+  updated() {
       this.$store.commit('refreshFriends');
       this.$store.commit('refreshFriendRequests');
+      this.$store.commit('refreshPossibleFriends');
   },
   methods: {
     filterUsers() {
+      console.log('search', this.usernameQuery);
+      console.log([...this.$store.state.nonFriends])
       if (this.usernameQuery.length === 0) {
-        const error = 'Error: Search cannot be empty.';
-        this.$set(this.alerts, error, 'error'); // Set an alert to be the error text, timeout of 3000 ms
-        setTimeout(() => this.$delete(this.alerts, error), 3000);
-        return;
+        this.searchResult = undefined;
+      } else {
+        if (this.$store.state.nonFriends.includes(this.usernameQuery)) {
+           this.searchResult = [this.usernameQuery];
+        }
+        else {
+          this.searchResult = [];
+        }
       }
-
-      // when a username is passed in, call to the store to filter users
-      // based on users that contain the full string 
     },
     searchPageToggle() {
       this.searchPage = true;

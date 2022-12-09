@@ -32,9 +32,9 @@ router.get(
 );
 
 /**
- * Get the likes for a given ID
+ * create a new like
  *
- * @name GET /api/likes/:id
+ * @name POST /api/likes/:id
  *
  * @param {string} id - the id of the liked object
  *

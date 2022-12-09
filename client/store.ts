@@ -71,7 +71,6 @@ const store = new Vuex.Store({
        * @param profileMixtapes - new profileMixtapes to set
        */
       state.profileMixtapes = profileMixtapes;
-      this.commit('refreshLikes');
     },
     setProfileCircle(state, profileCircle) {
       /**
@@ -191,15 +190,16 @@ const store = new Vuex.Store({
       /**
        * Update all of the likes
        */
-      const allMixtapes = [...state.mixtapes, ...state.profileMixtapes];
-      const requests = allMixtapes.map((mixtape) => {
-        const url = `/api/likes/${mixtape._id}`;
-        const res = fetch(url).then(async (r) => r.json());
-        return res;
-      });
-
-      const likes = await Promise.all(requests); // wait for all requests to finish
-      this.commit('setLikes', likes);
+      if (state.mixtapes.length > 0) {
+        const requests = state.mixtapes.map((mixtape) => {
+          const url = `/api/likes/${mixtape._id}`;
+          const res = fetch(url).then(async (r) => r.json());
+          return res;
+        });
+  
+        const likes = await Promise.all(requests); // wait for all requests to finish
+        this.commit('setLikes', likes);
+      }
     },
     addLike(state, like) {
       /**

@@ -8,13 +8,14 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import * as userValidator from '../server/user/middleware';
 import {userRouter} from '../server/user/router';
-import { songRouter } from '../server/song/router';
-import { mixtapeRouter } from '../server/mixtape/router';
-import { promptRouter } from '../server/prompt/router';
-import { favoriteRouter } from '../server/favorite/router';
-import { friendRouter } from '../server/friend/router';
-import { likeRouter } from '../server/likes/router';
-import { profileRouter } from '../server/profile/router';
+import {songRouter} from '../server/song/router';
+import {mixtapeRouter} from '../server/mixtape/router';
+import {promptRouter} from '../server/prompt/router';
+import {favoriteRouter} from '../server/favorite/router';
+import {friendRouter} from '../server/friend/router';
+import {likeRouter} from '../server/likes/router';
+import {profileRouter} from '../server/profile/router';
+import {commentRouter} from '../server/comments/router';
 import MongoStore from 'connect-mongo';
 
 // Load environmental variables
@@ -23,21 +24,21 @@ dotenv.config({});
 // Connect to mongoDB
 const mongoConnectionUrl = process.env.MONGO_SRV;
 if (!mongoConnectionUrl) {
-  throw new Error('Please add the MongoDB connection SRV as \'MONGO_SRV\'');
+  throw new Error("Please add the MongoDB connection SRV as 'MONGO_SRV'");
 }
 
 const client = mongoose
   .connect(mongoConnectionUrl)
-  .then(m => {
+  .then((m) => {
     console.log('Connected to MongoDB');
     return m.connection.getClient();
   })
-  .catch(err => {
+  .catch((err) => {
     console.error(`Error connecting to MongoDB: ${err.message as string}`);
     throw new Error(err.message);
   });
 
-mongoose.connection.on('error', err => {
+mongoose.connection.on('error', (err) => {
   console.error(err);
 });
 
@@ -58,17 +59,19 @@ app.use(express.urlencoded({extended: false}));
 
 // Initialize cookie session
 // https://www.npmjs.com/package/express-session#options
-app.use(session({
-  secret: '61040', // Should generate a real secret
-  resave: true,
-  saveUninitialized: false,
-  store: MongoStore.create({
-    clientPromise: client,
-    dbName: 'sessions',
-    autoRemove: 'interval',
-    autoRemoveInterval: 10 // Minutes
+app.use(
+  session({
+    secret: '61040', // Should generate a real secret
+    resave: true,
+    saveUninitialized: false,
+    store: MongoStore.create({
+      clientPromise: client,
+      dbName: 'sessions',
+      autoRemove: 'interval',
+      autoRemoveInterval: 10 // Minutes
+    })
   })
-}));
+);
 
 // This makes sure that if a user is logged in, they still exist in the database
 app.use(userValidator.isCurrentSessionUserExists);
@@ -81,6 +84,7 @@ app.use('/api/prompt', promptRouter);
 app.use('/api/favorite', favoriteRouter);
 app.use('/api/friend', friendRouter);
 app.use('/api/likes', likeRouter);
+app.use('/api/comments', commentRouter);
 app.use('/api/profile', profileRouter);
 
 // Catch all the other routes and display error message
@@ -93,5 +97,7 @@ app.all('*', (req: Request, res: Response) => {
 // Create server to listen to request at specified port
 const server = http.createServer(app);
 server.listen(app.get('port'), () => {
-  console.log(`Express server running at http://localhost:${app.get('port') as number}`);
+  console.log(
+    `Express server running at http://localhost:${app.get('port') as number}`
+  );
 });

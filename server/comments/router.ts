@@ -49,25 +49,29 @@ router.get(
     const response = allComments.map(util.constructCommentResponse);
     res.status(200).json(response);
   },
-  [
-    userValidator.isAuthorExists
-  ],
   async (req: Request, res: Response, next: NextFunction) => {
     // Check if mixtape query parameter was supplied
     if (req.query.mixtape !== undefined) {
-        next();
-        return;
-      }
-    const authorComments = await CommentCollection.findAllByUsername(req.query.author as string);
+      next();
+      return;
+    }
+
+    // Perform middleware check now that we know this is the 'author'case
+    await userValidator.isAuthorExists(req, res, next);
+    const authorComments = await CommentCollection.findAllByUsername(
+      req.query.author as string
+    );
     const response = authorComments.map(util.constructCommentResponse);
     res.status(200).json(response);
   },
-  [
-    mixtapeValidator.isMixtapeExists
-  ],
+  [mixtapeValidator.isMixtapeExistsById],
   async (req: Request, res: Response) => {
-    const mixtapeComments = await CommentCollection.findAllByMixtape(req.query.mixtape as string);
+    const mixtapeComments = await CommentCollection.findAllByMixtape(
+      req.query.mixtape as string
+    );
+
     const response = mixtapeComments.map(util.constructCommentResponse);
+
     res.status(200).json(response);
   }
 );
@@ -75,7 +79,7 @@ router.get(
 /**
  * Create a new comment.
  *
- * @name POST /api/comments
+ * @name POST /api/comments/:mixtapeId
  *
  * @param {string} content - The content of the comment
  * @param {string} mixtapeId - The id of the mixtape that is being commented on
@@ -84,14 +88,15 @@ router.get(
  * @throws {400} - If the comment content is empty or a stream of empty spaces
  */
 router.post(
-  '/',
-  [
-    userValidator.isUserLoggedIn,
-    commentValidator.isValidCommentContent
-  ],
+  '/:mixtapeId',
+  [userValidator.isUserLoggedIn, commentValidator.isValidCommentContent],
   async (req: Request, res: Response) => {
     const userId = (req.session.userId as string) ?? ''; // Will not be an empty string since its validated in isUserLoggedIn
-    const comment = await CommentCollection.addOne(userId, req.body.content, req.body.mixtapeId);
+    const comment = await CommentCollection.addOne(
+      userId,
+      req.body.content,
+      req.params.mixtapeId
+    );
 
     res.status(201).json({
       message: 'Your comment was created successfully.',
@@ -147,7 +152,10 @@ router.patch(
     commentValidator.isValidCommentContent
   ],
   async (req: Request, res: Response) => {
-    const comment = await CommentCollection.updateOne(req.params.commentId, req.body.content);
+    const comment = await CommentCollection.updateOne(
+      req.params.commentId,
+      req.body.content
+    );
     res.status(200).json({
       message: 'Your comment was updated successfully.',
       comment: util.constructCommentResponse(comment)

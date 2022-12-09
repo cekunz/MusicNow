@@ -39,6 +39,9 @@
       </article>
     </section>
     <LikeComponent :liked-object-id="mixtape._id" />
+    <router-link :to="{name: 'Comments', params: {mixtapeId: mixtape._id}}">
+      Comments
+    </router-link>
   </article>
 </template>
 

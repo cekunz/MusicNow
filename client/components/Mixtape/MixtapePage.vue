@@ -16,7 +16,6 @@ export default {
   computed: {
     mixtape() {
       for (const mixtape of this.$store.state.profileMixtapes) {
-        console.log(mixtape._id, this.$route.params.mixtapeId);
         if (mixtape._id && mixtape._id === this.$route.params.mixtapeId) {
           return mixtape;
         }

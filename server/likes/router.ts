@@ -26,13 +26,12 @@ router.get(
     const likedId = req.params.id ?? undefined;
     const liked = await likedObjectCollection.findOne(likedId);
     const response = util.constructLikeResponse(liked);
-    console.log(response);
     res.status(200).json(response);
   }
 );
 
 /**
- * create a new like
+ * Add likes functionality to old mixtapes that did not have them before.
  *
  * @name POST /api/likes/:id
  *

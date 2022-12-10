@@ -1,12 +1,12 @@
 <template>
-  <article class="mixtape">
-    <header>
+  <article>
+    <div class="mixtape-container">
       <h3
-        class="author"
         v-if="
-          this.$store.state.friends.includes(mixtape.creator) ||
-          mixtape.creator === this.$store.state.username
+          $store.state.friends.includes(mixtape.creator) ||
+          mixtape.creator === $store.state.username
         "
+        class="username-container"
       >
         <router-link
           style="text-decoration: none; color: black"
@@ -15,47 +15,52 @@
           <span v-on:click="goToProfile"> @{{ mixtape.creator }} </span>
         </router-link>
       </h3>
-      <h3 class="author" v-else>@{{ mixtape.creator }}</h3>
-      <div v-if="$store.state.username === mixtape.creator" class="actions">
-        <button @click="deleteMixtape">🗑️ Delete</button>
+      <h3 class="username-container" v-else>@{{ mixtape.creator }}</h3>
+
+      <header class="delete-button-container">
+        <div v-if="$store.state.username === mixtape.creator" class="actions">
+          <button @click="deleteMixtape">🗑️ Delete</button>
+        </div>
+      </header>
+      <div class="content">
+        <SongComponent
+          :trackName="mixtape.songs[0].songTitle"
+          :artist="mixtape.songs[0].songArtist"
+          :trackId="mixtape.songs[0].trackId"
+          :albumCover="mixtape.songs[0].albumCover"
+          :simpleCover="true"
+        />
+        <SongComponent
+          :trackName="mixtape.songs[1].songTitle"
+          :artist="mixtape.songs[1].songArtist"
+          :trackId="mixtape.songs[1].trackId"
+          :albumCover="mixtape.songs[1].albumCover"
+          :simpleCover="true"
+        />
+        <SongComponent
+          :trackName="mixtape.songs[2].songTitle"
+          :artist="mixtape.songs[2].songArtist"
+          :trackId="mixtape.songs[2].trackId"
+          :albumCover="mixtape.songs[2].albumCover"
+          :simpleCover="true"
+        />
       </div>
-    </header>
-    <div class="content">
-      <SongComponent
-        :trackName="mixtape.songs[0].songTitle"
-        :artist="mixtape.songs[0].songArtist"
-        :trackId="mixtape.songs[0].trackId"
-        :albumCover="mixtape.songs[0].albumCover"
-        :simpleCover="true"
-      />
-      <SongComponent
-        :trackName="mixtape.songs[1].songTitle"
-        :artist="mixtape.songs[1].songArtist"
-        :trackId="mixtape.songs[1].trackId"
-        :albumCover="mixtape.songs[1].albumCover"
-        :simpleCover="true"
-      />
-      <SongComponent
-        :trackName="mixtape.songs[2].songTitle"
-        :artist="mixtape.songs[2].songArtist"
-        :trackId="mixtape.songs[2].trackId"
-        :albumCover="mixtape.songs[2].albumCover"
-        :simpleCover="true"
-      />
+      <section class="alerts">
+        <article
+          v-for="(status, alert, index) in alerts"
+          :key="index"
+          :class="status"
+        >
+          <p>{{ alert }}</p>
+        </article>
+      </section>
+      <LikeComponent :liked-object-id="mixtape._id" />
+      <div class="comment-button-container">
+        <button @click="$router.push(`/comments/${mixtape._id}`)">
+          Comments
+        </button>
+      </div>
     </div>
-    <section class="alerts">
-      <article
-        v-for="(status, alert, index) in alerts"
-        :key="index"
-        :class="status"
-      >
-        <p>{{ alert }}</p>
-      </article>
-    </section>
-    <LikeComponent :liked-object-id="mixtape._id" />
-    <router-link :to="{name: 'Comments', params: {mixtapeId: mixtape._id}}">
-      Comments
-    </router-link>
   </article>
 </template>
 
@@ -152,11 +157,47 @@ export default {
   justify-content: center;
 }
 
-.mixtape {
+.mixtape-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
   position: relative;
-  padding: 10px;
+  padding: 20px 30px;
   margin-bottom: 20px;
-  border: solid 3px rgb(24, 23, 23);
-  border-radius: 2px;
+  border: solid 2px rgb(122, 122, 122);
+  border-radius: 16px;
+}
+
+.mixtape-container button {
+  background-color: rgb(243, 243, 243);
+  border: solid 1px rgb(193, 193, 193);
+  border-radius: 4px;
+}
+
+.mixtape-container button:hover {
+  background-color: rgb(84, 84, 84);
+  color: white;
+  border-color: rgb(54, 54, 54);
+}
+
+.username-container {
+  position: absolute;
+  z-index: 1;
+  left: 40px;
+  top: 0;
+}
+
+.comment-button-container {
+  position: absolute;
+  z-index: 1;
+  right: 40px;
+  bottom: 40px;
+}
+
+.delete-button-container {
+  position: absolute;
+  z-index: 1;
+  left: 40px;
+  bottom: 40px;
 }
 </style>

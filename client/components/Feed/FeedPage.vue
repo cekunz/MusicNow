@@ -1,7 +1,7 @@
 <!-- eslint-disable vue/max-attributes-per-line -->
 
 <template>
-  <main>
+  <main class="viewport">
     <!-- what you see before you log in -->
     <section class="general" v-if="!$store.state.username">
       <h3 class="welcome">Welcome to MusicNow</h3>
@@ -22,18 +22,19 @@
     <!-- what you see after logging in after you post a mixtape-->
     <section v-if="$store.state.mixtapePosted">
       <!-- <header> -->
-        <div class="heading">
-          <h2>Welcome @{{ $store.state.username }}</h2>
-          <h2 v-if="$store.state.personalMixtape !== null"
-          > Here's what you {{feedPrompt}} </h2>
-        </div>
-          <MixtapeComponent
-            v-if="$store.state.personalMixtape !== null"
-            :mixtape="$store.state.personalMixtape"
-          />
-        <div class="heading">
-          <h2>Here's what your friends {{feedPrompt}}</h2>
-        </div>
+      <div class="heading">
+        <h2>Welcome @{{ $store.state.username }}</h2>
+        <h2 v-if="$store.state.personalMixtape !== null">
+          Here's what you {{ feedPrompt }}
+        </h2>
+      </div>
+      <MixtapeComponent
+        v-if="$store.state.personalMixtape !== null"
+        :mixtape="$store.state.personalMixtape"
+      />
+      <div class="heading">
+        <h2>Here's what your friends {{ feedPrompt }}</h2>
+      </div>
       <!-- </header> -->
       <section v-if="$store.state.mixtapes.length" class="post-container">
         <MixtapeComponent
@@ -141,5 +142,10 @@ section .scrollbox {
 
 .post-container {
   position: relative;
+}
+
+.viewport {
+  margin: auto;
+  width: 80vw;
 }
 </style>

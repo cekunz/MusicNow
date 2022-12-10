@@ -70,6 +70,6 @@ export default {
 <style>
 .viewport {
   margin: auto;
-  width: 50%;
+  width: 70%;
 }
 </style>

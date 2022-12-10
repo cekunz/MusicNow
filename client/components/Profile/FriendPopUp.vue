@@ -29,11 +29,11 @@ export default {
     friends: {
       type: Array,
       required: true
-    }
+    },
   },
   data() {
     return {
-      list: this.friends
+      list: this.friends,
     };
   },
   methods: {
@@ -73,13 +73,15 @@ button:hover {
   vertical-align: middle;
 }
 .modal-container1 {
-  width: 600px;
+  width: 800px;
   margin: 0px auto;
   padding: 20px 30px;
   background-color: #ccc;
   border-radius: 2px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
   font-family: Helvetica, Arial, sans-serif;
+  max-height: 600px;
+  overflow-y: auto;
 }
 .modal-header h3 {
   margin-top: 0;

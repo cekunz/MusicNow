@@ -17,6 +17,7 @@ const store = new Vuex.Store({
     profileFriends: [], // Friends of profile page
     profileMixtapes: [], // Mixtapes of profile page
     profileFavorites: [], // Saved songs (favorites) of profile page
+    profilePopUp: false,
     alerts: {}, // global success/error messages encountered during submissions to non-visible forms
     mixtapePosted: false,
     mixtapes: [],
@@ -93,6 +94,13 @@ const store = new Vuex.Store({
        * @param profileFavorites - new profileFavorites to set
        */
       state.profileFavorites = profileFavorites;
+    },
+    setProfilePopUp(state, profilePopUp) {
+      /**
+       * Update the stored profilePopUp to the specified one. False to close, True to open
+       * @param profilePopUp
+       */
+      state.profilePopUp = profilePopUp;
     },
     setLikes(state, likes) {
       /**
@@ -207,6 +215,20 @@ const store = new Vuex.Store({
       const url = `/api/favorite/:${state.username}`;
       const res = await fetch(url).then(async (r) => r.json());
       state.favorites = res;
+    },
+    async refreshProfile(state, profile) {
+      /**
+       * Update profile information
+       */
+      const url = `/api/profile?username=${profile}`
+      const res = await fetch(url).then(async (r) => r.json());
+      state.profileUsername = res.username;
+      state.profileFullname = res.fullName;
+      state.profileCircle = res.fullName[0];
+      state.profileFriends = res.friends;
+      state.profileMixtapes = res.mixtapes.reverse();
+      state.profileFavorites = res.favorites.reverse();
+      state.profilePopUp = false;
     },
     async refreshLikes(state) {
       /**

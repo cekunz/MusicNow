@@ -1,7 +1,23 @@
 <template>
   <article class="mixtape">
     <header>
-      <h3 class="author">@{{ mixtape.creator }}</h3>
+      <h3 
+        class="author"
+        v-if="this.$store.state.friends.includes(mixtape.creator)"
+      >
+        <router-link 
+          style="text-decoration: none; color: black" 
+          :to="{name: 'Profile', params: {name: mixtape.creator}}"
+        >
+          <span v-on:click="goToProfile"> @{{ mixtape.creator }} </span>
+        </router-link>
+      </h3>
+      <h3 
+        class="author"
+        v-else
+      >
+      @{{mixtape.creator}}
+      </h3>
       <div v-if="$store.state.username === mixtape.creator" class="actions">
         <button @click="deleteMixtape">🗑️ Delete</button>
       </div>
@@ -67,6 +83,10 @@ export default {
     };
   },
   methods: {
+    goToProfile() {
+      this.$store.commit('refreshProfile', this.mixtape.creator);
+      this.$store.commit('setProfilePopUp', false);
+    },
     deleteMixtape() {
       /**
        * Deletes this mixtape.

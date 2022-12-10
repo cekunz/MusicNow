@@ -15,7 +15,7 @@
               {{ $store.state.profileFriends.length }} Friends
             </button>
             <FriendPopUp
-              v-if="this.isOpen == true"
+              v-if="this.$store.state.profilePopUp == true"
               @close="close"
               :friends="$store.state.profileFriends"
             />
@@ -27,14 +27,14 @@
             <div class="rectangle">
               <div class="memory-rectangle">
                 <MemoryComponent
-                  v-for="mixtape in this.memoriesToShow"
+                  v-for="mixtape in this.$store.state.profileMixtapes.slice(0,8)"
                   :key="mixtape.id"
                   :mixtape="mixtape"
                 />
               </div>
               <div 
                 class="show-more"
-                v-if="this.showMoreMemories"
+                v-if="(this.$store.state.profileMixtapes.length > 8)"
               >
               <router-link
                 style="text-decoration: none; color: black"
@@ -53,7 +53,7 @@
           <div class="rectangle">
             <div class="favorites-rectangle">
               <SongComponent
-                v-for="favorite in this.favoritesToShow"
+                v-for="favorite in this.$store.state.profileFavorites.slice(0,6)"
                 class="profile-song"
                 :trackName="favorite.song.songTitle"
                 :artist="favorite.song.songArtist"
@@ -62,7 +62,7 @@
               />
               <div
                 class="view-all-box profile-song"
-                v-if="this.showMoreFavorites"
+                v-if="(this.$store.state.profileFavorites.length > 6)"
               >
                 <router-link
                   style="text-decoration: none; color: black"
@@ -91,52 +91,21 @@ export default {
   data() {
     return {
       isOpen: false,
-      friendsList: this.friends,
-      memoriesToShow:
-        this.$store.state.profileMixtapes.length > 8
-          ? this.$store.state.profileMixtapes.slice(0, 8)
-          : this.$store.state.profileMixtapes,
-      showMoreMemories: this.$store.state.profileMixtapes.length > 8,
-      favoritesToShow:
-        this.$store.state.profileFavorites.length > 7
-          ? this.$store.state.profileFavorites.slice(0, 6)
-          : this.$store.state.profileFavorites,
-      showMoreFavorites: this.$store.state.profileFavorites.length > 7
     };
   },
   beforeMount() {
-    this.updating();
+    if (this.$route.params.name) {
+      this.$store.commit('refreshProfile', this.$route.params.name);
+    }
   },
   methods: {
-    async updating() {
-      const urlProfile = this.$route.params.name
-        ? `/api/profile?username=${this.$route.params.name}`
-        : `/api/profile?username=${this.$store.state.username}`;
-
-      try {
-        const rProfile = await fetch(urlProfile);
-        const resProfile = await rProfile.json();
-
-        if (!rProfile.ok) {
-          throw new Error(resProfile.error);
-        }
-
-        this.$store.commit('setProfileUsername', resProfile.username);
-        this.$store.commit('setProfileFullname', resProfile.fullName);
-        this.$store.commit('setProfileCircle', resProfile.fullName[0]);
-        this.$store.commit('setProfileFriends', resProfile.friends);
-        this.$store.commit('setProfileMixtapes', resProfile.mixtapes.reverse());
-        this.$store.commit(
-          'setProfileFavorites',
-          resProfile.favorites.reverse()
-        );
-      } catch (e) {}
-    },
     open() {
-      this.isOpen = true;
+      // this.isOpen = true;
+      this.$store.commit('setProfilePopUp', true);
     },
     close() {
-      this.isOpen = false;
+      // this.isOpen = false;
+      this.$store.commit('setProfilePopUp', false);
     }
   }
 };

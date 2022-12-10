@@ -226,9 +226,12 @@ header {
 }
 
 .friends {
-  display: flex;
+  display: block;
   flex-direction: column;
+  margin-left: auto;
+  margin-right: auto;
   align-items: center;
+  width: 50%;
 }
 .searchbar {
   /* text-align: center; */

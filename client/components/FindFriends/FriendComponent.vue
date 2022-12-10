@@ -219,6 +219,6 @@ export default {
   margin-bottom: 20px;
   border: solid 3px rgb(24, 23, 23);
   border-radius: 2px;
-  width: 50%;
+  width: 100%;
 }
 </style>

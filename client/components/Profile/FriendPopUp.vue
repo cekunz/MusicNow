@@ -9,6 +9,7 @@
         <div class="modal-body1">
           <FriendComponent 
             v-for="friend in friends"
+            class="friend"
             :key="friend"
             :friend="friend"
             :confirmed="true"
@@ -70,13 +71,15 @@ button:hover {
 }
 .modal-wrapper {
   display: table-cell;
-  vertical-align: middle;
+  /* vertical-align: middle; */
 }
 .modal-container1 {
-  width: 800px;
+  width: 600px;
   margin: 0px auto;
   padding: 20px 30px;
-  background-color: #ccc;
+  /* background-color: #ccc; */
+  /* background-color: rgb(176, 176, 176); */
+  background-color: white;
   border-radius: 2px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
   font-family: Helvetica, Arial, sans-serif;
@@ -88,10 +91,14 @@ button:hover {
   color: #42b983;
 }
 .modal-body1 {
-  margin: 20px 0;
+  width: 85%;
+  margin-left: auto;
+  margin-right: auto;
 }
 .modal-default-button {
   float: right;
+  border: solid 1px white;
+  background-color: white;
 }
 
 </style>

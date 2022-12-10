@@ -3,8 +3,9 @@
     <header>
       <h3 
         class="author"
-        v-if="this.$store.state.friends.includes(mixtape.creator)"
-      >
+        v-if="(this.$store.state.friends.includes(mixtape.creator) 
+            || mixtape.creator === this.$store.state.username)"
+        >
         <router-link 
           style="text-decoration: none; color: black" 
           :to="{name: 'Profile', params: {name: mixtape.creator}}"

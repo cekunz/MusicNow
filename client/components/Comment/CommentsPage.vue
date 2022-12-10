@@ -45,7 +45,7 @@ export default {
     mixtape() {
       // look for mixtapes in current feed and profile
       const allMixtapes = [
-        ...(this.$store.state.mixtaps ?? []),
+        ...(this.$store.state.mixtapes ?? []),
         ...(this.$store.state.profileMixtapes ?? [])
       ];
       for (const mixtape of allMixtapes) {

@@ -155,6 +155,7 @@ export default {
   display: flex;
   flex-direction: row;
   justify-content: center;
+  margin: 50px 0;
 }
 
 .mixtape-container {

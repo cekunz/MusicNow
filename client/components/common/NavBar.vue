@@ -69,7 +69,6 @@ export default {
       this.$store.commit('setProfileUsername', this.$store.state.username);
     },
     refreshFriends() {
-      console.log('refresh!');
       this.$store.commit('refreshFriends');
       this.$store.commit('refreshFriendRequests');
       this.$store.commit('refreshPossibleFriends');

@@ -154,8 +154,6 @@ export default {
   },
   methods: {
     filterUsers() {
-      console.log('search', this.usernameQuery);
-      console.log([...this.$store.state.nonFriends])
       if (this.usernameQuery.length === 0) {
         this.searchResult = undefined;
       } else {

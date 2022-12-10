@@ -9,7 +9,7 @@
         <div class="modal-body1">
           <FriendComponent 
             v-for="friend in friends"
-            :key="user"
+            :key="friend"
             :friend="friend"
             :confirmed="true"
           />
@@ -37,8 +37,8 @@ export default {
     };
   },
   methods: {
-  }
-}
+      }
+        }
 </script>
 
 <style>

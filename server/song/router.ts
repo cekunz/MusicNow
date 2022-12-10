@@ -64,7 +64,7 @@ router.get(
   '/search',
   async (req: Request, res: Response) => {
     const token: string = await getAuthToken();
-    const url = `https://api.spotify.com/v1/search?q=${req.query.q as string}&type=${req.query.type as string}&market=US&limit=5`
+    const url = `https://api.spotify.com/v1/search?q=${req.query.q as string}&type=${req.query.type as string}&market=US&limit=6`
     // const url  . = req.body.url;
     const response = await fetch(url, {
       method: 'GET',

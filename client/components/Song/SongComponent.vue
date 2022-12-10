@@ -2,14 +2,32 @@
 
 <template>
     <div class="info">
+    <div v-if="editable">
+      <div class="songResult">
       <img class='image' :src='albumCover'>
       <h3 class='track'> {{shortenedTrack}} </h3>
       <h4 class='artist'> {{artist}} </h4>
-
-      <button v-if="!simpleCover || simpleCover===null"
-       @click="$emit('select', {songTitle: trackName, songArtist: artist, trackId: trackId, albumCover:albumCover})">
-        Select
+      <button class='clear' @click="clearSong">
+        Remove
       </button>
+      </div>
+    </div>
+
+    <div v-else>
+      <div v-if="simpleCover">
+        <img class='image' :src='albumCover'>
+        <h3 class='track'> {{shortenedTrack}} </h3>
+        <h4 class='artist'> {{artist}} </h4>
+      </div>
+      <button v-if="!simpleCover || simpleCover===null"
+        @click="$emit('select', {songTitle: trackName, songArtist: artist, trackId: trackId, albumCover:albumCover})">
+        <img class='image' :src='albumCover'>
+        <h3 class='track'> {{shortenedTrack}} </h3>
+        <h4 class='artist'> {{artist}} </h4>
+      </button>
+    </div>
+    
+    
     </div>
 </template>
 
@@ -36,12 +54,16 @@ export default {
     simpleCover: {
         type: Boolean,
         required: false
+    },
+    editable: {
+        type: Boolean,
+        required: false
     }
   },
   computed: {
     shortenedTrack() {
-        if (this.trackName.length > 35) {
-            return this.trackName.substring(0,33) + '...';
+        if (this.trackName.length > 25) {
+            return this.trackName.substring(0,21) + '...';
         } else return this.trackName;
     }
   },
@@ -51,6 +73,10 @@ export default {
     };
   },
   methods: {
+    clearSong() {
+        console.log('button pressed')
+        this.$emit("cleared");
+    }
   }
 };
 </script>
@@ -67,14 +93,19 @@ export default {
   border-radius: 2px;
 }
 
+
+.clear {
+    align-content: right;
+    font-size: 10;
+}
 .track {
-    font-size: 0.8vi;
-    font-size: 2.5vh;
+    font-size: 14;
+    font-weight: bold;
     margin-bottom:-16px;
 }
 .image {
-    height: 200px;
-    width: 200px;
+    height: 150px;
+    width: 150px;
     margin-bottom: -15px;
  }
 

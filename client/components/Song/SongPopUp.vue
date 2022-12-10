@@ -1,55 +1,51 @@
-<!-- Form for creating Song Selection -->
-
 <template>
-<div>
-    <section v-if="!submitted">
-        <div v-if="!editing">
-            <button class='plus'
-            v-if="!editing"
-            @click="startEditing"  
+  <!-- <script src="https://unpkg.com/vue@2"></script> -->
+  <div class="modal-mask">
+    <div class="modal-wrapper">
+      <div class="modal-container1">
+        <button class="modal-default-button" @click="$emit('close')">
+          X
+        </button>
+        <div class="modal-body1">
+          <div class="songSearch"> 
+            <textarea
+            @input="searchQuery = $event.target.value"
+            placeholder="Search for a song by title, artist, or album name..."
+            />
+            <button class ='submit'
+            @click="submitSong"
             >
-            +
-            </button> 
+            Search
+            </button>
+          </div>
+        <div v-if="selecting" class="songPicture"> 
+              
+          <SongComponent 
+          v-for="result in searchResults"
+          @select="selected"
+          :key="result.index"
+          :trackName="result.trackName"
+          :artist="result.artist"
+          :trackId="result.trackId"
+          :albumCover="result.albumCover"/>
         </div>
-        <div v-if="editing" class="song"> 
-           <SongPopUp 
-           @close="close"
-           @selected="selected"
-           />
-         
+          
         </div>
-    </section>
-    <section class='submitted' v-if="submitted">
-       <SongComponent 
-        @cleared="close"
-        :trackName="trackName"
-        :artist="artist"
-        :trackId="trackId"
-        :albumCover="albumCover"
-        :editable="true"
-        />
-         <!-- :simpleCover="true" -->
-       
-    </section>
-</div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
 import SongComponent from '@/components/Song/SongComponent.vue';
-import SongPopUp from '@/components/Song/SongPopUp.vue';
 
 export default {
-  name: 'SelectSongForm',
-  components: {SongComponent, SongPopUp},
+  name: 'SongPopUp',
+  components: {SongComponent},
   props: {
-    prompt: {
-        type: Object,
-        required: false
-    },
   },
   data() {
     return {
-      editing: false, // Whether or not this song is in edit mode
       selecting: false,
       artist: '',
       trackName: '', 
@@ -62,17 +58,6 @@ export default {
     };
   },
   methods: {
-    close() {
-      this.editing = false;
-      this.submitted = false;
-      console.log('final close')
-    },
-    startEditing() {
-      /**
-       * Enables edit mode on this song.
-       */
-       this.editing = true; 
-    },
     async selected(songInfo) {
       this.trackName = songInfo.songTitle;
       this.artist = songInfo.songArtist;
@@ -80,13 +65,13 @@ export default {
       this.albumCover = songInfo.albumCover;
       await this.createSong(songInfo)
       this.submitted = true;
-      this.editing = false;
-      this.$emit('submit', {songTitle: this.trackName, songArtist: this.artist, trackId: songInfo.trackId})
+      this.$emit('selected', {songTitle: this.trackName, songArtist: this.artist, trackId: songInfo.trackId, albumCover: this.albumCover})
     },
     formatSongs(result) {
       /**
        * puts search results into a usable format
        */
+      this.searchResults = [];
       for (const s of result) {
         const trackId = '' + s.id ;
         const artist = s.artists[0].name;
@@ -94,7 +79,6 @@ export default {
         const albumCover = s.album.images[1].url 
         this.searchResults.push({artist:artist, trackName:trackName, albumCover:albumCover, trackId: trackId});
       }
-      
       return;
 
     },
@@ -124,7 +108,7 @@ export default {
        * Finds song for mixtape
        * - first get the song objects, then ping the mixtape endpoint
        */
-      const url = `api/song/search?q=${this.searchQuery}&type=track`
+      const url = `api/song/search?q=${this.searchQuery}&type=track`;
       const params = {
         url: url,
         method: 'GET',
@@ -135,6 +119,7 @@ export default {
         }
       };
      this.request(params);
+     this.searchQuery = "";
     },
     async request(params) {
       /**
@@ -159,7 +144,6 @@ export default {
 
         const returned = await r.json();
         this.formatSongs(returned.tracks.items);
-        this.editing = false;
         this.selecting = true;
 
         params.callback();
@@ -172,34 +156,81 @@ export default {
 };
 </script>
 
-<style scoped>
-
-.plus {
-  font-size: 30px;
-  padding: 70px;
-  margin: 10px;
-  border: solid 4px rgb(192, 192, 192);
+<style>
+button {
+  padding: 8px;
+  font-size: 16px;
+  align-self: center;
+  border: solid 1px #ccc;
+  background-color: rgb(255, 255, 255);
   border-radius: 2px;
-  width: 100%;
 }
 
-.song {
+.submit {
+  padding: 8px;
+  font-size: 15px;
+  align-self: center;
+  border: solid 1px #ccc;
+  background-color: rgb(255, 255, 255);
+  border-radius: 2px;
+
+}
+
+button:hover {
+  background-color: rgb(54, 54, 54);
+  color: white;
+  border-color: rgb(54, 54, 54);
+}
+
+.modal-mask {
+  position: fixed;
+  z-index: 9998;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: table;
+  transition: opacity 0.3s ease;
+}
+.modal-wrapper {
+  display: table-cell;
+  vertical-align: middle;
+}
+.modal-container1 {
+  height: 820px;
+  width: 100px;
+  margin: 100px 100px; 
+  padding: 20px 20px;
+  background-color: #ccc;
+  border-radius: 2px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
+  font-family: Helvetica, Arial, sans-serif;
+}
+
+.modal-body1 {
+  margin: 20px 0;
+}
+.modal-default-button {
+  float: right;
+}
+.songSearch {
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
-
-.submitted {
-  text-align: center;
-  margin: 10px;
-  /* padding: 40px; */
-  /* border: solid 4px rgb(192, 192, 192); */
-  /* border-radius: 2px; */
+.songPicture {
+  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  row-gap: 110px;
+  column-gap: 20px;
+  grid-auto-rows: 120px;
+  grid-template-areas:
+    " a a "
+    " b b "
+    " c c ";
+  align-self: center; 
 }
 
-button:hover {
-  background-color: rgb(84, 84, 84);
-  color: white;
-  border-color: rgb(54, 54, 54);
-}
 </style>

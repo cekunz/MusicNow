@@ -65,7 +65,6 @@ export default {
     close() {
       this.editing = false;
       this.submitted = false;
-      console.log('final close')
     },
     startEditing() {
       /**

@@ -62,6 +62,7 @@ export default {
   },
   computed: {
     shortenedTrack() {
+        console.log(this.trackName, this.albumCover);
         if (this.trackName.length > 25) {
             return this.trackName.substring(0,21) + '...';
         } else return this.trackName;
@@ -74,7 +75,6 @@ export default {
   },
   methods: {
     clearSong() {
-        console.log('button pressed')
         this.$emit("cleared");
     }
   }

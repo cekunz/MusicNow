@@ -14,12 +14,17 @@
             <button @click="open">
               {{ $store.state.profileFriends.length }} Friends
             </button>
-            <FriendPopUp
+            <!-- <FriendPopUp
+              v-if="this.$store.state.profilePopUp == true"
+              @close="close"
+              :friends="$store.state.profileFriends"
+            /> -->
+          </section>
+          <FriendPopUp
               v-if="this.$store.state.profilePopUp == true"
               @close="close"
               :friends="$store.state.profileFriends"
             />
-          </section>
         </div>
         <div class="right">
           <section class="memory-info">

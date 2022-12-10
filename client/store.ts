@@ -130,7 +130,6 @@ const store = new Vuex.Store({
         .then((res) => {
           const comments = res;
           state.comments = comments;
-          console.log(state.comments);
         });
     },
     clearComments(state) {
@@ -153,7 +152,7 @@ const store = new Vuex.Store({
       state.mixtapePosted = false;
       state.personalMixtape = null;
     },
-    async personalMixtapeRefresh(state){
+    async personalMixtapeRefresh(state) {
       if (state.mixtapePosted) {
         const date = new Date();
         const day = date.getDate();
@@ -237,7 +236,7 @@ const store = new Vuex.Store({
       /**
        * Update profile information
        */
-      const url = `/api/profile?username=${profile}`
+      const url = `/api/profile?username=${profile}`;
       const res = await fetch(url).then(async (r) => r.json());
       state.profileUsername = res.username;
       state.profileFullname = res.fullName;
@@ -257,7 +256,7 @@ const store = new Vuex.Store({
           const res = fetch(url).then(async (r) => r.json());
           return res;
         });
-  
+
         const likes = await Promise.all(requests); // wait for all requests to finish
         this.commit('setLikes', likes);
       }

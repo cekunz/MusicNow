@@ -5,7 +5,7 @@
     :to="{name: 'Comments', params: {mixtapeId: mixtape._id}}"
   >
     <!-- <div class="square"></div> -->
-    <img class='square' :src='mixtape.songs[0].albumCover'>
+    <img class="square" :src="mixtape.songs[0].albumCover" />
     <div class="content">
       {{ this.displayDate }}
     </div>
@@ -13,8 +13,6 @@
 </template>
 
 <script>
-import MixtapeComponent from '@/components/Mixtape/MixtapeComponent.vue';
-
 export default {
   name: 'MemoryComponent',
   components: {},

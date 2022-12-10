@@ -109,10 +109,6 @@
             <h2> You have no friends by that username! </h2>
           </div>
        </div>
-
-      <div class="friends" v-else>
-        <h2>  </h2>
-      </div>
     </div>
     <div v-if="requestsPage===true" >
       <header>

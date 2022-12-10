@@ -1,47 +1,42 @@
 <template>
   <article class="mixtape">
     <header>
-      <h3 
+      <h3
         class="author"
         v-if="this.$store.state.friends.includes(mixtape.creator)"
       >
-        <router-link 
-          style="text-decoration: none; color: black" 
+        <router-link
+          style="text-decoration: none; color: black"
           :to="{name: 'Profile', params: {name: mixtape.creator}}"
         >
           <span v-on:click="goToProfile"> @{{ mixtape.creator }} </span>
         </router-link>
       </h3>
-      <h3 
-        class="author"
-        v-else
-      >
-      @{{mixtape.creator}}
-      </h3>
+      <h3 class="author" v-else>@{{ mixtape.creator }}</h3>
       <div v-if="$store.state.username === mixtape.creator" class="actions">
         <button @click="deleteMixtape">🗑️ Delete</button>
       </div>
     </header>
     <div class="content">
-      <SongComponent 
+      <SongComponent
         :trackName="mixtape.songs[0].songTitle"
         :artist="mixtape.songs[0].songArtist"
-        :trackId="mixtape.songs[0].trackId" 
-        :albumCover="mixtape.songs[0].albumCover" 
+        :trackId="mixtape.songs[0].trackId"
+        :albumCover="mixtape.songs[0].albumCover"
         :simpleCover="true"
       />
-      <SongComponent 
+      <SongComponent
         :trackName="mixtape.songs[1].songTitle"
         :artist="mixtape.songs[1].songArtist"
         :trackId="mixtape.songs[1].trackId"
-        :albumCover="mixtape.songs[1].albumCover" 
+        :albumCover="mixtape.songs[1].albumCover"
         :simpleCover="true"
       />
-      <SongComponent 
+      <SongComponent
         :trackName="mixtape.songs[2].songTitle"
         :artist="mixtape.songs[2].songArtist"
         :trackId="mixtape.songs[2].trackId"
-        :albumCover="mixtape.songs[2].albumCover" 
+        :albumCover="mixtape.songs[2].albumCover"
         :simpleCover="true"
       />
     </div>

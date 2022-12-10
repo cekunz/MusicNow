@@ -21,9 +21,14 @@ const routes = [
   {path: '/register', name: 'Register', component: RegisterPage},
   {path: '/profile', name: 'Profile', component: ProfilePage, params: true},
   {path: '/findFriends', name: 'Find Friends', component: FindFriendsPage},
-  {path: '/mixtape', name: 'Mixtape', component: MixtapePage, params: true},
   {
-    path: '/comments',
+    path: '/mixtape/:mixtapeId',
+    name: 'Mixtape',
+    component: MixtapePage,
+    params: true
+  },
+  {
+    path: '/comments/:mixtapeId',
     name: 'Comments',
     component: CommentsPage,
     params: true

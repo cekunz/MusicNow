@@ -44,9 +44,10 @@ export default {
   computed: {
     mixtape() {
       // look for mixtapes in current feed and profile
-      const allMixtapes = this.$store.state.mixtapes.concat(
-        this.$store.state.profileMixtapes
-      );
+      const allMixtapes = [
+        ...(this.$store.state.mixtaps ?? []),
+        ...(this.$store.state.profileMixtapes ?? [])
+      ];
       for (const mixtape of allMixtapes) {
         if (this.$route.params.mixtapeId === mixtape._id) {
           return mixtape;
@@ -60,7 +61,6 @@ export default {
   },
   created() {
     if (this.mixtape !== undefined) {
-      console.log(this.$route.params.mixtapeId);
       this.$store.commit('setComments', this.$route.params.mixtapeId);
     }
   }

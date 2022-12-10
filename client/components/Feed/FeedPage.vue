@@ -21,11 +21,20 @@
 
     <!-- what you see after logging in after you post a mixtape-->
     <section v-if="$store.state.mixtapePosted">
-      <header>
-        <div class="center">
+      <!-- <header> -->
+        <div class="heading">
           <h2>Welcome @{{ $store.state.username }}</h2>
+          <h2 v-if="$store.state.personalMixtape !== null"
+          > Here's what you {{feedPrompt}} </h2>
         </div>
-      </header>
+          <MixtapeComponent
+            v-if="$store.state.personalMixtape !== null"
+            :mixtape="$store.state.personalMixtape"
+          />
+        <div class="heading">
+          <h2>Here's what your friends {{feedPrompt}}</h2>
+        </div>
+      <!-- </header> -->
       <section v-if="$store.state.mixtapes.length" class="post-container">
         <MixtapeComponent
           v-for="mixtape in $store.state.mixtapes"
@@ -44,13 +53,15 @@
 import MixtapeComponent from '@/components/Mixtape/MixtapeComponent.vue';
 import MusicNowHeader from '@/components/common/MusicNowHeader.vue';
 import MakeMixtapePage from '@/components/Mixtape/MakeMixtapePage.vue';
+import PromptComponent from '@/components/Prompt/PromptComponent.vue';
 
 export default {
   name: 'FeedPage',
   components: {
     MixtapeComponent,
     MakeMixtapePage,
-    MusicNowHeader
+    MusicNowHeader,
+    PromptComponent
   },
   async beforeCreate() {
     if (!this.$store.state.username) {
@@ -60,6 +71,13 @@ export default {
   mounted() {
     if (this.$store.state.username) {
       this.$store.commit('refreshFeed');
+    }
+  },
+  computed: {
+    feedPrompt() {
+      const prompt = this.$store.state.prompt.promptText;
+      const promptSection = prompt.substring(25);
+      return `${promptSection}`;
     }
   }
 };
@@ -83,11 +101,18 @@ section {
   align-items: center;
 }
 
-header,
+/* header,
 header > * {
   display: flex;
   justify-content: space-between;
   align-items: center;
+} */
+
+.heading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* text-align: center; */
 }
 
 .welcome {

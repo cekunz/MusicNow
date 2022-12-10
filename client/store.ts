@@ -20,6 +20,7 @@ const store = new Vuex.Store({
     profilePopUp: false,
     alerts: {}, // global success/error messages encountered during submissions to non-visible forms
     mixtapePosted: false,
+    personalMixtape: null,
     mixtapes: [],
     friends: [],
     friendRequests: [],
@@ -143,16 +144,32 @@ const store = new Vuex.Store({
        * Update status if Mixtape has been posted for the day
        */
       state.mixtapePosted = true;
+      this.commit('personalMixtapeRefresh');
     },
     resetMixtape(state) {
       /**
        * Update status if Mixtape has been posted for the day
        */
       state.mixtapePosted = false;
+      state.personalMixtape = null;
+    },
+    async personalMixtapeRefresh(state){
+      if (state.mixtapePosted) {
+        const date = new Date();
+        const day = date.getDate();
+        const month = date.toLocaleString('default', {month: 'long'});
+        const year = date.getFullYear();
+        // Formatted as Month Day, Year (Nov 21, 2022 for example)
+
+        const today = `${month} ${day}, ${year}`;
+        const url = `/api/mixtape/${state.username}?date=${today}`;
+        const res = await fetch(url).then(async (r) => r.json());
+        state.personalMixtape = res;
+      }
     },
     async refreshFeed(state) {
       /**
-       * Update prompt of the day
+       * Update feed posts
        */
       const date = new Date();
       const day = date.getDate();

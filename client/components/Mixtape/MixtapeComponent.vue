@@ -164,7 +164,7 @@ export default {
   position: relative;
   padding: 20px 30px;
   margin-bottom: 20px;
-  border: solid 2px rgb(122, 122, 122);
+  border: solid 2px rgb(171, 171, 171);
   border-radius: 16px;
 }
 

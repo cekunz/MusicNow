@@ -1,7 +1,7 @@
 <!-- User should be authenticated in order to see this page -->
 
 <template>
-  <main>
+  <main class="not-modal">
     <section>
       <header>
         <div class="left">
@@ -14,11 +14,6 @@
             <button @click="open">
               {{ $store.state.profileFriends.length }} Friends
             </button>
-            <!-- <FriendPopUp
-              v-if="this.$store.state.profilePopUp == true"
-              @close="close"
-              :friends="$store.state.profileFriends"
-            /> -->
           </section>
           <FriendPopUp
               v-if="this.$store.state.profilePopUp == true"
@@ -237,5 +232,8 @@ button:hover {
 .show-more:hover {
   text-decoration: underline;
   cursor: pointer;
+}
+.not-modal {
+
 }
 </style>

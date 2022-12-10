@@ -66,7 +66,7 @@ export default {
   created() {},
   methods: {
     goToProfile() {
-      this.$store.commit('setProfileUsername', this.$store.state.username);
+      this.$store.commit('refreshProfile', this.$store.state.username);
     },
     refreshFriends() {
       this.$store.commit('refreshFriends');

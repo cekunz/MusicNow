@@ -4,18 +4,26 @@
   <div class="info">
     <div v-if="editable">
       <div class="songResult">
-        <img class="image" :src="albumCover" />
-        <h3 class="track">{{ shortenedTrack }}</h3>
-        <h4 class="artist">{{ artist }}</h4>
-        <button class="clear" @click="clearSong">Remove</button>
+      <img class='image' :src="albumCover">
+      <h3 class='track'> {{shortenedTrack}} </h3>
+      <h4 class='artist'> {{artist}} </h4>
+      <button class='clear' @click="clearSong">
+        Remove
+      </button>
       </div>
     </div>
 
     <div v-else>
       <div v-if="simpleCover">
-        <img class="image" :src="albumCover" />
-        <h3 class="track">{{ shortenedTrack }}</h3>
-        <h4 class="artist">{{ artist }}</h4>
+        <!-- <img class='image' :src='albumCover'> -->
+        <div class="image-wrapper">
+          <img class="image" :src="albumCover">
+          <FavoriteComponent
+            :favoritedSongId="trackId"
+          />
+        </div>
+        <h3 class='track'> {{shortenedTrack}} </h3>
+        <h4 class='artist'> {{artist}} </h4>
       </div>
       <button
         v-if="!simpleCover || simpleCover === null"
@@ -37,8 +45,11 @@
 </template>
 
 <script>
+import FavoriteComponent from '@/components/Favorites/FavoriteComponent.vue';
+
 export default {
   name: 'SongComponent',
+  components: {FavoriteComponent},
   props: {
     trackName: {
       type: String,
@@ -106,15 +117,19 @@ export default {
   margin-bottom: -16px;
 }
 .image {
-  height: 150px;
-  width: 150px;
+  height: 80%;
+  width: 80%;
   margin-bottom: -15px;
-}
+ }
 
 .artist {
   font-size: 10;
   font-weight: lighter;
   margin-bottom: 7px;
+}
+
+.image-wrapper {
+  position: relative;
 }
 
 button {

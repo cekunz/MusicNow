@@ -1,5 +1,4 @@
 <template>
-  <!-- <script src="https://unpkg.com/vue@2"></script> -->
   <div class="modal-mask">
     <div class="modal-wrapper">
       <div class="modal-container1">
@@ -56,6 +55,7 @@ button:hover {
   background-color: rgb(54, 54, 54);
   color: white;
   border-color: rgb(54, 54, 54);
+  cursor: pointer;
 }
 
 .modal-mask {
@@ -71,14 +71,12 @@ button:hover {
 }
 .modal-wrapper {
   display: table-cell;
-  /* vertical-align: middle; */
+  vertical-align: middle;
 }
 .modal-container1 {
   width: 600px;
   margin: 0px auto;
   padding: 20px 30px;
-  /* background-color: #ccc; */
-  /* background-color: rgb(176, 176, 176); */
   background-color: white;
   border-radius: 2px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);

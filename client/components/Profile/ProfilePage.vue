@@ -59,7 +59,8 @@
                 :trackName="favorite.song.songTitle"
                 :artist="favorite.song.songArtist"
                 :trackId="favorite.song.trackId"
-                :albumCover="favorite.song.songTitle"
+                :albumCover="favorite.song.albumCover"
+                :simpleCover="true"
               />
               <div
                 class="view-all-box profile-song"
@@ -197,7 +198,7 @@ button:hover {
 .favorites-rectangle {
   margin: 2%;
   color: black;
-  height: 15vh;
+  height: 25vh;
   width: 96%;
   display: flex;
   gap: 2%;
@@ -205,7 +206,6 @@ button:hover {
 
 .profile-song {
   width: 12.5%;
-  height: 100%;
 }
 
 .view-all-box {

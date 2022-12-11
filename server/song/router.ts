@@ -19,7 +19,7 @@ const router = express.Router();
  * @return {SongResponse[]} - A list of all songs
  */
 /**
- * Get songs by title and artist.
+ * Get song by title and artist.
  *
  * @name GET /api/song?songTitle=songTitle&songArtist=songArtist
  *

@@ -237,7 +237,7 @@ const store = new Vuex.Store({
       /**
        * Update favorited songs
        */
-      const url = `/api/favorite/:${state.username}`;
+      const url = `/api/favorite/${state.username}`;
       const res = await fetch(url).then(async (r) => r.json());
       state.favorites = res;
     },

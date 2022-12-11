@@ -17,6 +17,7 @@
         <img src="../../public/musicnow-logos/feed.png">
       </router-link>
       <router-link
+        @click="refreshFriends"
         v-if="$store.state.username"
         to="/findFriends"
       >
@@ -24,7 +25,7 @@
       </router-link>
       <router-link
         v-if="$store.state.username"
-        :to="{name: 'Profile', params: {name: $store.state.username}}"
+        :to="{name: 'Profile', params: {name: $store.state.username} }"
       >
         <span v-on:click="goToProfile">
           <img class="profile" src="../../public/musicnow-logos/profile.png">
@@ -65,7 +66,12 @@ export default {
   created() {},
   methods: {
     goToProfile() {
-      this.$store.commit('setProfileUsername', this.$store.state.username);
+      this.$store.commit('refreshProfile', this.$store.state.username);
+    },
+    refreshFriends() {
+      this.$store.commit('refreshFriends');
+      this.$store.commit('refreshFriendRequests');
+      this.$store.commit('refreshPossibleFriends');
     }
   }
 }

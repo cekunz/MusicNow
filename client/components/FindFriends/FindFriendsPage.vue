@@ -2,76 +2,7 @@
 
 <template>
   <main>
-    <div v-if="searchPage===true" >
-      <header>
-        Find Friends
-      </header>
-        <center class ="search">
-         <textarea
-            class="searchbar"
-            rows="1"
-            @input="usernameQuery = $event.target.value"
-            placeholder="Search for Users..."
-            style="resize: none"
-          />
-         <button 
-          @click="filterUsers"
-         > 
-          🔎
-         </button>
-        </center>
-        <div class="friends"
-        v-if="friendsToShow.length>0"
-        >
-        <FriendComponent
-          v-for="user in friendsToShow"
-          :key="user"
-          :friend="user"
-          :confirmed="false"
-        />
-        </div>
-        <div class="friends" v-else>
-          <h2> There are currently no other users to add as friends, check back later! </h2>
-        </div>
-
-
-    </div>
-     <div v-if="yourFriends===true" >
-      <header>
-        Your Friends
-      </header>
-      <div  class="friends" v-if="$store.state.friends.length>0">
-         <FriendComponent
-          v-for="user in $store.state.friends"
-          :key="user"
-          :friend="user"
-          :confirmed="true"
-        />
-      </div>
-      <div class="friends" v-else>
-        <h2> You currently haven't added any friends, send a friend request to get started! </h2>
-      </div>
-    </div>
-    <div v-if="requestsPage===true" >
-      <header>
-        Friend Requests
-      </header>
-      <div class="friends" v-if="$store.state.friendRequests.length>0" >
-         <FriendComponent
-          v-for="user in $store.state.friendRequests"
-          :key="user"
-          :friend="user"
-          :confirmed="false"
-         />
-        </div>
-        <div class="friends" v-else>
-          <h2> You currently have no friend requests, check back later! </h2>
-      </div>
-    </div>
-    
-
-
-     <footer>
+    <div class='toggle'>
         <center>
          <button class="inactive"
          v-if="!searchPage"
@@ -112,7 +43,89 @@
           Friend Requests
          </button>
          </center>
-      </footer>
+      </div>
+    <div v-if="searchPage===true" >
+      <header>
+        Find Friends
+      </header>
+    <div>
+      </div>
+        <center class="search">
+         <textarea
+            class="searchbar"
+            rows="1"
+            @input="usernameQuery = $event.target.value"
+            placeholder="Start typing to search for users..."
+            style="resize: none"
+          />
+        </center>
+        <div class="friends"
+          v-if="usersToShow.length>0"
+        >
+        <FriendComponent
+          v-for="user in usersToShow"
+          :key="user"
+          :friend="user"
+          :confirmed="false"
+        />
+        </div>
+        <div v-else>
+          <div class="friends" v-if="usernameQuery===''">>
+            <h2> There are currently no other users to add as friends, check back later! </h2>
+          </div>
+          <div class="friends" v-if="usernameQuery!==''">
+            <h2> There are no users by that username! </h2>
+          </div>
+        </div>
+
+
+    </div>
+     <div v-if="yourFriends===true" >
+      <header>
+        Your Friends
+      </header>
+      <center class="search">
+         <textarea
+            class="searchbar"
+            rows="1"
+            @input="friendQuery = $event.target.value"
+            placeholder="Start typing to search through your friends..."
+            style="resize: none"
+          />
+        </center>
+      <div class="friends" v-if="friendsToShow.length>0">
+         <FriendComponent
+          v-for="user in friendsToShow"
+          :key="user"
+          :friend="user"
+          :confirmed="true"
+        />
+      </div>
+       <div v-else>
+          <div class="friends" v-if="friendQuery===''">>
+            <h2> You currently haven't added any friends, send a friend request to get started! </h2>
+          </div>
+          <div class="friends" v-if="friendQuery!==''">
+            <h2> You have no friends by that username! </h2>
+          </div>
+       </div>
+    </div>
+    <div v-if="requestsPage===true" >
+      <header>
+        Friend Requests
+      </header>
+      <div class="friends" v-if="$store.state.friendRequests.length>0">
+         <FriendComponent
+          v-for="user in $store.state.friendRequests"
+          :key="user"
+          :friend="user"
+          :confirmed="false"
+         />
+        </div>
+        <div class="friends" v-if="$store.state.friendRequests.length===0">
+          <h2> You currently have no friend requests, check back later! </h2>
+        </div>
+    </div>
   </main>
 </template>
 
@@ -128,33 +141,50 @@ export default {
   data() {
     return {
       usernameQuery: '',
+      friendQuery: '',
       alerts: {},
       searchPage: true,
       yourFriends: false,
       requestsPage: false, 
-      
+      searchResult: undefined,
     };
   },
   computed: {
+    usersToShow() {
+      if (this.usernameQuery === '') {
+       return this.$store.state.nonFriends.splice(0,5); 
+       
+      } else {
+        const filtered = this.$store.state.nonFriends.filter((username) => username.includes(this.usernameQuery));
+        return filtered
+      }
+    },
     friendsToShow() {
-      return this.$store.state.nonFriends.splice(0,5); 
+      if (this.friendQuery === '') {
+        return this.$store.state.friends; 
+      } else {
+        const filtered = this.$store.state.friends.filter((username) => username.includes(this.friendQuery));
+        return filtered
+      }
     }
   },
-  mounted() {
+  updated() {
       this.$store.commit('refreshFriends');
       this.$store.commit('refreshFriendRequests');
+      this.$store.commit('refreshPossibleFriends');
   },
   methods: {
     filterUsers() {
       if (this.usernameQuery.length === 0) {
-        const error = 'Error: Search cannot be empty.';
-        this.$set(this.alerts, error, 'error'); // Set an alert to be the error text, timeout of 3000 ms
-        setTimeout(() => this.$delete(this.alerts, error), 3000);
-        return;
+        this.searchResult = undefined;
+      } else {
+        if (this.$store.state.nonFriends.includes(this.usernameQuery)) {
+           this.searchResult = [this.usernameQuery];
+        }
+        else {
+          this.searchResult = [];
+        }
       }
-
-      // when a username is passed in, call to the store to filter users
-      // based on users that contain the full string 
     },
     searchPageToggle() {
       this.searchPage = true;
@@ -196,13 +226,16 @@ header {
 }
 
 .friends {
-  display: flex;
+  display: block;
   flex-direction: column;
+  margin-left: auto;
+  margin-right: auto;
   align-items: center;
+  width: 50%;
 }
 .searchbar {
   /* text-align: center; */
-  font-size: 25px;
+  font-size: 20px;
   padding: 15px;
   /* align-content: center; */
   /* margin-top: 10px; */
@@ -212,6 +245,10 @@ header {
 
 }
 
+.toggle {
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
 button {
   position: relative;
   padding: 15px;

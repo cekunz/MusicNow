@@ -69,12 +69,13 @@ router.get(
 router.post(
   '/:username?',
   [
-    // userValidator.isUserLoggedIn,
-    songValidator.istrackIdExistsQuery
+    userValidator.isUserLoggedIn,
+    songValidator.istrackIdExistsBody
   ],
   async (req: Request, res: Response) => {
-    const username = req.params.username as string;
-    const trackId = req.query.trackId as string;
+    console.log(req.body);
+    const username = req.body.username as string;
+    const trackId = req.body.trackId as string;
     const favorite = await FavoriteCollection.addOne(trackId, username)
 
     res.status(201).json({
@@ -98,11 +99,11 @@ router.delete(
   '/',
   [
     userValidator.isUserLoggedIn,
-    songValidator.istrackIdExistsQuery
+    songValidator.istrackIdExistsBody
   ],
   async (req: Request, res: Response) => {
-    const username = req.params.username as string;
-    const trackId = req.query.trackId as string;
+    const username = req.body.username as string;
+    const trackId = req.body.trackId as string;
     const favorite = await FavoriteCollection.deleteOne(trackId, username)
 
     res.status(200).json({

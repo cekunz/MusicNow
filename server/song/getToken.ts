@@ -21,7 +21,6 @@ export async function getAuthToken() {
   if (response) {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     const datajson = await response.json();
-    console.log(datajson);
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/dot-notation
     return datajson['access_token'];
   }

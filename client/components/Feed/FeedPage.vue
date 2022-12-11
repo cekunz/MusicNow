@@ -1,7 +1,7 @@
 <!-- eslint-disable vue/max-attributes-per-line -->
 
 <template>
-  <main>
+  <main class="viewport">
     <!-- what you see before you log in -->
     <section class="general" v-if="!$store.state.username">
       <h3 class="welcome">Welcome to MusicNow</h3>
@@ -21,11 +21,24 @@
 
     <!-- what you see after logging in after you post a mixtape-->
     <section v-if="$store.state.mixtapePosted">
-      <header>
-        <div class="center">
-          <h2>Welcome @{{ $store.state.username }}</h2>
-        </div>
-      </header>
+      <!-- <header> -->
+      <div class="heading">
+        <h2>Welcome @{{ $store.state.username }}</h2>
+        <h2> Today's prompt </h2>
+        <h1> {{$store.state.prompt.promptText}} </h1>
+      </div>
+
+      <center><h2 v-if="$store.state.personalMixtape !== null">
+        Here's what you responded to today's prompt 
+      </h2></center>
+      <MixtapeComponent
+        v-if="$store.state.personalMixtape !== null"
+        :mixtape="$store.state.personalMixtape"
+      />
+      <div class="heading">
+        <h2>Here's how your friends responded to today's prompt </h2>
+      </div>
+      <!-- </header> -->
       <section v-if="$store.state.mixtapes.length" class="post-container">
         <MixtapeComponent
           v-for="mixtape in $store.state.mixtapes"
@@ -34,7 +47,7 @@
         />
       </section>
       <article v-else>
-        <h3>Your friends haven't posted any mixtapes yet!</h3>
+        <center> <h3>Your friends haven't posted any mixtapes yet!</h3> </center>
       </article>
     </section>
   </main>
@@ -44,13 +57,15 @@
 import MixtapeComponent from '@/components/Mixtape/MixtapeComponent.vue';
 import MusicNowHeader from '@/components/common/MusicNowHeader.vue';
 import MakeMixtapePage from '@/components/Mixtape/MakeMixtapePage.vue';
+import PromptComponent from '@/components/Prompt/PromptComponent.vue';
 
 export default {
   name: 'FeedPage',
   components: {
     MixtapeComponent,
     MakeMixtapePage,
-    MusicNowHeader
+    MusicNowHeader,
+    PromptComponent
   },
   async beforeCreate() {
     if (!this.$store.state.username) {
@@ -60,6 +75,13 @@ export default {
   mounted() {
     if (this.$store.state.username) {
       this.$store.commit('refreshFeed');
+    }
+  },
+  computed: {
+    feedPrompt() {
+      const prompt = this.$store.state.prompt.promptText;
+      const promptSection = prompt.substring(25);
+      return `${promptSection}`;
     }
   }
 };
@@ -83,11 +105,18 @@ section {
   align-items: center;
 }
 
-header,
+/* header,
 header > * {
   display: flex;
   justify-content: space-between;
   align-items: center;
+} */
+
+.heading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* text-align: center; */
 }
 
 .welcome {
@@ -116,5 +145,10 @@ section .scrollbox {
 
 .post-container {
   position: relative;
+}
+
+.viewport {
+  margin: auto;
+  width: 80vw;
 }
 </style>

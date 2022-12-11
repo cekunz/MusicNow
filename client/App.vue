@@ -45,8 +45,11 @@ export default {
         this.$store.commit('refreshPrompt');
         this.$store.commit('refreshFeed');
         this.$store.commit('refreshFriends');
+        this.$store.commit('refreshFavorites');
         this.$store.commit('refreshFriendRequests');
         this.$store.commit('refreshPossibleFriends');
+        this.$store.commit('personalMixtapeRefresh'); 
+        this.$store.commit('refreshProfile', this.$store.state.username); 
       });
 
     // Clear alerts on page refresh

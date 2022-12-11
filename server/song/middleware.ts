@@ -33,6 +33,21 @@ const isSongExists = async (req: Request, res: Response, next: NextFunction) => 
 };
 
 /**
+ * Checks if a Song with trackId in req.body exists
+ */
+ const istrackIdExistsBody = async (req: Request, res: Response, next: NextFunction) => {
+  const song = await SongCollection.findOne(req.body.trackId);
+  if (!song) {
+    res.status(404).json({
+      error: `Song with id ${req.body.songId} does not exist.`
+    });
+    return;
+  }
+
+  next();
+};
+
+/**
  * Checks if a Song with songId in req.query exists
  */
  const istrackIdExistsQuery = async (req: Request, res: Response, next: NextFunction) => {
@@ -79,5 +94,6 @@ export {
   isValidSongContent,
   isSongExists,
   istrackIdExists,
-  istrackIdExistsQuery
+  istrackIdExistsQuery,
+  istrackIdExistsBody
 };

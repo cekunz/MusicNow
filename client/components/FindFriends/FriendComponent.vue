@@ -4,8 +4,22 @@
     class="friend"
   >
     <header>
-      <h3 class="author">
-        @{{ friend }} 
+      <h3 
+        class="author"
+        v-if="this.$store.state.friends.includes(friend)"
+      >
+        <router-link 
+          style="text-decoration: none; color: black" 
+          :to="{name: 'Profile', params: {name: friend}}"
+        >
+          <span v-on:click="goToProfile"> @{{ friend }} </span>
+        </router-link>
+      </h3>
+      <h3 
+        class="author"
+        v-else
+      >
+      @{{friend}}
       </h3>
     </header>
     <div class="right"
@@ -76,6 +90,10 @@ export default {
     };
   },
   methods: {
+    goToProfile() {
+      this.$store.commit('refreshProfile', this.friend);
+      this.$store.commit('setProfilePopUp', false);
+    },
     delete() {
       /**
        * Deletes this mixtape.
@@ -201,6 +219,6 @@ export default {
   margin-bottom: 20px;
   border: solid 3px rgb(24, 23, 23);
   border-radius: 2px;
-  width: 50%;
+  width: 100%;
 }
 </style>

@@ -1,5 +1,4 @@
 <template>
-  <!-- <script src="https://unpkg.com/vue@2"></script> -->
   <div class="modal-mask">
     <div class="modal-wrapper">
       <div class="modal-container1">
@@ -9,7 +8,8 @@
         <div class="modal-body1">
           <FriendComponent 
             v-for="friend in friends"
-            :key="user"
+            class="friend"
+            :key="friend"
             :friend="friend"
             :confirmed="true"
           />
@@ -29,16 +29,16 @@ export default {
     friends: {
       type: Array,
       required: true
-    }
+    },
   },
   data() {
     return {
-      list: this.friends
+      list: this.friends,
     };
   },
   methods: {
-  }
-}
+      }
+        }
 </script>
 
 <style>
@@ -55,6 +55,7 @@ button:hover {
   background-color: rgb(54, 54, 54);
   color: white;
   border-color: rgb(54, 54, 54);
+  cursor: pointer;
 }
 
 .modal-mask {
@@ -76,20 +77,26 @@ button:hover {
   width: 600px;
   margin: 0px auto;
   padding: 20px 30px;
-  background-color: #ccc;
+  background-color: white;
   border-radius: 2px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
   font-family: Helvetica, Arial, sans-serif;
+  max-height: 600px;
+  overflow-y: auto;
 }
 .modal-header h3 {
   margin-top: 0;
   color: #42b983;
 }
 .modal-body1 {
-  margin: 20px 0;
+  width: 85%;
+  margin-left: auto;
+  margin-right: auto;
 }
 .modal-default-button {
   float: right;
+  border: solid 1px white;
+  background-color: white;
 }
 
 </style>

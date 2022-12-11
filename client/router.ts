@@ -7,6 +7,7 @@ import RegisterPage from './components/Login/RegisterPage.vue';
 import ProfilePage from './components/Profile/ProfilePage.vue';
 import FindFriendsPage from './components/FindFriends/FindFriendsPage.vue';
 import MixtapePage from './components/Mixtape/MixtapePage.vue';
+import CommentsPage from './components/Comment/CommentsPage.vue';
 import ProfileMemoriesPage from './components/Profile/ProfileMemoriesPage.vue';
 import ProfileSongsPage from './components/Profile/ProfileSongsPage.vue';
 import NotFound from './NotFound.vue';
@@ -20,7 +21,18 @@ const routes = [
   {path: '/register', name: 'Register', component: RegisterPage},
   {path: '/profile', name: 'Profile', component: ProfilePage, params: true},
   {path: '/findFriends', name: 'Find Friends', component: FindFriendsPage},
-  {path: '/mixtape', name: 'Mixtape', component: MixtapePage, params: true},
+  {
+    path: '/mixtape/:mixtapeId',
+    name: 'Mixtape',
+    component: MixtapePage,
+    params: true
+  },
+  {
+    path: '/comments/:mixtapeId',
+    name: 'Comments',
+    component: CommentsPage,
+    params: true
+  },
   {path: '/profile/memories', name: 'Memories', component: ProfileMemoriesPage},
   {path: '/profile/songs', name: 'Favorites', component: ProfileSongsPage},
   {path: '*', name: 'Not Found', component: NotFound}

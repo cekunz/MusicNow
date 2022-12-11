@@ -110,7 +110,6 @@ router.post(
   '/:username?',
   [userValidator.isUserLoggedIn],
   async (req: Request, res: Response) => {
-    console.log('BODY', req.body);
     const song1 = await SongCollection.findOne(req.body.song1);
     const song2 = await SongCollection.findOne(req.body.song2);
     const song3 = await SongCollection.findOne(req.body.song3);

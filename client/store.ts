@@ -14,18 +14,22 @@ const store = new Vuex.Store({
     profileUsername: null, // Username of the profile
     profileFullname: null, // Full Name of the profile
     profileCircle: null, // First Initial to be displayed on profile page
+    profileCircleColor: null,
     profileFriends: [], // Friends of profile page
     profileMixtapes: [], // Mixtapes of profile page
     profileFavorites: [], // Saved songs (favorites) of profile page
+    profilePopUp: false,
     alerts: {}, // global success/error messages encountered during submissions to non-visible forms
     mixtapePosted: false,
+    personalMixtape: null,
     mixtapes: [],
     friends: [],
     friendRequests: [],
     nonFriends: [],
     favorites: [],
     prompt: '', // the daily prompt
-    likes: Object.create(null) // All likes from friends
+    likes: Object.create(null), // All likes from friends
+    comments: []
   },
   mutations: {
     alert(state, payload) {
@@ -71,14 +75,21 @@ const store = new Vuex.Store({
        * @param profileMixtapes - new profileMixtapes to set
        */
       state.profileMixtapes = profileMixtapes;
-      this.commit('refreshLikes');
     },
-    setProfileCircle(state, profileCircle) {
-      /**
-       * Update the stored profileCircle to the specified one.
-       * @param profileCircle - new profileCircle to set
+    async refreshProfileIcon(state, updatedProfileIcon){
+      /**    
+       * Update the stored profileCircleColor to the specified one.
+       * @param profileColor - new profileColor to set
        */
-      state.profileCircle = profileCircle;
+      const url = `/api/profile/${state.username}`;
+      const options = {
+        body: JSON.stringify(updatedProfileIcon),
+        method: 'PATCH',
+        headers: {'Content-Type': 'application/json'}
+      };
+      const res = await fetch(url, options).then(async (r) => r.json());
+      state.profileCircleColor = res.profile.iconColor;
+      state.profileCircle = res.profile.iconText;
     },
     setProfileFriends(state, profileFriends) {
       /**
@@ -93,6 +104,13 @@ const store = new Vuex.Store({
        * @param profileFavorites - new profileFavorites to set
        */
       state.profileFavorites = profileFavorites;
+    },
+    setProfilePopUp(state, profilePopUp) {
+      /**
+       * Update the stored profilePopUp to the specified one. False to close, True to open
+       * @param profilePopUp
+       */
+      state.profilePopUp = profilePopUp;
     },
     setLikes(state, likes) {
       /**
@@ -109,21 +127,57 @@ const store = new Vuex.Store({
       }
       state.likes = newLikes;
     },
+    async setComments(state, mixtapeId) {
+      /**
+       * Update the stored comments to the specified ones.
+       * @param mixtapeId - mixtapeId associated with the comments we want to get
+       */
+      fetch(`/api/comments?mixtape=${mixtapeId}`, {
+        credentials: 'same-origin' // Sends express-session credentials with request
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          const comments = res;
+          state.comments = comments;
+        });
+    },
+    clearComments(state) {
+      /**
+       *  Remove all comments stored in Vuex
+       */
+      state.comments = [];
+    },
     postMixtape(state) {
       /**
        * Update status if Mixtape has been posted for the day
        */
       state.mixtapePosted = true;
+      this.commit('personalMixtapeRefresh');
     },
     resetMixtape(state) {
       /**
        * Update status if Mixtape has been posted for the day
        */
       state.mixtapePosted = false;
+      state.personalMixtape = null;
+    },
+    async personalMixtapeRefresh(state) {
+      if (state.mixtapePosted) {
+        const date = new Date();
+        const day = date.getDate();
+        const month = date.toLocaleString('default', {month: 'long'});
+        const year = date.getFullYear();
+        // Formatted as Month Day, Year (Nov 21, 2022 for example)
+
+        const today = `${month} ${day}, ${year}`;
+        const url = `/api/mixtape/${state.username}?date=${today}`;
+        const res = await fetch(url).then(async (r) => r.json());
+        state.personalMixtape = res;
+      }
     },
     async refreshFeed(state) {
       /**
-       * Update prompt of the day
+       * Update feed posts
        */
       const date = new Date();
       const day = date.getDate();
@@ -183,23 +237,48 @@ const store = new Vuex.Store({
       /**
        * Update favorited songs
        */
-      const url = `/api/favorite/:${state.username}`;
+      const url = `/api/favorite/${state.username}`;
       const res = await fetch(url).then(async (r) => r.json());
       state.favorites = res;
+    },
+    async refreshProfile(state, profile) {
+      /**
+       * Update profile information
+       */
+      const url = `/api/profile?username=${profile}`;
+      const res = await fetch(url).then(async (r) => r.json());
+      state.profileUsername = res.username;
+      state.profileFullname = res.fullName;
+
+      if (res.iconText === undefined) {
+        state.profileCircle = res.fullName[0];
+      } else {
+        state.profileCircleColor = res.iconText
+      }
+      if (res.iconColor === undefined) {
+        state.profileCircleColor = '#ccc'
+      } else {
+        state.profileCircleColor = res.iconColor
+      }
+      state.profileFriends = res.friends;
+      state.profileMixtapes = res.mixtapes.reverse();
+      state.profileFavorites = res.favorites.reverse();
+      state.profilePopUp = false;
     },
     async refreshLikes(state) {
       /**
        * Update all of the likes
        */
-      const allMixtapes = [...state.mixtapes, ...state.profileMixtapes];
-      const requests = allMixtapes.map((mixtape) => {
-        const url = `/api/likes/${mixtape._id}`;
-        const res = fetch(url).then(async (r) => r.json());
-        return res;
-      });
+      if (state.mixtapes.length > 0) {
+        const requests = state.mixtapes.map((mixtape) => {
+          const url = `/api/likes/${mixtape._id}`;
+          const res = fetch(url).then(async (r) => r.json());
+          return res;
+        });
 
-      const likes = await Promise.all(requests); // wait for all requests to finish
-      this.commit('setLikes', likes);
+        const likes = await Promise.all(requests); // wait for all requests to finish
+        this.commit('setLikes', likes);
+      }
     },
     addLike(state, like) {
       /**

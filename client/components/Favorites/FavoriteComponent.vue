@@ -1,47 +1,179 @@
+<!-- eslint-disable vue/max-attributes-per-line -->
+<!-- eslint-disable vue/singleline-html-element-content-newline -->
+<!-- Reusable component for displaying the Music Now header that shows today's date -->
+
 <template>
-    <article class="Favorite">
-        <h1> Your Favorites </h1>
-        <div class="content">
-            <article v-for="song in favorites">
-                <SongComponent :song="song" />
-            </article>
-        </div>
-    </article>
+  <section class="favorite-container circle">
+    <p v-if="userHasFavorited" class="favorited circle-inner" @click="removeFavorite">
+      <i class="fas fa-bookmark bookmark" />
+    </p>
+    <p v-else class=" notFavorited circle-inner" @click="addFavorite">
+      <i class="fas fa-bookmark bookmark" />
+    </p>
+  </section>
 </template>
 
 <script>
-import SongComponent from '@/components/Song/SongComponent.vue';
-import store from '@/store.ts'
-
 export default {
   name: 'FavoriteComponent',
-  components: {SongComponent},
   props: {
-
+    trackId: {
+      type: String,
+      required: false
+    }
   },
   data() {
-    return {
-        alerts: {} // Displays success/error messages encountered during freet modification
-    };
+    return {};
   },
   computed: {
-    favorites() {
-        await store.refreshFavorites();
-        return store.favorites.map(favorite => favorite.song);
+    /**
+     * Compute if the user has favorited the object with this.favoritedObjectId
+     */
+    userHasFavorited() {
+      let isFavorite = false;
+      this.$store.state.favorites.forEach(favorite => {
+        if (favorite.song.trackId === this.trackId) {
+          isFavorite = true;;
+        }
+      });
+      return isFavorite;
     }
   },
   methods: {
+    addFavorite() {
+      this.submit(false);
+      this.$store.commit('refreshFavorites');
+    },
+    removeFavorite() {
+      this.submit(true);
+      this.$store.commit('refreshFavorites');
+    },
+    async submit(remove = false) {
+      /**
+       * Submits a form with the specified options from data().
+       */
+        const options = remove ? {
+          method: 'DELETE',
+          headers: {'Content-Type': 'application/json'},
+          credentials: 'same-origin' // Sends express-session credentials with request
+        } : {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          credentials: 'same-origin' // Sends express-session credentials with request
+        };
+        options.body = JSON.stringify({username: this.$store.state.username, trackId: this.trackId});
 
+      try {
+        const r = await fetch(`/api/favorite`, options);
+        if (!r.ok) {
+          // If response is not okay, we throw an error and enter the catch block
+          const res = await r.json();
+          throw new Error(res.error);
+        }
+        this.$store.commit('refreshFavorites');
+        if (this.$store.state.profileUsername === this.$store.state.username) {
+          this.$store.commit('refreshProfile', this.$store.state.username);
+        }
+      } catch (e) {
+      }
+    }
   }
 };
 </script>
 
 <style scoped>
-
-.Favorite{
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
+.favorite-container {
+  position: absolute;
+  right: 10%;
+  top: 0%;
+  border-radius: 50%;
+  background-color: white;
+  cursor: pointer;
+}
+.favorited {
+  color: rgb(255, 126, 28);
+  -webkit-animation-name: wiggle;
+  -ms-animation-name: wiggle;
+  -ms-animation-duration: 1000ms;
+  -webkit-animation-duration: 1000ms;
+  -webkit-animation-iteration-count: 1;
+  -ms-animation-iteration-count: 1;
+  -webkit-animation-timing-function: ease-in-out;
+  -ms-animation-timing-function: ease-in-out;
+}
+.favorited:hover {
+  color: rgb(223, 100, 0);
 }
 
+.notFavorited {
+  color: rgb(0, 0, 0);
+}
+.notFavorited:hover {
+  color: rgb(255, 143, 92);
+}
+
+.circle-inner {
+  display: table-cell;
+  text-decoration: none;
+  height: 30px;
+  width: 30px;
+}
+
+.bookmark {
+  margin-top: 20%;
+}
+
+@-webkit-keyframes wiggle {
+  0% {
+    -webkit-transform: rotate(10deg);
+  }
+  25% {
+    -webkit-transform: rotate(-10deg);
+  }
+  50% {
+    -webkit-transform: rotate(20deg);
+  }
+  75% {
+    -webkit-transform: rotate(-5deg);
+  }
+  100% {
+    -webkit-transform: rotate(0deg);
+  }
+}
+
+@-ms-keyframes wiggle {
+  0% {
+    -ms-transform: rotate(1deg);
+  }
+  25% {
+    -ms-transform: rotate(-1deg);
+  }
+  50% {
+    -ms-transform: rotate(1.5deg);
+  }
+  75% {
+    -ms-transform: rotate(-5deg);
+  }
+  100% {
+    -ms-transform: rotate(0deg);
+  }
+}
+
+@keyframes wiggle {
+  0% {
+    transform: rotate(10deg);
+  }
+  25% {
+    transform: rotate(-10deg);
+  }
+  50% {
+    transform: rotate(20deg);
+  }
+  75% {
+    transform: rotate(-5deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
 </style>

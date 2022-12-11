@@ -2,9 +2,10 @@
   <router-link
     class="memory"
     style="text-decoration: none; color: black"
-    :to="{name: 'Mixtape', params: {mixtapeId: mixtape._id}}"
+    :to="{name: 'Comments', params: {mixtapeId: mixtape._id}}"
   >
-    <div class="square"></div>
+    <!-- <div class="square"></div> -->
+    <img class="square" :src="mixtape.songs[0].albumCover" />
     <div class="content">
       {{ this.displayDate }}
     </div>
@@ -12,8 +13,6 @@
 </template>
 
 <script>
-import MixtapeComponent from '@/components/Mixtape/MixtapeComponent.vue';
-
 export default {
   name: 'MemoryComponent',
   components: {},
@@ -62,12 +61,10 @@ export default {
 }
 
 .square {
-  margin-top: 10%;
-  margin-bottom: 10%;
+  margin-top: 5%;
+  margin-bottom: 2.5%;
   display: inline-block;
-  background-color: #ccc;
   border-radius: 2px;
-  height: 60%;
   width: 75%;
 }
 </style>

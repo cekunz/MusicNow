@@ -19,7 +19,7 @@ const router = express.Router();
  * @return {SongResponse[]} - A list of all songs
  */
 /**
- * Get songs by title and artist.
+ * Get song by title and artist.
  *
  * @name GET /api/song?songTitle=songTitle&songArtist=songArtist
  *
@@ -64,8 +64,7 @@ router.get(
   '/search',
   async (req: Request, res: Response) => {
     const token: string = await getAuthToken();
-    const url = `https://api.spotify.com/v1/search?q=${req.query.q as string}&type=${req.query.type as string}&market=US&limit=5`
-    // const url  . = req.body.url;
+    const url = `https://api.spotify.com/v1/search?q=${req.query.q as string}&type=${req.query.type as string}&market=US&limit=6`
     const response = await fetch(url, {
       method: 'GET',
       headers: {

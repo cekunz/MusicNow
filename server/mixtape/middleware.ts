@@ -24,4 +24,25 @@ const isMixtapeExists = async (
   next();
 };
 
-export {isMixtapeExists};
+/**
+ * Checks if a Mixtape with a given id exists
+ */
+const isMixtapeExistsById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const mixtape = await MixtapeCollection.findOneById(
+    req.query.mixtape as string
+  );
+  if (!mixtape) {
+    res.status(404).json({
+      error: `Mixtape with id ${req.query.mixtape as string} does not exist.`
+    });
+    return;
+  }
+
+  next();
+};
+
+export {isMixtapeExists, isMixtapeExistsById};

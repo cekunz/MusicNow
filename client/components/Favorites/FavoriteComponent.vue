@@ -4,15 +4,12 @@
 
 <template>
   <section class="favorite-container circle">
-    <!-- <div v-if="userHasLiked" class="liked" @click="removeLike">
-      <i class="fas fa-fire fa-2x" />
-    </div>
-    <div v-else class="notLiked" @click="addLike">
-      <i class="fas fa-fire fa-2x" />
-    </div> -->
-      <p class="circle-inner">
-        <i class="fas fa-bookmark bookmark" />
-      </p>
+    <p v-if="userHasFavorited" class="favorited circle-inner" @click="removeFavorite">
+      <i class="fas fa-bookmark bookmark" />
+    </p>
+    <p v-else class=" notFavorited circle-inner" @click="addFavorite">
+      <i class="fas fa-bookmark bookmark" />
+    </p>
   </section>
 </template>
 
@@ -20,7 +17,10 @@
 export default {
   name: 'FavoriteComponent',
   props: {
-    favoritedSongId: {type: String, required: true}
+    trackId: {
+      type: String,
+      required: false
+    }
   },
   data() {
     return {};
@@ -30,40 +30,51 @@ export default {
      * Compute if the user has favorited the object with this.favoritedObjectId
      */
     userHasFavorited() {
-      return this.$store.state.favorites.includes(favoritedSongId);
+      let isFavorite = false;
+      this.$store.state.favorites.forEach(favorite => {
+        if (favorite.song.trackId === this.trackId) {
+          isFavorite = true;;
+        }
+      });
+      return isFavorite;
     }
   },
   methods: {
     addFavorite() {
-      this.$store.commit('addLike', this.like);
       this.submit(false);
+      this.$store.commit('refreshFavorites');
     },
-    removeLike() {
-      this.$store.commit('removeLike', this.like);
+    removeFavorite() {
       this.submit(true);
+      this.$store.commit('refreshFavorites');
     },
     async submit(remove = false) {
       /**
        * Submits a form with the specified options from data().
        */
-      const options = {
-        method: 'PATCH',
-        headers: {'Content-Type': 'application/json'},
-        credentials: 'same-origin' // Sends express-session credentials with request
-      };
-
-      options.body = JSON.stringify({id: this.likedObjectId, remove: remove});
+        const options = remove ? {
+          method: 'DELETE',
+          headers: {'Content-Type': 'application/json'},
+          credentials: 'same-origin' // Sends express-session credentials with request
+        } : {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          credentials: 'same-origin' // Sends express-session credentials with request
+        };
+        options.body = JSON.stringify({username: this.$store.state.username, trackId: this.trackId});
 
       try {
-        const r = await fetch('/api/likes', options);
+        const r = await fetch(`/api/favorite`, options);
         if (!r.ok) {
           // If response is not okay, we throw an error and enter the catch block
           const res = await r.json();
           throw new Error(res.error);
         }
+        this.$store.commit('refreshFavorites');
+        if (this.$store.state.profileUsername === this.$store.state.username) {
+          this.$store.commit('refreshProfile', this.$store.state.username);
+        }
       } catch (e) {
-        this.$set(this.alerts, e, 'error');
-        setTimeout(() => this.$delete(this.alerts, e), 3000);
       }
     }
   }
@@ -77,8 +88,9 @@ export default {
   top: 0%;
   border-radius: 50%;
   background-color: white;
+  cursor: pointer;
 }
-.liked {
+.favorited {
   color: rgb(255, 126, 28);
   -webkit-animation-name: wiggle;
   -ms-animation-name: wiggle;
@@ -89,14 +101,14 @@ export default {
   -webkit-animation-timing-function: ease-in-out;
   -ms-animation-timing-function: ease-in-out;
 }
-.liked:hover {
+.favorited:hover {
   color: rgb(223, 100, 0);
 }
 
-.notLiked {
+.notFavorited {
   color: rgb(0, 0, 0);
 }
-.notLiked:hover {
+.notFavorited:hover {
   color: rgb(255, 143, 92);
 }
 

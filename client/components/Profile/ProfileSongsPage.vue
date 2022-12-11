@@ -17,10 +17,11 @@
           <SongComponent 
             class="favorites-page"
             v-for="favorite in this.$store.state.profileFavorites"
-              :trackName="favorite.song.songTitle"
-              :artist="favorite.song.songArtist"
-              :trackId="favorite.song.trackId"
-              :albumCover="favorite.song.songTitle"
+            :trackName="favorite.song.songTitle"
+            :artist="favorite.song.songArtist"
+            :trackId="favorite.song.trackId"
+            :albumCover="favorite.song.albumCover"
+            :simpleCover="true"
           />
         </div>
       </div>

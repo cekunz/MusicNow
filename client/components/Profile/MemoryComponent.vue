@@ -64,7 +64,6 @@ export default {
   margin-top: 5%;
   margin-bottom: 2.5%;
   display: inline-block;
-  background-color: #ccc;
   border-radius: 2px;
   width: 75%;
 }

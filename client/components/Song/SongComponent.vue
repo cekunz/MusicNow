@@ -19,7 +19,7 @@
         <div class="image-wrapper">
           <img class="image" :src="albumCover">
           <FavoriteComponent
-            :favoritedSongId="trackId"
+            :trackId="trackId"
           />
         </div>
         <h3 class='track'> {{shortenedTrack}} </h3>

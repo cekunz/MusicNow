@@ -38,7 +38,9 @@ class ProfileCollection {
       favorites: favorites,
       mixtapes: mixtapes,
       friends: friends,
-      friendRequests: friendRequests
+      friendRequests: friendRequests,
+      iconColor: '#ccc',
+      iconText: username[0],
     });
     await profile.save(); // Saves mixtape to MongoDB
     return profile;
@@ -70,7 +72,7 @@ class ProfileCollection {
    * @param {string} username - The username of the desired profile
    * @return {Promise<HydratedDocument<Profile>> | Promise<null> } - The updated profile of the given user, if any
    */
-   static async updateOne(username: string): Promise<HydratedDocument<Profile>> {
+   static async updateOne(username: string, iconColor: string|null, iconText: string|null): Promise<HydratedDocument<Profile>> {
     const profile = await ProfileModel.findOne({username: username});
     const user: User  = await UserCollection.findOneByUsername(username);
     const favorites = await FavoriteCollection.findFavoritesByUser(username);
@@ -78,6 +80,12 @@ class ProfileCollection {
     const friends = await FriendCollection.findFriends(username);
     const friendRequests = await FriendCollection.findFriendRequests(username);
     // profile.user = user; // testing keeping the user the same as before
+    if (iconColor !== null) {
+      profile.iconColor = iconColor
+    } 
+    if (iconText !== null) {
+      profile.iconText = iconText
+    }
     profile.fullName = user.fullName;
     profile.favorites = favorites;
     profile.mixtapes = mixtapes;

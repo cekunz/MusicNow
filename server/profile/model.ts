@@ -19,7 +19,9 @@ export type Profile = {
   favorites: Favorite[];
   mixtapes: Mixtape[];
   friends: String[];
-  friendRequests: String[]
+  friendRequests: String[];
+  iconColor: String;
+  iconText: String;
 };
 
 // Mongoose schema definition for interfacing with a MongoDB table
@@ -60,7 +62,15 @@ const ProfileSchema = new Schema({
   friendRequests: {
     type: Array,
     required: true
-  }
+  },
+  iconColor: {
+    type: String,
+    required: false
+  },
+  iconText: {
+    type: String,
+    required: false
+  },
 });
 
 const ProfileModel = model<Profile>('Profile', ProfileSchema);

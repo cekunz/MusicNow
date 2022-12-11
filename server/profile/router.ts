@@ -40,7 +40,7 @@ router.get(
   async (req: Request, res: Response) => {
     // get profile of the given user
     await ProfileCollection.findOneByUsername(req.query.username as string);
-    const profile = await ProfileCollection.updateOne(req.query.username as string);
+    const profile = await ProfileCollection.updateOne(req.query.username as string, null, null);
     const response = util.constructProfileResponse(profile);
     res.status(200).json(response);
   }
@@ -67,6 +67,36 @@ router.post(
 
     res.status(201).json({
       message: 'Your profile was created successfully.',
+      profile: util.constructProfileResponse(profile)
+    });
+  }
+);
+
+/**
+ * Update profile icon info
+ *
+ * @name PATCH /api/profile/:username?color=color&text=text
+ *
+ * @param {string} username - The name of the creator
+ * @param {string} iconColor - The new color 
+ * @param {string} iconText - The new text
+ * 
+ * @return {ProfileResponse} - The created profile
+ * @throws {403} - If the user is not logged in
+ */
+ router.patch(
+  '/:username?',
+  [
+    userValidator.isUserLoggedIn,
+  ],
+  async (req: Request, res: Response) => {
+    const username = req.params.username as string;
+    const iconColor = req.body.profileColor as string;
+    const iconText = req.body.profileText as string;
+    const profile = await ProfileCollection.updateOne(username, iconColor, iconText);
+
+    res.status(201).json({
+      message: 'Your profile was updated successfully.',
       profile: util.constructProfileResponse(profile)
     });
   }

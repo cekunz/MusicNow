@@ -7,7 +7,7 @@
         <div class="left">
           <section class="user-info">
             <div class="circle">
-              <p class="circle-inner">{{ $store.state.profileCircle }}</p>
+              <p class="circle-inner">{{ profilePicText }}</p>
             </div>
             <h2 class="info">{{ $store.state.profileFullname }}</h2>
             <h2 class="info">@{{ $store.state.profileUsername }}</h2>
@@ -54,6 +54,7 @@
             <div class="favorites-rectangle">
               <SongComponent
                 v-for="favorite in this.$store.state.profileFavorites.slice(0,6)"
+                :key=favorite
                 class="profile-song"
                 :trackName="favorite.song.songTitle"
                 :artist="favorite.song.songArtist"
@@ -93,6 +94,14 @@ export default {
       isOpen: false,
     };
   },
+  computed: {
+    profilePicColor () {
+      return this.$store.state.profileCircleColor;
+    },
+     profilePicText () {
+      return this.$store.state.profileCircle;
+    }
+  },
   beforeMount() {
     if (this.$route.params.name) {
       this.$store.commit('refreshProfile', this.$route.params.name);
@@ -100,11 +109,9 @@ export default {
   },
   methods: {
     open() {
-      // this.isOpen = true;
       this.$store.commit('setProfilePopUp', true);
     },
     close() {
-      // this.isOpen = false;
       this.$store.commit('setProfilePopUp', false);
     }
   }
@@ -157,7 +164,7 @@ button:hover {
 
 .circle {
   display: inline-block;
-  background-color: #ccc;
+  background-color: v-bind(profilePicColor);
   margin: 10px;
   margin-bottom: 30px;
   border-radius: 50%;
@@ -233,7 +240,7 @@ button:hover {
   text-decoration: underline;
   cursor: pointer;
 }
-.not-modal {
+/* .not-modal {
 
-}
+} */
 </style>

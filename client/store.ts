@@ -14,6 +14,7 @@ const store = new Vuex.Store({
     profileUsername: null, // Username of the profile
     profileFullname: null, // Full Name of the profile
     profileCircle: null, // First Initial to be displayed on profile page
+    profileCircleColor: null,
     profileFriends: [], // Friends of profile page
     profileMixtapes: [], // Mixtapes of profile page
     profileFavorites: [], // Saved songs (favorites) of profile page
@@ -75,12 +76,23 @@ const store = new Vuex.Store({
        */
       state.profileMixtapes = profileMixtapes;
     },
-    setProfileCircle(state, profileCircle) {
-      /**
-       * Update the stored profileCircle to the specified one.
-       * @param profileCircle - new profileCircle to set
+    async refreshProfileIcon(state, updatedProfileIcon){
+      /**    
+       * Update the stored profileCircleColor to the specified one.
+       * @param profileColor - new profileColor to set
        */
-      state.profileCircle = profileCircle;
+      const url = `/api/profile/${state.username}`;
+      const options = {
+        body: JSON.stringify(updatedProfileIcon),
+        method: 'PATCH',
+        headers: {'Content-Type': 'application/json'}
+      };
+      const res = await fetch(url, options).then(async (r) => r.json());
+      console.log('before reassignment', state);
+      console.log('response', res);
+      state.profileCircleColor = res.profile.iconColor;
+      state.profileCircle = res.profile.iconText;
+      console.log('after reassignment', state)
     },
     setProfileFriends(state, profileFriends) {
       /**
@@ -240,7 +252,14 @@ const store = new Vuex.Store({
       const res = await fetch(url).then(async (r) => r.json());
       state.profileUsername = res.username;
       state.profileFullname = res.fullName;
-      state.profileCircle = res.fullName[0];
+      if (state.profileCircle === null) {
+        if (res.iconText === null) {state.profileCircle = res.fullName[0];}
+        else {state.profileCircleColor = res.iconText}
+      }
+      if (state.profileCircleColor === null) {
+        if (res.iconColor === null) {state.profileCircleColor = '#ccc'}
+        else {state.profileCircleColor = res.iconColor}
+      }
       state.profileFriends = res.friends;
       state.profileMixtapes = res.mixtapes.reverse();
       state.profileFavorites = res.favorites.reverse();

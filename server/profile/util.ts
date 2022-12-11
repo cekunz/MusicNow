@@ -13,7 +13,9 @@ type ProfileResponse = {
   favorites: Favorite[];
   mixtapes: Mixtape[];
   friends: String[];
-  friendRequests: String[]
+  friendRequests: String[];
+  iconColor: String;
+  iconText: String;
 };
 
 /**
@@ -38,7 +40,9 @@ const constructProfileResponse = (profile: HydratedDocument<Profile>): ProfileRe
     favorites: profileCopy.favorites,
     mixtapes: profileCopy.mixtapes,
     friends: profileCopy.friends,
-    friendRequests: profileCopy.friendRequests
+    friendRequests: profileCopy.friendRequests,
+    iconColor: profileCopy.iconColor,
+    iconText: profileCopy.iconText,
   };
 };
 

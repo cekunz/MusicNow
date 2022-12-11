@@ -8,9 +8,12 @@
         "
         class="username-container"
       >
-        <router-link
+        <div class="circle">
+          <p class="circle-inner">{{ profileCircleText }}</p>
+        </div>
+        <router-link class='username-link'
           style="text-decoration: none; color: black"
-          :to="{name: 'Profile', params: {name: mixtape.creator}}"
+          :to="{name: 'Profile', params: {name: mixtape.creator} }"
         >
           <span v-on:click="goToProfile"> @{{ mixtape.creator }} </span>
         </router-link>
@@ -82,8 +85,26 @@ export default {
   },
   data() {
     return {
-      alerts: {} // Displays success/error messages encountered during freet modification
+    profileCircleColor: null,
+    profileCircleText: null,
+    alerts: {} // Displays success/error messages encountered during freet modification
     };
+  },
+  async mounted() {
+      const url = `/api/profile?username=${this.mixtape.creator}`;
+      const res = await fetch(url).then(async (r) => r.json());
+      if (res.iconText === undefined) {
+        this.profileCircleText =  res.fullName[0];
+      } else {
+        this.profileCircleText = res.iconText;
+      }
+      if (res.iconColor === undefined) {
+        this.profileCircleColor = '#ccc';
+      } else {
+        this.profileCircleColor = res.iconColor;
+      }
+  },
+  computed: {
   },
   methods: {
     goToProfile() {
@@ -158,6 +179,26 @@ export default {
   margin: 50px 0;
 }
 
+.circle {
+  display: inline-block;
+  background-color: v-bind(profileCircleColor);
+  margin-right: 15px;
+  margin-left:-15px;
+  margin-bottom: 0px;
+  border-radius: 50%;
+}
+
+.circle-inner {
+  color: black;
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+  text-decoration: none;
+  height: 60px;
+  width: 60px;
+  font-size: 22px;
+}
+
 .mixtape-container {
   display: flex;
   flex-direction: row;
@@ -182,11 +223,22 @@ export default {
 }
 
 .username-container {
+  /* display: flex;
+  flex-direction: row;
+  align-content: center; */
   position: absolute;
   z-index: 1;
   left: 40px;
   top: 0;
 }
+
+.username-link {
+  position: absolute;
+  z-index: 1;
+  /* left: 40px; */
+  top: 25%;
+}
+
 
 .comment-button-container {
   position: absolute;

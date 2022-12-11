@@ -86,7 +86,12 @@ class ProfileCollection {
     if (iconText !== null) {
       profile.iconText = iconText
     }
-    profile.fullName = user.fullName;
+    if (!('fullName' in user)) {
+      profile.fullName = username;
+    } 
+    else {
+      profile.fullName = user.fullName;
+    }
     profile.favorites = favorites;
     profile.mixtapes = mixtapes;
     profile.friends = friends;

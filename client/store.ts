@@ -88,11 +88,8 @@ const store = new Vuex.Store({
         headers: {'Content-Type': 'application/json'}
       };
       const res = await fetch(url, options).then(async (r) => r.json());
-      console.log('before reassignment', state);
-      console.log('response', res);
       state.profileCircleColor = res.profile.iconColor;
       state.profileCircle = res.profile.iconText;
-      console.log('after reassignment', state)
     },
     setProfileFriends(state, profileFriends) {
       /**
@@ -252,13 +249,16 @@ const store = new Vuex.Store({
       const res = await fetch(url).then(async (r) => r.json());
       state.profileUsername = res.username;
       state.profileFullname = res.fullName;
-      if (state.profileCircle === null) {
-        if (res.iconText === null) {state.profileCircle = res.fullName[0];}
-        else {state.profileCircleColor = res.iconText}
+
+      if (res.iconText === undefined) {
+        state.profileCircle = res.fullName[0];
+      } else {
+        state.profileCircleColor = res.iconText
       }
-      if (state.profileCircleColor === null) {
-        if (res.iconColor === null) {state.profileCircleColor = '#ccc'}
-        else {state.profileCircleColor = res.iconColor}
+      if (res.iconColor === undefined) {
+        state.profileCircleColor = '#ccc'
+      } else {
+        state.profileCircleColor = res.iconColor
       }
       state.profileFriends = res.friends;
       state.profileMixtapes = res.mixtapes.reverse();

@@ -134,6 +134,16 @@ export default {
   cursor: pointer;
 }
 
+.like-count {
+  flex-direction: row;
+  font-size: 1.5em;
+  margin-top: 5px;
+}
+
+.like-info-container {
+  flex-direction: row;
+}
+
 @-webkit-keyframes wiggle {
   0% {
     -webkit-transform: rotate(10deg);

@@ -80,7 +80,8 @@ export default {
 <style scoped>
 nav {
     padding: 1vw 2vw;
-    background-color: #ccc;
+    /* background-color: #ccc; */
+    background-color: #7FFFD4;
     display: flex;
     justify-content: space-between;
     align-items: center;

@@ -150,5 +150,7 @@ section .scrollbox {
 .viewport {
   margin: auto;
   width: 80vw;
+  background-color: #e5fff6;
 }
+
 </style>

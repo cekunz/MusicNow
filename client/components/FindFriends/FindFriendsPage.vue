@@ -246,7 +246,8 @@ header {
 }
 
 .toggle {
-  margin-top: 30px;
+  /* margin-top: 30px; */
+  padding-top: 30px;
   margin-bottom: 30px;
 }
 button {
@@ -254,9 +255,24 @@ button {
   padding: 15px;
   font-size: 20px;
   margin-left: 2px;
+  background-color: aquamarine;
 }
 
+
 button:hover {
+  background-color: #009965;
+  color: white;
+  border-color: rgb(54, 54, 54);
+}
+
+
+.active {
+  background-color: #004c33;
+  color: white;
+  border-color: rgb(54, 54, 54);
+}
+
+/* button:hover {
   background-color: rgb(84, 84, 84);
   color: white;
   border-color: rgb(54, 54, 54);
@@ -267,6 +283,10 @@ button:hover {
   background-color: rgb(28, 28, 28);
   color: white;
   border-color: rgb(54, 54, 54);
+} */
+
+main {
+  background-color: #e5fff6;
 }
 
 </style>

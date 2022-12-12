@@ -21,16 +21,15 @@
 
     <!-- what you see after logging in after you post a mixtape-->
     <section v-if="$store.state.mixtapePosted">
-      <!-- <header> -->
+        <MusicNowHeader /> 
       <div class="heading">
-        <h2>Welcome @{{ $store.state.username }}</h2>
         <h2>Today's prompt</h2>
-        <h1>{{ $store.state.prompt.promptText }}</h1>
+        <h1 class='prompt'>{{ $store.state.prompt.promptText }}</h1>
       </div>
 
       <center>
         <h2 v-if="$store.state.personalMixtape !== null">
-          Here's what you responded to today's prompt
+          Here's how you responded to today's prompt
         </h2>
       </center>
       <MixtapeComponent
@@ -107,18 +106,10 @@ section {
   align-items: center;
 }
 
-/* header,
-header > * {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-} */
-
 .heading {
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* text-align: center; */
 }
 
 .welcome {
@@ -129,6 +120,11 @@ header > * {
 h3 {
   font-size: 20px;
   margin-bottom: 40px;
+}
+
+.prompt {
+  margin-top: 0px;
+  font-size: 40px;
 }
 
 button {

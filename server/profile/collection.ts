@@ -81,10 +81,10 @@ class ProfileCollection {
     const friendRequests = await FriendCollection.findFriendRequests(username);
     // profile.user = user; // testing keeping the user the same as before
     if (iconColor !== null) {
-      profile.iconColor = iconColor
+      profile.iconColor = iconColor;
     } 
     if (iconText !== null) {
-      profile.iconText = iconText
+      profile.iconText = iconText;
     }
     if (!('fullName' in user)) {
       profile.fullName = username;

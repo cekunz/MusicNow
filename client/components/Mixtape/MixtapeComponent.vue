@@ -22,7 +22,6 @@
 
       <header class="delete-button-container">
         <div v-if="$store.state.username === mixtape.creator" class="actions" >
-          <!-- <button v-if="this.showComments" @click="deleteMixtape; $router.push('/');">🗑️ Delete</button> -->
           <button @click="deleteMixtape">🗑️ Delete</button>
         </div>
       </header>
@@ -93,6 +92,7 @@ export default {
     return {
     profileCircleColor: null,
     profileCircleText: null,
+    likeCount: null,
     alerts: {} // Displays success/error messages encountered during freet modification
     };
   },

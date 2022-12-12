@@ -114,6 +114,7 @@ export default {
 }
 .liked:hover {
   color: rgb(223, 100, 0);
+  cursor: pointer;
 }
 
 .notLiked {
@@ -121,6 +122,7 @@ export default {
 }
 .notLiked:hover {
   color: rgb(255, 143, 92);
+  cursor: pointer;
 }
 
 @-webkit-keyframes wiggle {

@@ -6,37 +6,27 @@
   <nav>
     <div class="left">
       <router-link to="/">
-        <img src="../../public/logo-musicnow.png" />
+        <img src="../../public/logo-musicnow-white.png" />
       </router-link>
     </div>
     <div class="right">
-      <router-link v-if="$store.state.username" to="/">
-        <img src="../../public/musicnow-logos/feed.png" />
-      </router-link>
+      <router-link v-if="$store.state.username" to="/"> Feed </router-link>
       <router-link
         @click="refreshFriends"
         v-if="$store.state.username"
         to="/findFriends"
-      >
-        <img
-          class="friends"
-          src="../../public/musicnow-logos/find-friends.png"
-        />
+        >Friends
       </router-link>
       <router-link
         v-if="$store.state.username"
         :to="{name: 'Profile', params: {name: $store.state.username}}"
       >
-        <span v-on:click="goToProfile">
-          <img class="profile" src="../../public/musicnow-logos/profile.png" />
-        </span>
+        <span v-on:click="goToProfile"> Profile </span>
       </router-link>
       <router-link v-if="$store.state.username" to="/account">
-        <img class="settings" src="../../public/musicnow-logos/settings.png" />
+        Settings
       </router-link>
-      <router-link v-else to="/login">
-        <img src="../../public/musicnow-logos/login.png" />
-      </router-link>
+      <router-link v-else to="/login"> Login </router-link>
     </div>
     <section class="alerts">
       <article
@@ -74,11 +64,16 @@ export default {
 <style scoped>
 nav {
   padding: 1vw 2vw;
-  background-color: #ccc;
+  background-color: rgb(30, 30, 30);
   display: flex;
   justify-content: space-between;
   align-items: center;
   position: relative;
+}
+
+a {
+  color: whitesmoke;
+  text-decoration: none;
 }
 
 .title {

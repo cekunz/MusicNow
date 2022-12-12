@@ -49,7 +49,6 @@ export default {
         this.$store.commit('refreshFriendRequests');
         this.$store.commit('refreshPossibleFriends');
         this.$store.commit('personalMixtapeRefresh');
-        // this.$store.commit('refreshProfile', this.$store.state.profileUsername);
       });
 
     // Clear alerts on page refresh

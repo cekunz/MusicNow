@@ -21,7 +21,8 @@
       <h3 class="username-container" v-else>@{{ mixtape.creator }}</h3>
 
       <header class="delete-button-container">
-        <div v-if="$store.state.username === mixtape.creator" class="actions">
+        <div v-if="$store.state.username === mixtape.creator" class="actions" >
+          <!-- <button v-if="this.showComments" @click="deleteMixtape; $router.push('/');">🗑️ Delete</button> -->
           <button @click="deleteMixtape">🗑️ Delete</button>
         </div>
       </header>
@@ -130,14 +131,9 @@ export default {
         }
       };
       this.request(params);
-    },
-    todayDate() {
-      const date = new Date();
-      const day = date.getDate();
-      const month = date.getMonth();
-      const year = date.getFullYear();
-      // Formatted as Month Day, Year (Nov 21, 2022 for example)
-      return `${this.numberToMonth(month)} ${day}, ${year}`;
+      if (this.showComments === true) {
+        location.href = '/';
+      }
     },
     async request(params) {
       /**
@@ -150,13 +146,10 @@ export default {
         method: params.method,
         headers: {'Content-Type': 'application/json'}
       };
-      if (params.body) {
-        options.body = params.body;
-      }
 
       try {
         const r = await fetch(
-          `/api/mixtape/${this.mixtape.creator}?date=${this.todayDate()}`,
+          `/api/mixtape/${this.mixtape.creator}?date=${this.mixtape.date}`,
           options
         );
         if (!r.ok) {

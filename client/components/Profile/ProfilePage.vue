@@ -62,9 +62,6 @@
                 :albumCover="favorite.song.albumCover"
                 :simpleCover="true"
               />
-              <!-- <div
-                class="view-all-box profile-song"
-              > -->
                 <router-link
                   v-if="(this.$store.state.profileFavorites.length > 7)"
                   class="profile-song view-all-box"
@@ -73,7 +70,6 @@
                 >
                   <p class="hover-view">View All →</p>
                 </router-link>
-              <!-- </div> -->
             </div>
           </div>
         </section>

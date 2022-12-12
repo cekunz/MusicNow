@@ -147,7 +147,7 @@ router.delete(
   async (req: Request, res: Response) => {
     const {username} = req.params;
     const date = req.query.date as string;
-    await MixtapeCollection.deleteOneByCreatorByDate(username, new Date(date));
+    await MixtapeCollection.deleteOneByCreatorByDate(username, date);
     res.status(200).json({
       message: 'Your Song was deleted successfully.'
     });

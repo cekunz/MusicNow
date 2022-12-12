@@ -44,4 +44,9 @@ export default {
 .settings {
   background-color: #e5fff6;
 }
+
+h2 {
+  margin-block-start: 0;
+  padding-top: 0.83em;
+}
 </style>

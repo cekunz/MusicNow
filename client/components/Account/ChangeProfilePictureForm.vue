@@ -14,6 +14,7 @@
         </div>
       </div>
 
+      <div class='changes'>
       <div class="selector">
         <label for="colorpicker">Select New Color:</label>
         <input
@@ -34,7 +35,7 @@
           maxlength="2"
         />
       </div>
-
+      </div>
       <div class="new">
         <p>New Profile Icon</p>
         <div class="new-circle">
@@ -91,6 +92,7 @@ export default {
 .colorpicker {
   height: 50px;
   width: 50px;
+  margin-bottom: 20px;
 }
 .circle {
   display: inline-block;
@@ -98,6 +100,18 @@ export default {
   margin: 10px;
   margin-bottom: 30px;
   border-radius: 50%;
+}
+
+.changes {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-right: 85px;
+  margin-left: 45px
+}
+
+label {
+  margin-bottom: 5px;
 }
 
 .new-circle {

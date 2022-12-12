@@ -1,8 +1,13 @@
 <template>
-  <router-link
+  <!-- <router-link
     class="memory"
     style="text-decoration: none; color: black"
     :to="{name: 'Comments', params: {mixtapeId: mixtape._id, isMemory: this.mixtape.date}}"
+  > -->
+    <router-link
+    class="memory"
+    style="text-decoration: none; color: black"
+    :to="{path: `/comments/${mixtape._id}`, query: {memory: true}}"
   >
     <img class="square" v-if="mixtape.songs[0].albumCover" :src="mixtape.songs[0].albumCover" />
     <img class="square" v-else-if="mixtape.songs[1].albumCover" :src="mixtape.songs[1].albumCover" />
@@ -22,7 +27,7 @@ export default {
     mixtape: {
       type: Object,
       required: true
-    }
+    },
   },
   data() {
     return {

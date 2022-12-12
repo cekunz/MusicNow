@@ -58,7 +58,7 @@
         </article>
       </section>
       <LikeComponent :liked-object-id="mixtape._id" />
-      <div class="comment-button-container">
+      <div v-if="showComments === false" class="comment-button-container">
         <button @click="$router.push(`/comments/${mixtape._id}`)">
           Comments
         </button>
@@ -81,6 +81,11 @@ export default {
     mixtape: {
       type: Object,
       required: true
+    },
+    // True if in the comments section, false otherwise (like in the feed)
+    showComments: {
+      type: Boolean,
+      required: false
     }
   },
   data() {

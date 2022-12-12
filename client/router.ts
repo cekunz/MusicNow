@@ -33,7 +33,7 @@ const routes = [
     params: true
   },
   {
-    path: '/comments/:mixtapeId',
+    path: '/comments/:mixtapeId?',
     name: 'Comments',
     component: CommentsPage,
     params: true

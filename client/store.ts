@@ -253,7 +253,7 @@ const store = new Vuex.Store({
       if (res.iconText === undefined) {
         state.profileCircle = res.fullName[0];
       } else {
-        state.profileCircleColor = res.iconText;
+        state.profileCircle = res.iconText;
       }
       if (res.iconColor === undefined) {
         state.profileCircleColor = '#ccc';

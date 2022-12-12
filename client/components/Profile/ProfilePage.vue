@@ -99,10 +99,12 @@ export default {
     },
     profilePicText() {
       return this.$store.state.profileCircle;
+    },
+    favoriteSongsToDisplay() {
+      return (this.$store.state.profileFavorites.length > 7) ? this.$store.state.profileFavorites.slice(0,6) : this.$store.state.profileFavorites.slice(0,7);
     }
   },
   beforeMount() {
-    this.favoriteSongsToDisplay = (this.$store.state.profileFavorites.length > 7) ? this.$store.state.profileFavorites.slice(0,6) : this.$store.state.profileFavorites.slice(0,7);
     if (this.$route.params.name) {
       this.$store.commit('refreshProfile', this.$route.params.name);
     }

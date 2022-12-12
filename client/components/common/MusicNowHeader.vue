@@ -54,7 +54,8 @@ export default {
   justify-content: center;
   align-items: center;
   padding: 20px;
-  margin: 20px;
+  padding-top: 40px;
+  /* margin: 20px; */
   position: relative;
 }
 .header-big-text {

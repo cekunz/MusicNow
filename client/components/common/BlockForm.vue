@@ -147,6 +147,7 @@ form {
   justify-content: space-between;
   margin-bottom: 14px;
   position: relative;
+  background-color: white;
 }
 
 article > div {
@@ -174,10 +175,12 @@ button {
   height: 2em;
   border: solid 1px rgb(192, 192, 192);
   border-radius: 2px;
+  background-color: aquamarine;
 }
 
 button:hover {
-  background-color: rgb(84, 84, 84);
+  /* background-color: rgb(84, 84, 84); */
+  background-color: #009965;
   color: white;
   border-color: rgb(54, 54, 54);
 }

@@ -148,7 +148,11 @@ section .scrollbox {
 }
 
 .viewport {
-  margin: auto;
-  width: 80vw;
+  /* margin: auto;
+  width: 80vw; */
+  margin: 0;
+  width: 100%;
+  background-color: #e5fff6;
 }
+
 </style>

@@ -64,7 +64,8 @@ export default {
 <style scoped>
 nav {
   padding: 1vw 2vw;
-  background-color: rgb(30, 30, 30);
+  /* background-color: #ccc; */
+  background-color: #7fffd4;
   display: flex;
   justify-content: space-between;
   align-items: center;

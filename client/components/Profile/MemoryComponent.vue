@@ -2,10 +2,11 @@
   <router-link
     class="memory"
     style="text-decoration: none; color: black"
-    :to="{name: 'Comments', params: {mixtapeId: mixtape._id}}"
+    :to="{name: 'Comments', params: {mixtapeId: mixtape._id, isMemory: this.mixtape.date}}"
   >
-    <!-- <div class="square"></div> -->
-    <img class="square" :src="mixtape.songs[0].albumCover" />
+    <img class="square" v-if="mixtape.songs[0].albumCover" :src="mixtape.songs[0].albumCover" />
+    <img class="square" v-else-if="mixtape.songs[1].albumCover" :src="mixtape.songs[1].albumCover" />
+    <img class="square" v-else-if="mixtape.songs[2].albumCover" :src="mixtape.songs[2].albumCover" />
     <div class="content">
       {{ this.displayDate }}
     </div>
@@ -48,16 +49,20 @@ export default {
 
 .memory {
   margin: 2%;
-  border: solid 3px rgb(176, 176, 176);
-  background-color: rgb(176, 176, 176);
+  /* border: solid 3px rgb(176, 176, 176); */
+  /* background-color: rgb(176, 176, 176); */
+  border: solid 3px #009965;
+  background-color: #009965;
   border-radius: 2px;
   height: 44%;
   width: 20%;
 }
 .memory:hover {
-  background-color: rgb(84, 84, 84);
+  /* background-color: rgb(84, 84, 84);
+  border-color: rgb(84, 84, 84); */
   color: white;
-  border-color: rgb(84, 84, 84);
+  background-color: #004c33;
+  border-color: #004c33;
 }
 
 .square {

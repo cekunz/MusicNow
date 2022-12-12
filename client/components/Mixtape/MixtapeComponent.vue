@@ -208,7 +208,7 @@ export default {
   margin-bottom: 20px;
   border: solid 2px rgb(171, 171, 171);
   border-radius: 16px;
-  background-color: whitesmoke;
+  background-color: white;
 }
 
 .mixtape-container button {

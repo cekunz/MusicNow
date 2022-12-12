@@ -6,7 +6,7 @@
       <h2>
         <router-link
           style="text-decoration: none; color: black"
-          :to="{name: 'Profile', params: {username: this.$store.state.profileUsername}}"
+          :to="{name: 'Profile', params: {name: this.$store.state.profileUsername}}"
         >
           <i class="fas fa-arrow-left left-side"></i>
         </router-link>

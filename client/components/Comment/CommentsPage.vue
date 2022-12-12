@@ -6,7 +6,7 @@
   <main class="viewport">
     <section>
       <header>
-        <h2 v-if="($route.params.isMemory === undefined)">Comments Section</h2>
+        <h2 v-if="($route.query.memory === undefined)">Comments Section</h2>
         <h2 v-else>
           <router-link
             style="text-decoration: none; color: black"
@@ -14,12 +14,12 @@
           >
             <i class="fas fa-arrow-left left-side"></i>
           </router-link>
-          Memory on {{ $route.params.isMemory }}
+          Memory on {{ mixtape.date }}
         </h2>
       </header>
-      <MixtapeComponent v-if="mixtape !== undefined" :mixtape="mixtape" />
+      <MixtapeComponent v-if="mixtape !== undefined" :mixtape="mixtape" :showComments="true"/>
     </section>
-    <section v-if="$store.state.username">
+    <section v-if="($store.state.username && $route.query.memory === undefined)">
       <CreateCommentsForm :mixtape-id="$route.params.mixtapeId" />
     </section>
     <section v-if="$store.state.mixtapes.length">

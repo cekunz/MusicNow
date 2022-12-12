@@ -4,11 +4,18 @@
 
 <template>
   <section class="like-container">
+    <!-- {{ this.$store.state.likes[this.likedObjectId]['likers'].length }} -->
     <div v-if="userHasLiked" class="liked" @click="removeLike">
-      <i class="fas fa-fire fa-2x" />
+      <i class="fas fa-fire fa-2x like-info-container" />
+      <p class="like-count">
+        &nbsp;{{ this.$store.state.likes[this.likedObjectId]['likers'].length }}
+      </p>
     </div>
     <div v-else class="notLiked" @click="addLike">
-      <i class="fas fa-fire fa-2x" />
+      <i class="fas fa-fire fa-2x like-info-container" />
+      <p class="like-count">
+        &nbsp;{{ this.$store.state.likes[this.likedObjectId]['likers'].length }}
+      </p>
     </div>
   </section>
 </template>
@@ -103,6 +110,7 @@ export default {
 }
 .liked {
   color: #12de9d;
+  display: flex;
   -webkit-animation-name: wiggle;
   -ms-animation-name: wiggle;
   -ms-animation-duration: 1000ms;
@@ -118,6 +126,7 @@ export default {
 }
 
 .notLiked {
+  display: flex;
   color: rgb(0, 0, 0);
 }
 .notLiked:hover {

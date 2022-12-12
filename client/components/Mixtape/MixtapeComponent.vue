@@ -59,7 +59,7 @@
         </article>
       </section>
       <LikeComponent :liked-object-id="mixtape._id" />
-      <div class="comment-button-container">
+      <div v-if="showComments === false" class="comment-button-container">
         <button @click="$router.push(`/comments/${mixtape._id}`)">
           Comments
         </button>
@@ -82,6 +82,11 @@ export default {
     mixtape: {
       type: Object,
       required: true
+    },
+    // True if in the comments section, false otherwise (like in the feed)
+    showComments: {
+      type: Boolean,
+      required: false
     }
   },
   data() {
@@ -125,14 +130,9 @@ export default {
         }
       };
       this.request(params);
-    },
-    todayDate() {
-      const date = new Date();
-      const day = date.getDate();
-      const month = date.getMonth();
-      const year = date.getFullYear();
-      // Formatted as Month Day, Year (Nov 21, 2022 for example)
-      return `${this.numberToMonth(month)} ${day}, ${year}`;
+      if (this.showComments === true) {
+        location.href = '/';
+      }
     },
     async request(params) {
       /**
@@ -145,13 +145,10 @@ export default {
         method: params.method,
         headers: {'Content-Type': 'application/json'}
       };
-      if (params.body) {
-        options.body = params.body;
-      }
 
       try {
         const r = await fetch(
-          `/api/mixtape/${this.mixtape.creator}?date=${this.todayDate()}`,
+          `/api/mixtape/${this.mixtape.creator}?date=${this.mixtape.date}`,
           options
         );
         if (!r.ok) {

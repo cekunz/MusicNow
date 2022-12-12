@@ -223,9 +223,6 @@ export default {
 }
 
 .username-container {
-  /* display: flex;
-  flex-direction: row;
-  align-content: center; */
   position: absolute;
   z-index: 1;
   left: 40px;
@@ -235,7 +232,6 @@ export default {
 .username-link {
   position: absolute;
   z-index: 1;
-  /* left: 40px; */
   top: 25%;
 }
 

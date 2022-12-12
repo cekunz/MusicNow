@@ -10,6 +10,24 @@
         <SelectSongForm style='margin-right:30px' @submit="updateSong2"/>
         <SelectSongForm @submit="updateSong3"/>
     </section>
+
+     <div class=buttons >
+      <div class='captionInput'
+        v-if="song1!==null && song2!==null && song3!==null"
+      >
+        <label for="caption"> Caption your Mixtape:</label>
+        <textarea
+            type="text"
+            id="caption"
+            @input="caption = $event.target.value"
+            placeholder="Optional, 200 character limit"
+            maxlength="200"
+            style="resize: none"
+            
+          />
+      </div>
+     </div>
+
      <button class='submit'
       v-if="song1!==null && song2!==null && song3!==null"
       @click="submitMixtape"
@@ -33,10 +51,15 @@ export default {
       song1: null,
       song2: null,
       song3: null,
+      editingCaption: false,
+      caption: '',
       alerts: {} // Displays success/error messages
     };
   },
   methods: {
+    openCaption() {
+      this.editingCaption = true;
+    },
     updateSong1(song1){
       this.song1 = song1.trackId;
     },
@@ -53,7 +76,7 @@ export default {
        */
 
       // only pass in the trackId
-      const body = JSON.stringify({song1: this.song1, song2: this.song2, song3:this.song3});
+      const body = JSON.stringify({song1: this.song1, song2: this.song2, song3:this.song3, caption: this.caption});
       const params = {
         method: 'POST',
         message: 'Successfully created mixtape!',
@@ -88,6 +111,7 @@ export default {
 
         this.$store.commit('postMixtape');
         this.$store.commit('refreshFeed');
+        this.editingCaption = false;
 
         params.callback();
       } catch (e) {
@@ -109,6 +133,23 @@ export default {
   width: 100%;
   border: solid 4px rgb(192, 192, 192);
   background-color: white;
+}
+
+.captionInput {
+  margin: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.caption {
+  font-size: 18px;
+  margin-bottom: 15px;
+
+}
+.buttons {
+  margin-top: 10px;
 }
 
 h2 {

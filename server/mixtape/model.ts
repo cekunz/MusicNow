@@ -13,6 +13,7 @@ export type Mixtape = {
   songs: Song[]; 
   date: string;
   creator: string;
+  caption: string;
 };
 
 const MixtapeSchema = new Schema({
@@ -28,6 +29,10 @@ const MixtapeSchema = new Schema({
   creator: {
     type: String,
     required: true,
+  },
+  caption: {
+    type: String,
+    required: false,
   }
 });
 

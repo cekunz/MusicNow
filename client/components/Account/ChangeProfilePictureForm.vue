@@ -28,7 +28,7 @@
       <div class="selector-letter">
         <label for="letterpicker"> Select New Icon Content:</label>
         <input
-          type="character"
+          type="text"
           id="letterpicker"
           @input="selectedNewString = $event.target.value"
           placeholder="2 character or 1 emoji limit"

@@ -149,7 +149,7 @@ class MixtapeCollection {
    */
   static async deleteOneByCreatorByDate(
     username: string,
-    date: Date
+    date: string
   ): Promise<boolean> {
     const mixtape = await MixtapeModel.deleteOne({creator: username, date});
     return mixtape !== null;

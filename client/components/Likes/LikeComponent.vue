@@ -4,11 +4,18 @@
 
 <template>
   <section class="like-container">
+    <!-- {{ this.$store.state.likes[this.likedObjectId]['likers'].length }} -->
     <div v-if="userHasLiked" class="liked" @click="removeLike">
-      <i class="fas fa-fire fa-2x" />
+      <i class="fas fa-fire fa-2x like-info-container" />
+      <p class="like-count">
+        &nbsp;{{ this.$store.state.likes[this.likedObjectId]['likers'].length }}
+      </p>
     </div>
     <div v-else class="notLiked" @click="addLike">
-      <i class="fas fa-fire fa-2x" />
+      <i class="fas fa-fire fa-2x like-info-container" />
+      <p class="like-count">
+        &nbsp;{{ this.$store.state.likes[this.likedObjectId]['likers'].length }}
+      </p>
     </div>
   </section>
 </template>
@@ -102,7 +109,8 @@ export default {
   top: 40px;
 }
 .liked {
-  color: rgb(255, 126, 28);
+  color: #12de9d;
+  display: flex;
   -webkit-animation-name: wiggle;
   -ms-animation-name: wiggle;
   -ms-animation-duration: 1000ms;
@@ -113,14 +121,27 @@ export default {
   -ms-animation-timing-function: ease-in-out;
 }
 .liked:hover {
-  color: rgb(223, 100, 0);
+  color: #75ebc5;
+  cursor: pointer;
 }
 
 .notLiked {
+  display: flex;
   color: rgb(0, 0, 0);
 }
 .notLiked:hover {
-  color: rgb(255, 143, 92);
+  color: #12de9d;
+  cursor: pointer;
+}
+
+.like-count {
+  flex-direction: row;
+  font-size: 1.5em;
+  margin-top: 5px;
+}
+
+.like-info-container {
+  flex-direction: row;
 }
 
 @-webkit-keyframes wiggle {

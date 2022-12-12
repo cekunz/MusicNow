@@ -6,11 +6,20 @@
   <main class="viewport">
     <section>
       <header>
-        <h2>Comments Section</h2>
+        <h2 v-if="($route.query.memory === undefined)">Comments Section</h2>
+        <h2 v-else>
+          <router-link
+            style="text-decoration: none; color: black"
+            :to="{name: 'Profile', params: {name: this.$store.state.profileUsername}}"
+          >
+            <i class="fas fa-arrow-left left-side"></i>
+          </router-link>
+          Memory on {{ mixtape.date }}
+        </h2>
       </header>
-      <MixtapeComponent v-if="mixtape !== undefined" :mixtape="mixtape" />
+      <MixtapeComponent v-if="mixtape !== undefined" :mixtape="mixtape" :showComments="true"/>
     </section>
-    <section v-if="$store.state.username">
+    <section v-if="($store.state.username && $route.query.memory === undefined)">
       <CreateCommentsForm :mixtape-id="$route.params.mixtapeId" />
     </section>
     <section v-if="$store.state.mixtapes.length">
@@ -71,5 +80,10 @@ export default {
 .viewport {
   margin: auto;
   width: 70%;
+  text-align: center;
+}
+
+.left-side {
+  float: left;
 }
 </style>

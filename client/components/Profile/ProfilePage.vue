@@ -27,10 +27,7 @@
             <div class="rectangle">
               <div class="memory-rectangle">
                 <MemoryComponent
-                  v-for="mixtape in this.$store.state.profileMixtapes.slice(
-                    0,
-                    8
-                  )"
+                  v-for="mixtape in this.$store.state.profileMixtapes.slice(0,8)"
                   :key="mixtape.id"
                   :mixtape="mixtape"
                 />
@@ -56,10 +53,7 @@
           <div class="rectangle">
             <div class="favorites-rectangle">
               <SongComponent
-                v-for="favorite in this.$store.state.profileFavorites.slice(
-                  0,
-                  6
-                )"
+                v-for="favorite in this.favoriteSongsToDisplay"
                 :key="favorite"
                 class="profile-song"
                 :trackName="favorite.song.songTitle"
@@ -68,17 +62,14 @@
                 :albumCover="favorite.song.albumCover"
                 :simpleCover="true"
               />
-              <div
-                class="view-all-box profile-song"
-                v-if="this.$store.state.profileFavorites.length > 6"
-              >
                 <router-link
-                  style="text-decoration: none; color: black"
+                  v-if="(this.$store.state.profileFavorites.length > 7)"
+                  class="profile-song view-all-box"
+                  style="color: black;"
                   :to="{name: 'Favorites'}"
                 >
-                  View All →
+                  <p class="hover-view">View All →</p>
                 </router-link>
-              </div>
             </div>
           </div>
         </section>
@@ -99,7 +90,7 @@ export default {
   components: {FriendComponent, FriendPopUp, MemoryComponent, SongComponent},
   data() {
     return {
-      isOpen: false
+      isOpen: false,
     };
   },
   computed: {
@@ -108,11 +99,13 @@ export default {
     },
     profilePicText() {
       return this.$store.state.profileCircle;
+    },
+    favoriteSongsToDisplay() {
+      return (this.$store.state.profileFavorites.length > 7) ? this.$store.state.profileFavorites.slice(0,6) : this.$store.state.profileFavorites.slice(0,7);
     }
   },
   beforeMount() {
     if (this.$route.params.name) {
-      console.log(this.$route.params.name);
       this.$store.commit('refreshProfile', this.$route.params.name);
     }
   },
@@ -218,6 +211,7 @@ button:hover {
 
 .profile-song {
   width: 12.5%;
+  /* width: 17.5%; */
 }
 
 .view-all-box {
@@ -225,9 +219,9 @@ button:hover {
   flex-direction: column;
   justify-content: center;
   text-align: center;
-  /* height: 110px; */
   border: solid 3px rgb(24, 23, 23);
   border-radius: 2px;
+  text-decoration: none;
 }
 
 .view-all-box:hover {
@@ -261,5 +255,14 @@ button:hover {
 }
 .not-modal {
   background-color: #e5fff6;
+}
+.view-all-songs {
+  /* width: 100%;
+  height: 100%;
+  margin-top: 55%; */
+}
+
+.hover-view:hover {
+  text-decoration: underline;
 }
 </style>

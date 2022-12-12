@@ -11,9 +11,10 @@
         <div class="circle">
           <p class="circle-inner">{{ profileCircleText }}</p>
         </div>
-        <router-link class='username-link'
+        <router-link
+          class="username-link"
           style="text-decoration: none; color: black"
-          :to="{name: 'Profile', params: {name: mixtape.creator} }"
+          :to="{name: 'Profile', params: {name: mixtape.creator}}"
         >
           <span v-on:click="goToProfile"> @{{ mixtape.creator }} </span>
         </router-link>
@@ -58,7 +59,7 @@
         </article>
       </section>
       <LikeComponent :liked-object-id="mixtape._id" />
-      <div class="comment-button-container">
+      <div v-if="showComments === false" class="comment-button-container">
         <button @click="$router.push(`/comments/${mixtape._id}`)">
           Comments
         </button>
@@ -81,31 +82,35 @@ export default {
     mixtape: {
       type: Object,
       required: true
+    },
+    // True if in the comments section, false otherwise (like in the feed)
+    showComments: {
+      type: Boolean,
+      required: false
     }
   },
   data() {
     return {
-    profileCircleColor: null,
-    profileCircleText: null,
-    alerts: {} // Displays success/error messages encountered during freet modification
+      profileCircleColor: null,
+      profileCircleText: null,
+      alerts: {} // Displays success/error messages encountered during freet modification
     };
   },
   async mounted() {
-      const url = `/api/profile?username=${this.mixtape.creator}`;
-      const res = await fetch(url).then(async (r) => r.json());
-      if (res.iconText === undefined) {
-        this.profileCircleText =  res.fullName[0];
-      } else {
-        this.profileCircleText = res.iconText;
-      }
-      if (res.iconColor === undefined) {
-        this.profileCircleColor = '#ccc';
-      } else {
-        this.profileCircleColor = res.iconColor;
-      }
+    const url = `/api/profile?username=${this.mixtape.creator}`;
+    const res = await fetch(url).then(async (r) => r.json());
+    if (res.iconText === undefined) {
+      this.profileCircleText = res.fullName[0];
+    } else {
+      this.profileCircleText = res.iconText;
+    }
+    if (res.iconColor === undefined) {
+      this.profileCircleColor = '#ccc';
+    } else {
+      this.profileCircleColor = res.iconColor;
+    }
   },
-  computed: {
-  },
+  computed: {},
   methods: {
     goToProfile() {
       this.$store.commit('refreshProfile', this.mixtape.creator);
@@ -125,14 +130,9 @@ export default {
         }
       };
       this.request(params);
-    },
-    todayDate() {
-      const date = new Date();
-      const day = date.getDate();
-      const month = date.getMonth();
-      const year = date.getFullYear();
-      // Formatted as Month Day, Year (Nov 21, 2022 for example)
-      return `${this.numberToMonth(month)} ${day}, ${year}`;
+      if (this.showComments === true) {
+        location.href = '/';
+      }
     },
     async request(params) {
       /**
@@ -145,13 +145,10 @@ export default {
         method: params.method,
         headers: {'Content-Type': 'application/json'}
       };
-      if (params.body) {
-        options.body = params.body;
-      }
 
       try {
         const r = await fetch(
-          `/api/mixtape/${this.mixtape.creator}?date=${this.todayDate()}`,
+          `/api/mixtape/${this.mixtape.creator}?date=${this.mixtape.date}`,
           options
         );
         if (!r.ok) {
@@ -183,7 +180,7 @@ export default {
   display: inline-block;
   background-color: v-bind(profileCircleColor);
   margin-right: 15px;
-  margin-left:-15px;
+  margin-left: -15px;
   margin-bottom: 0px;
   border-radius: 50%;
 }
@@ -206,21 +203,21 @@ export default {
   position: relative;
   padding: 20px 30px;
   margin-bottom: 20px;
-  border: solid 2px rgb(171, 171, 171);
-  border-radius: 16px;
-  background-color: white;
+  border: solid 2px rgb(222, 222, 222);
+  border-radius: 36px;
+  background-color: whitesmoke;
 }
 
 .mixtape-container button {
   background-color: rgb(243, 243, 243);
   border: solid 1px rgb(193, 193, 193);
-  border-radius: 4px;
+  border-radius: 8px;
 }
 
 .mixtape-container button:hover {
-  background-color: rgb(84, 84, 84);
-  color: white;
-  border-color: rgb(54, 54, 54);
+  border-color: #1aeeab;
+  border-width: 3px;
+  color: #00c385;
 }
 
 .username-container {
@@ -235,7 +232,6 @@ export default {
   z-index: 1;
   top: 25%;
 }
-
 
 .comment-button-container {
   position: absolute;

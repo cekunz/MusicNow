@@ -174,13 +174,15 @@ button {
   margin-top: 8px;
   height: 2em;
   border: solid 1px rgb(192, 192, 192);
-  border-radius: 2px;
+  border-radius: 4px;
+  background-color: rgb(255, 255, 255);
 }
 
 button:hover {
-  background-color: rgb(84, 84, 84);
-  color: white;
-  border-color: rgb(54, 54, 54);
+  border-color: #1aeeab;
+  background-color: rgb(255, 255, 255);
+  border-width: 2px;
+  color: #00c385;
 }
 
 form > article p {

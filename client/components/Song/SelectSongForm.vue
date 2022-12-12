@@ -196,8 +196,13 @@ export default {
   /* border-radius: 2px; */
 }
 
+button {
+  background-color: aquamarine;
+}
+
 button:hover {
-  background-color: rgb(84, 84, 84);
+  /* background-color: rgb(84, 84, 84); */
+  background-color: #009965;
   color: white;
   border-color: rgb(54, 54, 54);
 }

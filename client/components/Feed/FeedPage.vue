@@ -24,19 +24,21 @@
       <!-- <header> -->
       <div class="heading">
         <h2>Welcome @{{ $store.state.username }}</h2>
-        <h2> Today's prompt </h2>
-        <h1> {{$store.state.prompt.promptText}} </h1>
+        <h2>Today's prompt</h2>
+        <h1>{{ $store.state.prompt.promptText }}</h1>
       </div>
 
-      <center><h2 v-if="$store.state.personalMixtape !== null">
-        Here's what you responded to today's prompt 
-      </h2></center>
+      <center>
+        <h2 v-if="$store.state.personalMixtape !== null">
+          Here's what you responded to today's prompt
+        </h2>
+      </center>
       <MixtapeComponent
         v-if="$store.state.personalMixtape !== null"
         :mixtape="$store.state.personalMixtape"
       />
       <div class="heading">
-        <h2>Here's how your friends responded to today's prompt </h2>
+        <h2>Here's how your friends responded to today's prompt</h2>
       </div>
       <!-- </header> -->
       <section v-if="$store.state.mixtapes.length" class="post-container">
@@ -47,7 +49,7 @@
         />
       </section>
       <article v-else>
-        <center> <h3>Your friends haven't posted any mixtapes yet!</h3> </center>
+        <center><h3>Your friends haven't posted any mixtapes yet!</h3></center>
       </article>
     </section>
   </main>
@@ -150,7 +152,5 @@ section .scrollbox {
 .viewport {
   margin: auto;
   width: 80vw;
-  background-color: #e5fff6;
 }
-
 </style>

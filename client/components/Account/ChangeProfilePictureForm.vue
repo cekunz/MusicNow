@@ -142,6 +142,7 @@ form {
   justify-content: space-between;
   margin-bottom: 14px;
   position: relative;
+  background-color: white;
 }
 </style>
 

@@ -2,7 +2,7 @@
 
 <template>
   <main class="not-modal">
-    <section>
+    <section v-if="$store.state.profileUsername === $route.params.name">
       <header>
         <div class="left">
           <section class="user-info">
@@ -16,10 +16,10 @@
             </button>
           </section>
           <FriendPopUp
-              v-if="this.$store.state.profilePopUp == true"
-              @close="close"
-              :friends="$store.state.profileFriends"
-            />
+            v-if="this.$store.state.profilePopUp == true"
+            @close="close"
+            :friends="$store.state.profileFriends"
+          />
         </div>
         <div class="right">
           <section class="memory-info">
@@ -27,22 +27,25 @@
             <div class="rectangle">
               <div class="memory-rectangle">
                 <MemoryComponent
-                  v-for="mixtape in this.$store.state.profileMixtapes.slice(0,8)"
+                  v-for="mixtape in this.$store.state.profileMixtapes.slice(
+                    0,
+                    8
+                  )"
                   :key="mixtape.id"
                   :mixtape="mixtape"
                 />
               </div>
-              <div 
+              <div
                 class="show-more"
-                v-if="(this.$store.state.profileMixtapes.length > 8)"
+                v-if="this.$store.state.profileMixtapes.length > 8"
               >
-              <router-link
-                style="text-decoration: none; color: black"
-                :to="{name: 'Memories'}"
-              >
-                View All →
-              </router-link>
-            </div>
+                <router-link
+                  style="text-decoration: none; color: black"
+                  :to="{name: 'Memories'}"
+                >
+                  View All →
+                </router-link>
+              </div>
             </div>
           </section>
         </div>
@@ -53,8 +56,11 @@
           <div class="rectangle">
             <div class="favorites-rectangle">
               <SongComponent
-                v-for="favorite in this.$store.state.profileFavorites.slice(0,6)"
-                :key=favorite
+                v-for="favorite in this.$store.state.profileFavorites.slice(
+                  0,
+                  6
+                )"
+                :key="favorite"
                 class="profile-song"
                 :trackName="favorite.song.songTitle"
                 :artist="favorite.song.songArtist"
@@ -64,7 +70,7 @@
               />
               <div
                 class="view-all-box profile-song"
-                v-if="(this.$store.state.profileFavorites.length > 6)"
+                v-if="this.$store.state.profileFavorites.length > 6"
               >
                 <router-link
                   style="text-decoration: none; color: black"
@@ -78,6 +84,7 @@
         </section>
       </footer>
     </section>
+    <i v-else class="fas fa-circle-notch fa-spin fa-2x loading" />
   </main>
 </template>
 
@@ -92,19 +99,20 @@ export default {
   components: {FriendComponent, FriendPopUp, MemoryComponent, SongComponent},
   data() {
     return {
-      isOpen: false,
+      isOpen: false
     };
   },
   computed: {
-    profilePicColor () {
+    profilePicColor() {
       return this.$store.state.profileCircleColor;
     },
-     profilePicText () {
+    profilePicText() {
       return this.$store.state.profileCircle;
     }
   },
   beforeMount() {
     if (this.$route.params.name) {
+      console.log(this.$route.params.name);
       this.$store.commit('refreshProfile', this.$route.params.name);
     }
   },
@@ -137,14 +145,17 @@ button {
   font-size: 20px;
   align-self: center;
   margin-top: 30px;
-  border: solid 1px #ccc;
-  background-color: #ccc;
+  /* border: solid 1px #ccc; */
+  /* background-color: #ccc; */
+  border: solid 1px aquamarine;
+  background-color: aquamarine;
   border-radius: 2px;
   width: 50%;
 }
 
 button:hover {
-  background-color: rgb(54, 54, 54);
+  /* background-color: rgb(54, 54, 54); */
+  background-color: #009965;
   color: white;
   border-color: rgb(54, 54, 54);
   cursor: pointer;
@@ -184,7 +195,8 @@ button:hover {
 
 .rectangle {
   display: inline-block;
-  background-color: #ccc;
+  /* background-color: #ccc; */
+  background-color: aquamarine;
 }
 
 .memory-rectangle {
@@ -240,7 +252,14 @@ button:hover {
   text-decoration: underline;
   cursor: pointer;
 }
-/* .not-modal {
 
-} */
+.loading {
+  display: flex;
+  justify-content: center;
+  margin: 300px;
+  color: rgba(0, 0, 0, 0.545);
+}
+.not-modal {
+  background-color: #e5fff6;
+}
 </style>

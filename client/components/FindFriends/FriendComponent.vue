@@ -220,5 +220,10 @@ export default {
   border: solid 3px rgb(24, 23, 23);
   border-radius: 2px;
   width: 100%;
+  background-color: white;
+}
+
+button {
+  background-color: aquamarine;
 }
 </style>

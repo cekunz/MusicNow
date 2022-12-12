@@ -145,14 +145,17 @@ button {
   font-size: 20px;
   align-self: center;
   margin-top: 30px;
-  border: solid 1px #ccc;
-  background-color: #ccc;
+  /* border: solid 1px #ccc; */
+  /* background-color: #ccc; */
+  border: solid 1px aquamarine;
+  background-color: aquamarine;
   border-radius: 2px;
   width: 50%;
 }
 
 button:hover {
-  background-color: rgb(54, 54, 54);
+  /* background-color: rgb(54, 54, 54); */
+  background-color: #009965;
   color: white;
   border-color: rgb(54, 54, 54);
   cursor: pointer;
@@ -192,7 +195,8 @@ button:hover {
 
 .rectangle {
   display: inline-block;
-  background-color: #ccc;
+  /* background-color: #ccc; */
+  background-color: aquamarine;
 }
 
 .memory-rectangle {
@@ -255,7 +259,7 @@ button:hover {
   margin: 300px;
   color: rgba(0, 0, 0, 0.545);
 }
-/* .not-modal {
-
-} */
+.not-modal {
+  background-color: #e5fff6;
+}
 </style>

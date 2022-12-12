@@ -2,7 +2,7 @@
 <!-- User should be authenticated in order to see this page -->
 
 <template>
-  <main>
+  <main class="settings">
     <section>
       <header>
         <h2>Account settings for @{{ $store.state.username }}</h2>
@@ -39,3 +39,9 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.settings {
+  background-color: #e5fff6;
+}
+</style>

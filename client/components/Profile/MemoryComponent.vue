@@ -48,16 +48,20 @@ export default {
 
 .memory {
   margin: 2%;
-  border: solid 3px rgb(176, 176, 176);
-  background-color: rgb(176, 176, 176);
+  /* border: solid 3px rgb(176, 176, 176); */
+  /* background-color: rgb(176, 176, 176); */
+  border: solid 3px #009965;
+  background-color: #009965;
   border-radius: 2px;
   height: 44%;
   width: 20%;
 }
 .memory:hover {
-  background-color: rgb(84, 84, 84);
+  /* background-color: rgb(84, 84, 84);
+  border-color: rgb(84, 84, 84); */
   color: white;
-  border-color: rgb(84, 84, 84);
+  background-color: #004c33;
+  border-color: #004c33;
 }
 
 .square {

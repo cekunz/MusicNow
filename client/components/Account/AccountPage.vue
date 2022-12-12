@@ -39,7 +39,21 @@ export default {
 
 <style scoped>
 .settings {
-  background-color: #e5fff6;
+  background-color: #ffffff;
+}
+
+button {
+  background-color: rgb(255, 255, 255);
+  border: solid 2px rgb(211, 211, 211);
+  border-radius: 8px;
+  margin: 0 8px;
+}
+
+button:hover {
+  border-color: #1aeeab;
+  background-color: rgb(255, 255, 255);
+  border-width: 2px;
+  color: #00c385;
 }
 
 h2 {

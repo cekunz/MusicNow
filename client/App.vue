@@ -70,6 +70,8 @@ body {
   margin: 0;
   font-size: 1.2em;
   font-family: Arial, Helvetica, sans-serif;
+  background-color: #ffffff;
+  color: rgb(0, 0, 0);
 }
 
 main {

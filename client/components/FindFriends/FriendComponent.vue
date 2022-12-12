@@ -1,53 +1,36 @@
-
 <template>
-  <article
-    class="friend"
-  >
+  <article class="friend">
     <header>
-      <h3 
-        class="author"
-        v-if="this.$store.state.friends.includes(friend)"
-      >
-        <router-link 
-          style="text-decoration: none; color: black" 
+      <h3 class="author" v-if="this.$store.state.friends.includes(friend)">
+        <router-link
+          style="text-decoration: none; color: black"
           :to="{name: 'Profile', params: {name: friend}}"
         >
           <span v-on:click="goToProfile"> @{{ friend }} </span>
         </router-link>
       </h3>
-      <h3 
-        class="author"
-        v-else
-      >
-      @{{friend}}
-      </h3>
+      <h3 class="author" v-else>@{{ friend }}</h3>
     </header>
-    <div class="right"
-       
+    <div class="right">
+      <button class="button-deny" @click="removeFriend" v-if="confirmed">
+        Remove Friend
+      </button>
+
+      <button @click="acceptFriend" v-if="!confirmed && requested">
+        Accept
+      </button>
+      <button
+        class="button-deny"
+        @click="rejectFriend"
+        v-if="!confirmed && requested"
       >
-        <button @click="removeFriend"
-         v-if="confirmed"
-        >
-          Remove Friend
-        </button>
+        Reject
+      </button>
 
-        <button @click="acceptFriend"
-         v-if="!confirmed && requested"
-        >
-          Accept
-        </button>
-        <button @click="rejectFriend"
-         v-if="!confirmed && requested"
-        >
-          Reject
-        </button>
-
-         <button @click="sendFriendRequest"
-         v-if="!confirmed && !requested"
-        >
-          + Add Friend
-        </button>
-      </div>
+      <button @click="sendFriendRequest" v-if="!confirmed && !requested">
+        + Add Friend
+      </button>
+    </div>
 
     <section class="alerts">
       <article
@@ -63,7 +46,7 @@
 
 <script>
 // create song component that will show the image of the album ,
-// loop over that 
+// loop over that
 
 export default {
   name: 'FriendComponent',
@@ -77,11 +60,11 @@ export default {
     confirmed: {
       type: Boolean,
       required: true
-    },
+    }
   },
   computed: {
     requested() {
-        return this.$store.state.friendRequests.includes(this.friend);
+      return this.$store.state.friendRequests.includes(this.friend);
     }
   },
   data() {
@@ -103,7 +86,8 @@ export default {
         method: 'DELETE',
         callback: () => {
           this.$store.commit('alert', {
-            message: 'Successfully deleted mixtape!', status: 'success'
+            message: 'Successfully deleted mixtape!',
+            status: 'success'
           });
         }
       };
@@ -118,7 +102,8 @@ export default {
         method: 'DELETE',
         callback: () => {
           this.$store.commit('alert', {
-            message: 'Successfully removed friend.', status: 'success'
+            message: 'Successfully removed friend.',
+            status: 'success'
           });
         }
       };
@@ -133,7 +118,8 @@ export default {
         method: 'PATCH',
         callback: () => {
           this.$store.commit('alert', {
-            message: 'Successfully accepted friend request!', status: 'success'
+            message: 'Successfully accepted friend request!',
+            status: 'success'
           });
         }
       };
@@ -148,26 +134,28 @@ export default {
         method: 'PATCH',
         callback: () => {
           this.$store.commit('alert', {
-            message: 'Successfully accepted rejected friend request.', status: 'success'
+            message: 'Successfully accepted rejected friend request.',
+            status: 'success'
           });
         }
       };
       this.request(params);
     },
     sendFriendRequest() {
-        /**
-         * send new friend request
-        */
-        const params = {
+      /**
+       * send new friend request
+       */
+      const params = {
         url: `/api/friend/${this.$store.state.username}?user=${this.friend}`,
         method: 'POST',
         callback: () => {
-            this.$store.commit('alert', {
-            message: 'Successfully sent sent friend request.', status: 'success'
-            });
+          this.$store.commit('alert', {
+            message: 'Successfully sent sent friend request.',
+            status: 'success'
+          });
         }
-        };
-        this.request(params);
+      };
+      this.request(params);
     },
     async request(params) {
       /**
@@ -177,7 +165,8 @@ export default {
        * @param params.callback - Function to run if the the request succeeds
        */
       const options = {
-        method: params.method, headers: {'Content-Type': 'application/json'}
+        method: params.method,
+        headers: {'Content-Type': 'application/json'}
       };
       if (params.body) {
         options.body = params.body;
@@ -189,9 +178,9 @@ export default {
           const res = await r.json();
           throw new Error(res.error);
         }
-        this.$store.commit('refreshFriends'); 
-        this.$store.commit('refreshFriendRequests'); 
-        this.$store.commit('refreshPossibleFriends'); 
+        this.$store.commit('refreshFriends');
+        this.$store.commit('refreshFriendRequests');
+        this.$store.commit('refreshPossibleFriends');
         params.callback();
       } catch (e) {
         this.$set(this.alerts, e, 'error');
@@ -217,18 +206,37 @@ export default {
 .friend {
   padding: 10px;
   margin-bottom: 20px;
-  border: solid 3px rgb(24, 23, 23);
-  border-radius: 2px;
+  border: solid 2px rgb(197, 197, 197);
+  border-radius: 12px;
   width: 100%;
   background-color: white;
 }
 
 button {
-  background-color: aquamarine;
+  background-color: rgb(255, 255, 255);
+  border: solid 2px rgb(211, 211, 211);
+  border-radius: 8px;
+  margin: 0 8px;
+}
+
+.button-deny {
+  background-color: rgb(255, 255, 255);
+  border: solid 2px rgb(211, 211, 211);
+  border-radius: 8px;
+  margin: 0 8px;
 }
 
 button:hover {
-  background-color: #009965;
+  border-color: #1aeeab;
+  background-color: rgb(255, 255, 255);
+  border-width: 2px;
+  color: #00c385;
 }
 
+.button-deny:hover {
+  border-color: #ff4157;
+  background-color: rgb(255, 255, 255);
+  border-width: 2px;
+  color: #e9112a;
+}
 </style>

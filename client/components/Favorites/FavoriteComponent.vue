@@ -4,10 +4,14 @@
 
 <template>
   <section class="favorite-container circle">
-    <p v-if="userHasFavorited" class="favorited circle-inner" @click="removeFavorite">
+    <p
+      v-if="userHasFavorited"
+      class="favorited circle-inner"
+      @click="removeFavorite"
+    >
       <i class="fas fa-bookmark bookmark" />
     </p>
-    <p v-else class=" notFavorited circle-inner" @click="addFavorite">
+    <p v-else class="notFavorited circle-inner" @click="addFavorite">
       <i class="fas fa-bookmark bookmark" />
     </p>
   </section>
@@ -31,9 +35,9 @@ export default {
      */
     userHasFavorited() {
       let isFavorite = false;
-      this.$store.state.favorites.forEach(favorite => {
+      this.$store.state.favorites.forEach((favorite) => {
         if (favorite.song.trackId === this.trackId) {
-          isFavorite = true;;
+          isFavorite = true;
         }
       });
       return isFavorite;
@@ -52,16 +56,21 @@ export default {
       /**
        * Submits a form with the specified options from data().
        */
-        const options = remove ? {
-          method: 'DELETE',
-          headers: {'Content-Type': 'application/json'},
-          credentials: 'same-origin' // Sends express-session credentials with request
-        } : {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          credentials: 'same-origin' // Sends express-session credentials with request
-        };
-        options.body = JSON.stringify({username: this.$store.state.username, trackId: this.trackId});
+      const options = remove
+        ? {
+            method: 'DELETE',
+            headers: {'Content-Type': 'application/json'},
+            credentials: 'same-origin' // Sends express-session credentials with request
+          }
+        : {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            credentials: 'same-origin' // Sends express-session credentials with request
+          };
+      options.body = JSON.stringify({
+        username: this.$store.state.username,
+        trackId: this.trackId
+      });
 
       try {
         const r = await fetch(`/api/favorite`, options);
@@ -74,8 +83,7 @@ export default {
         if (this.$store.state.profileUsername === this.$store.state.username) {
           this.$store.commit('refreshProfile', this.$store.state.username);
         }
-      } catch (e) {
-      }
+      } catch (e) {}
     }
   }
 };
@@ -91,7 +99,7 @@ export default {
   cursor: pointer;
 }
 .favorited {
-  color: rgb(255, 126, 28);
+  color: #12de9d;
   -webkit-animation-name: wiggle;
   -ms-animation-name: wiggle;
   -ms-animation-duration: 1000ms;
@@ -102,14 +110,16 @@ export default {
   -ms-animation-timing-function: ease-in-out;
 }
 .favorited:hover {
-  color: rgb(223, 100, 0);
+  color: #75ebc5;
+  cursor: pointer;
 }
 
 .notFavorited {
   color: rgb(0, 0, 0);
 }
 .notFavorited:hover {
-  color: rgb(255, 143, 92);
+  color: #12de9d;
+  cursor: pointer;
 }
 
 .circle-inner {

@@ -206,21 +206,21 @@ export default {
   position: relative;
   padding: 20px 30px;
   margin-bottom: 20px;
-  border: solid 2px rgb(171, 171, 171);
-  border-radius: 16px;
-  background-color: white;
+  border: solid 2px rgb(222, 222, 222);
+  border-radius: 36px;
+  background-color: whitesmoke;
 }
 
 .mixtape-container button {
   background-color: rgb(243, 243, 243);
   border: solid 1px rgb(193, 193, 193);
-  border-radius: 4px;
+  border-radius: 8px;
 }
 
 .mixtape-container button:hover {
-  background-color: rgb(84, 84, 84);
-  color: white;
-  border-color: rgb(54, 54, 54);
+  border-color: #1aeeab;
+  border-width: 3px;
+  color: #00c385;
 }
 
 .username-container {

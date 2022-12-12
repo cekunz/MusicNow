@@ -6,7 +6,7 @@
   <nav>
     <div class="left">
       <router-link to="/">
-        <img src="../../public/logo-musicnow-white.png" />
+        <img src="../../public/logo-musicnow.png" />
       </router-link>
     </div>
     <div class="right">
@@ -65,7 +65,7 @@ export default {
 nav {
   padding: 1vw 2vw;
   /* background-color: #ccc; */
-  background-color: #7fffd4;
+  background-color: #7bebc8;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -73,7 +73,7 @@ nav {
 }
 
 a {
-  color: whitesmoke;
+  color: rgb(20, 20, 20);
   text-decoration: none;
 }
 

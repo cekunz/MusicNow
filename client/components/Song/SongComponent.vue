@@ -4,12 +4,10 @@
   <div class="info">
     <div v-if="editable">
       <div class="songResult">
-      <img class='image' :src="albumCover">
-      <h3 class='track'> {{shortenedTrack}} </h3>
-      <h4 class='artist'> {{artist}} </h4>
-      <button class='clear' @click="clearSong">
-        Remove
-      </button>
+        <img class="image" :src="albumCover" />
+        <h3 class="track">{{ shortenedTrack }}</h3>
+        <h4 class="artist">{{ artist }}</h4>
+        <button class="clear" @click="clearSong">Remove</button>
       </div>
     </div>
 
@@ -17,13 +15,11 @@
       <div v-if="simpleCover">
         <!-- <img class='image' :src='albumCover'> -->
         <div class="image-wrapper">
-          <img class="image" :src="albumCover">
-          <FavoriteComponent
-            :trackId="trackId"
-          />
+          <img class="image" :src="albumCover" />
+          <FavoriteComponent :trackId="trackId" />
         </div>
-        <h3 class='track'> {{shortenedTrack}} </h3>
-        <h4 class='artist'> {{artist}} </h4>
+        <h3 class="track">{{ shortenedTrack }}</h3>
+        <h4 class="artist">{{ artist }}</h4>
       </div>
       <button
         v-if="!simpleCover || simpleCover === null"
@@ -120,7 +116,8 @@ export default {
   height: 80%;
   width: 80%;
   margin-bottom: -15px;
- }
+  filter: drop-shadow(0 4px 0.25rem rgb(205, 205, 205));
+}
 
 .artist {
   font-size: 10;

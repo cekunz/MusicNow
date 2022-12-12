@@ -102,7 +102,7 @@ export default {
   top: 40px;
 }
 .liked {
-  color: rgb(255, 126, 28);
+  color: #12de9d;
   -webkit-animation-name: wiggle;
   -ms-animation-name: wiggle;
   -ms-animation-duration: 1000ms;
@@ -113,7 +113,7 @@ export default {
   -ms-animation-timing-function: ease-in-out;
 }
 .liked:hover {
-  color: rgb(223, 100, 0);
+  color: #75ebc5;
   cursor: pointer;
 }
 
@@ -121,7 +121,7 @@ export default {
   color: rgb(0, 0, 0);
 }
 .notLiked:hover {
-  color: rgb(255, 143, 92);
+  color: #12de9d;
   cursor: pointer;
 }
 

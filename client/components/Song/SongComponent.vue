@@ -135,5 +135,9 @@ export default {
 button {
   font-size: 15px;
   padding: 5px;
+  background-color: aquamarine;
+}
+button:hover {
+  background-color: #009965;
 }
 </style>

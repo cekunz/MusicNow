@@ -162,7 +162,8 @@ button {
   font-size: 16px;
   align-self: center;
   border: solid 1px #ccc;
-  background-color: rgb(255, 255, 255);
+  /* background-color: rgb(255, 255, 255); */
+  background-color: aquamarine;
   border-radius: 2px;
 }
 
@@ -171,13 +172,18 @@ button {
   font-size: 15px;
   align-self: center;
   border: solid 1px #ccc;
-  background-color: rgb(255, 255, 255);
+  /* background-color: rgb(255, 255, 255); */
+  background-color: aquamarine;
   border-radius: 2px;
+}
 
+.submit:hover {
+  background-color: #004c33;
 }
 
 button:hover {
-  background-color: rgb(54, 54, 54);
+  /* background-color: rgb(54, 54, 54); */
+  background-color: #004c33;
   color: white;
   border-color: rgb(54, 54, 54);
 }
@@ -202,7 +208,8 @@ button:hover {
   width: 100px;
   margin: 100px 100px; 
   padding: 20px 20px;
-  background-color: #ccc;
+  /* background-color: #ccc; */
+  background-color: aquamarine;
   border-radius: 2px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
   font-family: Helvetica, Arial, sans-serif;
@@ -213,6 +220,9 @@ button:hover {
 }
 .modal-default-button {
   float: right;
+}
+.modal-default-button:hover {
+  background-color: #004c33;
 }
 .songSearch {
   display: flex;

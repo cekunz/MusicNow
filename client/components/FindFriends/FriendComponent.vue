@@ -226,4 +226,9 @@ export default {
 button {
   background-color: aquamarine;
 }
+
+button:hover {
+  background-color: #009965;
+}
+
 </style>

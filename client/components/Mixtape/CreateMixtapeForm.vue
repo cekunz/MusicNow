@@ -108,6 +108,7 @@ export default {
   justify-content: center;
   width: 100%;
   border: solid 4px rgb(192, 192, 192);
+  background-color: white;
 }
 
 h2 {

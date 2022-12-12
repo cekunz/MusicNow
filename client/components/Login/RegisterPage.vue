@@ -45,6 +45,7 @@ export default {
   padding: 1rem 4rem;
   padding-bottom: 2rem;
   margin-top: 8px;
+  background-color: white;
 }
 
 button {
@@ -55,6 +56,7 @@ button {
   border: solid 1px rgb(192, 192, 192);
   border-radius: 2px;
   width: 100%;
+  background-color: aquamarine;
 }
 
 button:hover {
@@ -62,4 +64,9 @@ button:hover {
   color: white;
   border-color: rgb(54, 54, 54);
 }
+
+main {
+  background-color: #e5fff6;
+}
+
 </style>

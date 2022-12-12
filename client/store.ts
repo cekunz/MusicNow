@@ -253,12 +253,12 @@ const store = new Vuex.Store({
       if (res.iconText === undefined) {
         state.profileCircle = res.fullName[0];
       } else {
-        state.profileCircleColor = res.iconText
+        state.profileCircleColor = res.iconText;
       }
       if (res.iconColor === undefined) {
-        state.profileCircleColor = '#ccc'
+        state.profileCircleColor = '#ccc';
       } else {
-        state.profileCircleColor = res.iconColor
+        state.profileCircleColor = res.iconColor;
       }
       state.profileFriends = res.friends;
       state.profileMixtapes = res.mixtapes.reverse();

@@ -1,11 +1,11 @@
 /* eslint-disable arrow-parens */
 import type {HydratedDocument} from 'mongoose';
-import type {likedObject} from './model';
+import type {Like} from './model';
 
 type likeResponse = {
   _id: string;
-  likedObjectId: string;
-  likers: Array<String>;
+  mixtapeId: string;
+  username: string;
 };
 
 /**
@@ -16,9 +16,9 @@ type likeResponse = {
  * @returns {likeResponse} - The likedObject object formatted for the frontend
  */
 const constructLikeResponse = (
-  liked: HydratedDocument<likedObject>
+  liked: HydratedDocument<Like>
 ): likeResponse => {
-  const likeCopy: likedObject = {
+  const likeCopy: Like = {
     ...liked.toObject({
       versionKey: false // Cosmetics; prevents returning of __v property
     })
@@ -26,8 +26,8 @@ const constructLikeResponse = (
 
   return {
     _id: likeCopy._id.toString(),
-    likers: likeCopy.likers.map((liker) => liker.toString()),
-    likedObjectId: likeCopy.object
+    username: likeCopy.username,
+    mixtapeId: likeCopy.mixtapeId
   };
 };
 

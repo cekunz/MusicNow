@@ -1,126 +1,142 @@
 /* eslint-disable arrow-parens */
 import type {Request, Response} from 'express';
 import express from 'express';
+import LikeCollection from './collection';
 import * as userValidator from '../user/middleware';
-import * as likedValidator from './middleware';
-import likedObjectCollection from './collection';
-import MixtapeCollection from '..//mixtape/collection';
-import * as util from './util';
+import * as likeValidator from './middleware';
+import type {Like} from  '../likes/model'
+import LikeModel from '../likes/model';
 
 const router = express.Router();
 
+
 /**
- * Get the likes for a given ID
+ * Get all likes 
  *
- * @name GET /api/likes/:id
+ * @name GET api/likes
  *
- * @param {string} id - the id of the liked object
+ * @return {Like[]} - A list of all the users that liked a mixtape, unordered
+ * @throws {403} - If the user is not logged in
+ */
+ router.get(
+  '/',
+  [
+    userValidator.isUserLoggedIn,
+  ],
+  async (req: Request, res: Response) => {
+    const likes = await LikeModel.find({});
+    res.status(200).json({
+        message: 'The likes were found successfully.',
+        likes: likes});
+});
+
+/**
+ * Get all likes for a given mixtape
  *
- * @return {likeResponse} - A list of all favorites sent by username
- * @throws {404} - If an object with the given id does not exist
+ * @name GET api/likes/:mixtapeId?
+ *
+ * @return {String[]} - A list of all the users that liked a mixtape, unordered
+ * @throws {403} - If the user is not logged in
  */
 router.get(
-  '/:id',
-  [likedValidator.isLikedExists],
+  '/mixtapeId?',
+  [
+    userValidator.isUserLoggedIn,
+  ],
   async (req: Request, res: Response) => {
-    const likedId = req.params.id ?? undefined;
-    const liked = await likedObjectCollection.findOne(likedId);
-    const response = util.constructLikeResponse(liked);
-    res.status(200).json(response);
-  }
-);
+    const mixtapeId = (req.params.mixtapeId as string) ?? undefined;
+    if (mixtapeId !== undefined) {
+        const likes = await LikeCollection.findLikesByMixtape(mixtapeId);
+        res.status(200).json({
+            message: 'The likes were found successfully.',
+            likes: likes});
+    } else {
+        res.status(404)
+    } 
+});
+
+// /**
+//  * Get all likes by a given user
+//  *
+//  * @name GET api/likes/:username?
+//  *
+//  * @return {string[]} - A list of all the mixtapes liked by userId
+//  * @throws {403} - If the user is not logged in
+//  */
+//  router.get(
+//   '/:username?',
+//   [
+//     userValidator.isUserLoggedIn,
+//   ],
+//   async (req: Request, res: Response) => {
+//     const username = (req.params.username as string) ?? undefined;
+//     if (username !== undefined) {
+//         const likes = await LikeCollection.findLikesByUser(username);
+//         res.status(200).json({
+//             message: 'The likes were found successfully.',
+//             likes: likes});
+//     } else {
+//         res.status(404)
+//     } 
+// });
 
 /**
- * Add likes functionality to old mixtapes that did not have them before.
+ * Send a like to a mixtape
  *
- * @name POST /api/likes/:id
- *
- * @param {string} id - the id of the liked object
- *
- * @return {likeResponse} - A list of all favorites sent by username
- * @throws {404} - If an object with the given id does not exist
- */
-router.post('/magic', async (req: Request, res: Response) => {
-  const mixtapes = await MixtapeCollection.findAll();
-  const likeObjects = mixtapes.map(async (mixtape) =>
-    likedObjectCollection.addOne(mixtape._id, [])
-  );
-  await Promise.all(likeObjects);
-  res.status(200).json({message: 'complete'});
-});
-/**
- * Create a new likedObject.
- *
- * @name POST /api/likes/
- *
- * @param {string} id - The id of the object being liked
- *
- * @return {likeResponse} - The created favorite
- * @throws {403} - If the object being liked already exists in the DB
+ * @name POST /api/likes/:mixtapeId?username=username
+ * 
+ * @param {string} mixtapeId - the id for the mixtape being liked
+ * @param {string} username - the username of the user liking the mixtape
+ * 
+ * @return {Like} - The created like object
+ * @throws {403} - If the user is not logged in
+ * @throws {405} - If the user has already liked the mixtpae
  */
 router.post(
-  '/',
-  [likedValidator.isLikedDoesntExist],
+  '/:mixtapeId?',
+  [
+    userValidator.isUserLoggedIn,
+    likeValidator.isDoubleLike,
+  ],
   async (req: Request, res: Response) => {
-    const likedId = req.body.id as string;
-    const liked = await likedObjectCollection.addOne(likedId);
-    res.status(201).json({
-      message: 'likedObject created successfully.',
-      prompt: util.constructLikeResponse(liked)
-    });
-  }
-);
-
-/**
- * Update a likedObject's likes by adding or removing logged in user
- *
- * @name PATCH /api/likes/
- *
- * @param {string} id - The Id of the object being liked
- * @param {boolean} remove - true if user should be removed from likes
- * @return {likeResponse} - The updated likedObject
- * @throws {403} - If user is not logged in
- * @throws {404} - If likedObject does not exist
- */
-router.patch(
-  '/',
-  [likedValidator.isLikedExists],
-  async (req: Request, res: Response) => {
-    const userId = (req.session.userId as string) ?? ''; // Will not be an empty string since its validated in isUserLoggedIn
-    const liked = await likedObjectCollection.updateOne(
-      req.body.id,
-      userId,
-      req.body.remove
-    );
+    const mixtapeId = (req.params.mixtapeId as string) ?? undefined;
+    const username = (req.query.username as string) ?? undefined;
+    const like: Like = await LikeCollection.addLike(mixtapeId, username);
     res.status(200).json({
-      message: 'likedObject was updated successfully.',
-      user: util.constructLikeResponse(liked)
-    });
-  }
+        message: 'The like was added successfully.',
+        like: like});
+    } 
 );
 
 /**
  * Delete a like
  *
- * @name DELETE /api/likes/
- *
- * @param {string} id - the Id of the object that is liked
+ * @name DELETE /api/likes/:mixtapeId?username=username
  *
  * @return {string} - A success message
- * @throws {404} - If an object with the Id does not exist
- *
+ * @throws {403} - If the user is not logged in 
+ * @throws {405} - if the user has not liked the mixtape
  */
 router.delete(
-  '/',
-  [likedValidator.isLikedExists],
+  '/:mixtapeId?',
+  [
+    userValidator.isUserLoggedIn,
+    likeValidator.unlikeWithoutLike,
+  ],
   async (req: Request, res: Response) => {
-    const likedId = (req.body.id as string) ?? undefined;
-    await likedObjectCollection.deleteOne(likedId);
-
-    res.status(200).json({
-      message: 'likedObject deleted successfully.'
-    });
+    const mixtapeId = (req.params.mixtapeId as string) ?? undefined;
+    const username = (req.query.username as string) ?? undefined;
+    const unlike = await LikeCollection.removeLike(mixtapeId, username);
+    if (unlike) {
+        res.status(200).json({
+            message: 'The mixtape was unliked successfully.'}); 
+    } else {
+        res.status(404).json({
+            message: 'There was an error in unliking this mixtape.'}); 
+    }  
   }
 );
 
 export {router as likeRouter};
+
+

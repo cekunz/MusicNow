@@ -28,7 +28,7 @@ const store = new Vuex.Store({
     nonFriends: [],
     favorites: [],
     prompt: '', // the daily prompt
-    likes: Object.create(null), // All likes from friends
+    likes: [], // All likes from friends
     comments: []
   },
   mutations: {
@@ -112,21 +112,6 @@ const store = new Vuex.Store({
        */
       state.profilePopUp = profilePopUp;
     },
-    setLikes(state, likes) {
-      /**
-       * Set the stored likes to the provided likes.
-       * @param likes - likes to store
-       */
-      const newLikes = Object.create(null);
-      // Group likes by their corresponding object Ids
-      for (const like of likes) {
-        const objectId = `${like.likedObjectId}`;
-        if (!(objectId in newLikes)) {
-          newLikes[objectId] = like;
-        }
-      }
-      state.likes = newLikes;
-    },
     async setComments(state, mixtapeId) {
       /**
        * Update the stored comments to the specified ones.
@@ -190,8 +175,6 @@ const store = new Vuex.Store({
       const res = await fetch(url).then(async (r) => r.json());
       state.mixtapes = res;
 
-      // Refresh likes after getting new mixtapes
-      this.commit('refreshLikes');
     },
     async refreshFriends(state) {
       /**
@@ -266,56 +249,39 @@ const store = new Vuex.Store({
       state.profilePopUp = false;
     },
     async refreshLikes(state) {
-      /**
-       * Update all of the likes
+       /**
+       *  get current DB likes
        */
-      const allMixtapes = [
-        ...(state.mixtapes ?? []),
-        ...(state.profileMixtapes ?? [])
-      ];
-      if (allMixtapes.length > 0) {
-        const requests = allMixtapes.map((mixtape) => {
-          const url = `/api/likes/${mixtape._id}`;
-          const res = fetch(url).then(async (r) => r.json());
-          return res;
-        });
-
-        const likes = await Promise.all(requests); // wait for all requests to finish
-        this.commit('setLikes', likes);
-      }
+       const url = `/api/likes`;
+       const res = await fetch(url).then(async (r) => r.json());
+       state.likes = res.likes;
     },
-    addLike(state, like) {
+    async addLike(state, mixtapeId) {
       /**
        * Add the user's name to the list of likers on an object.
-       * @param like - The new like to store
+       * @param mixtapeId - The new mixtape to like
        */
-      const newLikes = JSON.parse(JSON.stringify(state.likes)); // Copy to ensure no alliasing occurs;
-      const objectId = like.likedObjectId;
-      const user = state.userId;
-      if (objectId in newLikes) {
-        newLikes[objectId].likers.push(user); // add user to list of likers
-      }
-      state.likes = newLikes;
+      const options = {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'}
+      };
+      const url = `/api/likes/${mixtapeId}?username=${state.username}`;
+      const res = await fetch(url, options).then(async (r) => r.json());
+      await this.commit('refreshLikes');
     },
-    removeLike(state, like) {
+    async removeLike(state, mixtapeId) {
       /**
        * Remove the user's name from the list of likers on an object.
-       * @param like - The like object to modify
+       * @param like - The new mixtape to like
        */
-      const newLikes = JSON.parse(JSON.stringify(state.likes)); // Copy to ensure no alliasing occurs;
-      const objectId = like.likedObjectId;
-      const user = state.userId; // check! was username
-      if (objectId in newLikes) {
-        const newLikers = []
-        for (const liker of newLikes[objectId].likers) {
-          if (liker !== user) {
-            newLikers.push(liker);
-          }
-        }
-        newLikes[objectId].likers = newLikers;
-      }
-      state.likes = newLikes;
-    }
+      const options = {
+        method: 'DELETE',
+        headers: {'Content-Type': 'application/json'}
+      };
+      const url = `/api/likes/${mixtapeId}?username=${state.username}`;
+      const res = await fetch(url, options).then(async (r) => r.json());
+      await this.commit('refreshLikes');
+    },
   },
   // Store data across page refreshes, only discard on browser close
   plugins: [createPersistedState()]

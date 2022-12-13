@@ -1,6 +1,6 @@
 <template>
    <div class="center">
-      <h1> {{ $store.state.prompt.promptText }} </h1>
+      <h1> {{ $store.state.prompt }} </h1>
    </div>
 </template>
 

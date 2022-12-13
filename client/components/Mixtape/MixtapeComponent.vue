@@ -69,7 +69,7 @@
           <p>{{ alert }}</p>
         </article>
       </section>
-      <LikeComponent :liked-object-id="mixtape._id" />
+      <LikeComponent :mixtapeId="mixtape._id" />
       <div v-if="showComments === false" class="comment-button-container">
         <button @click="$router.push(`/comments/${mixtape._id}`)">
           Comments

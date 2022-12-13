@@ -11,7 +11,7 @@
             class="friend"
             :key="friend"
             :friend="friend"
-            :confirmed="true"
+            :confirmed="$store.state.friends.includes(friend)"
           />
         </div>
       </div>
@@ -74,7 +74,7 @@ button:hover {
   vertical-align: middle;
 }
 .modal-container1 {
-  width: 600px;
+  width: 700px;
   margin: 0px auto;
   padding: 20px 30px;
   background-color: white;

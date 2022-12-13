@@ -254,12 +254,12 @@ button:hover {
 }
 /* .not-modal {
   background-color: #e5fff6;
-} */
+}
 .view-all-songs {
   /* width: 100%;
   height: 100%;
   margin-top: 55%; */
-}
+
 
 .hover-view:hover {
   text-decoration: underline;

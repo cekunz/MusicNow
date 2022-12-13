@@ -6,20 +6,35 @@
   <main class="viewport">
     <section>
       <header>
-        <h2 v-if="($route.query.memory === undefined)">Comments Section</h2>
+        <h2 v-if="$route.query.memory === undefined">
+          <router-link
+            style="text-decoration: none; color: black"
+            :to="{name: 'Home'}"
+          >
+            <i class="fas fa-arrow-left left-side"></i>
+          </router-link>
+          Comments Section
+        </h2>
         <h2 v-else>
           <router-link
             style="text-decoration: none; color: black"
-            :to="{name: 'Profile', params: {name: this.$store.state.profileUsername} }"
+            :to="{
+              name: 'Profile',
+              params: {name: this.$store.state.profileUsername}
+            }"
           >
             <i class="fas fa-arrow-left left-side"></i>
           </router-link>
           Memory on {{ mixtape.date }}
         </h2>
       </header>
-      <MixtapeComponent v-if="mixtape !== undefined" :mixtape="mixtape" :showComments="true"/>
+      <MixtapeComponent
+        v-if="mixtape !== undefined"
+        :mixtape="mixtape"
+        :showComments="true"
+      />
     </section>
-    <section v-if="($store.state.username && $route.query.memory === undefined)">
+    <section v-if="$store.state.username && $route.query.memory === undefined">
       <CreateCommentsForm :mixtape-id="$route.params.mixtapeId" />
     </section>
     <section v-if="$store.state.mixtapes.length">
@@ -55,7 +70,7 @@ export default {
       // look for mixtapes in current feed and profile
       const allMixtapesSet = new Set([
         ...(this.$store.state.mixtapes ?? []),
-        (this.$store.state.personalMixtape ?? []),
+        this.$store.state.personalMixtape ?? [],
         ...(this.$store.state.profileMixtapes ?? [])
       ]);
       const allMixtapes = [...allMixtapesSet];

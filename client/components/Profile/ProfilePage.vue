@@ -27,7 +27,10 @@
             <div class="rectangle">
               <div class="memory-rectangle">
                 <MemoryComponent
-                  v-for="mixtape in this.$store.state.profileMixtapes.slice(0,8)"
+                  v-for="mixtape in this.$store.state.profileMixtapes.slice(
+                    0,
+                    8
+                  )"
                   :key="mixtape.id"
                   :mixtape="mixtape"
                 />
@@ -62,14 +65,14 @@
                 :albumCover="favorite.song.albumCover"
                 :simpleCover="true"
               />
-                <router-link
-                  v-if="(this.$store.state.profileFavorites.length > 7)"
-                  class="profile-song view-all-box"
-                  style="color: black;"
-                  :to="{name: 'Favorites'}"
-                >
-                  <p class="hover-view">View All →</p>
-                </router-link>
+              <router-link
+                v-if="this.$store.state.profileFavorites.length > 7"
+                class="profile-song view-all-box"
+                style="color: black"
+                :to="{name: 'Favorites'}"
+              >
+                <p class="hover-view">View All →</p>
+              </router-link>
             </div>
           </div>
         </section>
@@ -90,7 +93,7 @@ export default {
   components: {FriendComponent, FriendPopUp, MemoryComponent, SongComponent},
   data() {
     return {
-      isOpen: false,
+      isOpen: false
     };
   },
   computed: {
@@ -101,7 +104,9 @@ export default {
       return this.$store.state.profileCircle;
     },
     favoriteSongsToDisplay() {
-      return (this.$store.state.profileFavorites.length > 7) ? this.$store.state.profileFavorites.slice(0,6) : this.$store.state.profileFavorites.slice(0,7);
+      return this.$store.state.profileFavorites.length > 7
+        ? this.$store.state.profileFavorites.slice(0, 6)
+        : this.$store.state.profileFavorites.slice(0, 7);
     }
   },
   beforeMount() {
@@ -188,6 +193,11 @@ button:hover {
   display: inline-block;
   /* background-color: #ccc; */
   background-color: whitesmoke;
+  /* background-color: #ccc; */
+  border: #b1b1b1 solid;
+  /* background-color: whitesmoke; */
+  /* background-color: #7bebc8; */
+  border-radius: 16px;
   /* background-color: #7bebc8; */
 }
 

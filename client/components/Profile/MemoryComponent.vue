@@ -4,14 +4,26 @@
     style="text-decoration: none; color: black"
     :to="{name: 'Comments', params: {mixtapeId: mixtape._id, isMemory: this.mixtape.date}}"
   > -->
-    <router-link
+  <router-link
     class="memory"
     style="text-decoration: none; color: black"
-    :to="{path: `/comments/${mixtape._id}`, query: {memory: true} }"
+    :to="{path: `/comments/${mixtape._id}`, query: {memory: true}}"
   >
-    <img class="square" v-if="mixtape.songs[0].albumCover" :src="mixtape.songs[0].albumCover" />
-    <img class="square" v-else-if="mixtape.songs[1].albumCover" :src="mixtape.songs[1].albumCover" />
-    <img class="square" v-else-if="mixtape.songs[2].albumCover" :src="mixtape.songs[2].albumCover" />
+    <img
+      class="square"
+      v-if="mixtape.songs[0].albumCover"
+      :src="mixtape.songs[0].albumCover"
+    />
+    <img
+      class="square"
+      v-else-if="mixtape.songs[1].albumCover"
+      :src="mixtape.songs[1].albumCover"
+    />
+    <img
+      class="square"
+      v-else-if="mixtape.songs[2].albumCover"
+      :src="mixtape.songs[2].albumCover"
+    />
     <div class="content">
       {{ this.displayDate }}
     </div>
@@ -27,7 +39,7 @@ export default {
     mixtape: {
       type: Object,
       required: true
-    },
+    }
   },
   data() {
     return {
@@ -46,6 +58,9 @@ export default {
 </script>
 
 <style scoped>
+img {
+  filter: drop-shadow(0 4px 0.25rem rgb(171, 171, 171));
+}
 .content {
   display: flex;
   flex-direction: row;
@@ -58,18 +73,20 @@ export default {
   background-color: rgb(176, 176, 176); */
   /* border: solid 3px #009965;
   background-color: #009965; */
-  border: solid 3px #7bebc8;
-  background-color: #7bebc8;
-  border-radius: 2px;
+  background-color: #e0e0e0;
+  border-radius: 8px;
   height: 44%;
   width: 20%;
+  font-weight: bold;
 }
 .memory:hover {
   /* background-color: rgb(84, 84, 84);
   border-color: rgb(84, 84, 84); */
   color: white;
-  background-color: #004c33;
-  border-color: #004c33;
+  background-color: rgb(239, 239, 239);
+  border-color: #4ed8aa;
+  border-width: 2px;
+  border-style: solid;
 }
 
 .square {

@@ -59,8 +59,8 @@ export default {
   },
   data() {
     return {
-      selectedNewColor: this.$store.state.profileCircleColor,
-      selectedNewString: this.$store.state.profileCircle,
+      selectedNewColor: '#ccc',
+      selectedNewString: this.$store.state.username.substring(0,1),
       alerts: {} // Displays success/error messages encountered during freet modification
     };
   },

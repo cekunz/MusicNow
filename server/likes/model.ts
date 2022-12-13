@@ -2,25 +2,25 @@ import {Types} from 'mongoose';
 import {Schema, model} from 'mongoose';
 
 /**
- * This file defines the properties of a liked object
+ * This file defines the properties stored in a Like
  */
 
-export type likedObject = {
-  _id: Types.ObjectId;
-  object: string;
-  likers: string[];
+export type Like = {
+  _id: Types.ObjectId; // MongoDB assigns each object this ID on creation
+  username: string;
+  mixtapeId: string;
 };
 
-const likeSchema = new Schema({
-  object: {
+const LikeSchema = new Schema<Like>({
+  username: {
     type: String,
-    required: true
+    required: true,
   },
-  likers: {
-    type: Array,
-    required: true
-  }
+  mixtapeId: {
+    type: String,
+    required: true,
+  },
 });
 
-const LikeModel = model<likedObject>('Likes', likeSchema);
+const LikeModel = model<Like>('Like', LikeSchema);
 export default LikeModel;

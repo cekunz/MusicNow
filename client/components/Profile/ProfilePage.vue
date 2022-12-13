@@ -138,19 +138,17 @@ button {
   font-size: 20px;
   align-self: center;
   margin-top: 30px;
-  /* border: solid 1px #ccc; */
-  /* background-color: #ccc; */
-  border: solid 1px aquamarine;
-  background-color: aquamarine;
+  border: solid 1px rgb(211, 211, 211);
+  background-color: rgb(255, 255, 255);
   border-radius: 2px;
   width: 50%;
 }
 
 button:hover {
   /* background-color: rgb(54, 54, 54); */
-  background-color: #009965;
-  color: white;
-  border-color: rgb(54, 54, 54);
+  background-color: rgb(255, 255, 255);
+  color: #00c385;
+  border-color: #1aeeab;
   cursor: pointer;
 }
 
@@ -189,7 +187,8 @@ button:hover {
 .rectangle {
   display: inline-block;
   /* background-color: #ccc; */
-  background-color: aquamarine;
+  background-color: whitesmoke;
+  /* background-color: #7bebc8; */
 }
 
 .memory-rectangle {
@@ -253,14 +252,14 @@ button:hover {
   margin: 300px;
   color: rgba(0, 0, 0, 0.545);
 }
-.not-modal {
+/* .not-modal {
   background-color: #e5fff6;
 }
 .view-all-songs {
   /* width: 100%;
   height: 100%;
   margin-top: 55%; */
-}
+
 
 .hover-view:hover {
   text-decoration: underline;

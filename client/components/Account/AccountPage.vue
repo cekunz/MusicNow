@@ -33,6 +33,9 @@ export default {
     ChangeProfilePictureForm,
     DeleteAccountForm,
     LogoutForm
+  },
+  mounted() {
+    this.$store.commit('refreshProfile', this.$store.state.username);
   }
 };
 </script>

@@ -1,6 +1,5 @@
 <!-- eslint-disable vue/max-attributes-per-line -->
 <!-- eslint-disable vue/singleline-html-element-content-newline -->
-<!-- Reusable component for displaying the Music Now header that shows today's date -->
 
 <template>
   <section class="like-container">
@@ -8,13 +7,13 @@
     <div v-if="userHasLiked" class="liked" @click="removeLike">
       <i class="fas fa-fire fa-2x like-info-container" />
       <p class="like-count">
-        &nbsp;{{ this.$store.state.likes[this.likedObjectId]['likers'].length }}
+        &nbsp;{{ mixtapeLikes.length }}
       </p>
     </div>
     <div v-else class="notLiked" @click="addLike">
       <i class="fas fa-fire fa-2x like-info-container" />
       <p class="like-count">
-        &nbsp;{{ this.$store.state.likes[this.likedObjectId]['likers'].length }}
+        &nbsp;{{ mixtapeLikes.length }}
       </p>
     </div>
   </section>
@@ -24,7 +23,7 @@
 export default {
   name: 'LikeComponent',
   props: {
-    likedObjectId: {type: String, required: true}
+    mixtapeId: {type: String, required: true}
   },
   data() {
     return {};
@@ -33,26 +32,24 @@ export default {
     /**
      * The Like object associated with the given likedObjectId
      */
-    like() {
-      return this.$store.state.likes[this.likedObjectId];
+    mixtapeLikes() {
+      const likes = this.$store.state.likes;
+      return likes.filter((like) => like.mixtapeId === this.mixtapeId)
     },
     /**
      * Compute if the user has liked the object with this.likedObjectId
      */
     userHasLiked() {
-      return this.like !== undefined
-        ? this.like.likers.includes(this.$store.state.userId)
-        : false;
+      const filtered = this.mixtapeLikes.filter((like) => like.username === this.$store.state.username);
+      return filtered.length === 1
     }
   },
   methods: {
-    addLike() {
-      this.$store.commit('addLike', this.like);
-      this.submit(false);
+    async addLike() {
+      await this.$store.commit('addLike', this.mixtapeId);
     },
-    removeLike() {
-      this.$store.commit('removeLike', this.like);
-      this.submit(true);
+    async removeLike() {
+      await this.$store.commit('removeLike', this.mixtapeId);
     },
     async submit(remove = false) {
       /**

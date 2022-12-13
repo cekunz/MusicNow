@@ -1,6 +1,5 @@
 import type {NextFunction, Request, Response} from 'express';
 import express from 'express';
-import UserCollection from '../user/collection';
 import * as userValidator from '../user/middleware';
 import FavoriteCollection from './collection';
 import * as songValidator from '../song/middleware';
@@ -70,10 +69,8 @@ router.post(
   '/:username?',
   [
     userValidator.isUserLoggedIn,
-    songValidator.istrackIdExistsBody
   ],
   async (req: Request, res: Response) => {
-    console.log(req.body);
     const username = req.body.username as string;
     const trackId = req.body.trackId as string;
     const favorite = await FavoriteCollection.addOne(trackId, username)
@@ -99,7 +96,6 @@ router.delete(
   '/',
   [
     userValidator.isUserLoggedIn,
-    songValidator.istrackIdExistsBody
   ],
   async (req: Request, res: Response) => {
     const username = req.body.username as string;

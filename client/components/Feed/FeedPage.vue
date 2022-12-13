@@ -39,7 +39,6 @@
       <div class="heading">
         <h2>Here's how your friends responded to today's prompt</h2>
       </div>
-      <!-- </header> -->
       <section v-if="$store.state.mixtapes.length" class="post-container">
         <MixtapeComponent
           v-for="mixtape in $store.state.mixtapes"

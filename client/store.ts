@@ -27,8 +27,8 @@ const store = new Vuex.Store({
     friendRequests: [],
     nonFriends: [],
     favorites: [],
-    prompt: '', // the daily prompt
-    likes: Object.create(null), // All likes from friends
+    prompt: null, // the daily prompt
+    likes: [], // All likes from friends
     comments: []
   },
   mutations: {
@@ -112,21 +112,6 @@ const store = new Vuex.Store({
        */
       state.profilePopUp = profilePopUp;
     },
-    setLikes(state, likes) {
-      /**
-       * Set the stored likes to the provided likes.
-       * @param likes - likes to store
-       */
-      const newLikes = Object.create(null);
-      // Group likes by their corresponding object Ids
-      for (const like of likes) {
-        const objectId = `${like.likedObjectId}`;
-        if (!(objectId in newLikes)) {
-          newLikes[objectId] = like;
-        }
-      }
-      state.likes = newLikes;
-    },
     async setComments(state, mixtapeId) {
       /**
        * Update the stored comments to the specified ones.
@@ -189,9 +174,6 @@ const store = new Vuex.Store({
       const url = `/api/mixtape/${state.username}?date=${today}&feed=true`;
       const res = await fetch(url).then(async (r) => r.json());
       state.mixtapes = res;
-
-      // Refresh likes after getting new mixtapes
-      this.commit('refreshLikes');
     },
     async refreshFriends(state) {
       /**
@@ -267,55 +249,37 @@ const store = new Vuex.Store({
     },
     async refreshLikes(state) {
       /**
-       * Update all of the likes
+       *  get current DB likes
        */
-
-      // this is set to avoid duplicates. quick cheat-y way of doing it and could be imrpoved but it works and its for testing.
-      const allMixtapes = new Set([
-        ...(state.mixtapes ?? []),
-        ...(state.profileMixtapes ?? [])
-      ]);
-      if (allMixtapes.size > 0) {
-        const requests = [...allMixtapes].map((mixtape) => {
-          const url = `/api/likes/${mixtape._id}`;
-          const res = fetch(url).then(async (r) => r.json());
-          return res;
-        });
-
-        const likes = await Promise.all(requests); // wait for all requests to finish
-        this.commit('setLikes', likes);
-      }
+      const url = `/api/likes`;
+      const res = await fetch(url).then(async (r) => r.json());
+      state.likes = res.likes;
     },
-    addLike(state, like) {
+    async addLike(state, mixtapeId) {
       /**
        * Add the user's name to the list of likers on an object.
-       * @param like - The new like to store
+       * @param mixtapeId - The new mixtape to like
        */
-      const newLikes = JSON.parse(JSON.stringify(state.likes)); // Copy to ensure no alliasing occurs;
-      const objectId = like.likedObjectId;
-      const user = state.userId;
-      if (objectId in newLikes) {
-        newLikes[objectId].likers.push(user); // add user to list of likers
-      }
-      state.likes = newLikes;
+      const options = {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'}
+      };
+      const url = `/api/likes/${mixtapeId}?username=${state.username}`;
+      const res = await fetch(url, options).then(async (r) => r.json());
+      await this.commit('refreshLikes');
     },
-    removeLike(state, like) {
+    async removeLike(state, mixtapeId) {
       /**
        * Remove the user's name from the list of likers on an object.
-       * @param like - The like object to modify
+       * @param like - The new mixtape to like
        */
-      const newLikes = JSON.parse(JSON.stringify(state.likes)); // Copy to ensure no alliasing occurs;
-      const objectId = like.likedObjectId;
-      const user = state.username;
-      if (objectId in newLikes) {
-        const likers = newLikes[objectId].likers;
-
-        // Remove liker with a matching username
-        newLikes[objectId].likers = likers.filter((liker) => {
-          liker !== user;
-        });
-      }
-      state.likes = newLikes;
+      const options = {
+        method: 'DELETE',
+        headers: {'Content-Type': 'application/json'}
+      };
+      const url = `/api/likes/${mixtapeId}?username=${state.username}`;
+      const res = await fetch(url, options).then(async (r) => r.json());
+      await this.commit('refreshLikes');
     }
   },
   // Store data across page refreshes, only discard on browser close

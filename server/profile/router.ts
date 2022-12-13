@@ -1,6 +1,7 @@
 import type {NextFunction, Request, Response} from 'express';
 import express from 'express';
 import * as userValidator from '../user/middleware';
+import * as profileValidator from '../profile/middleware';
 import ProfileCollection from './collection';
 import UserCollection from '../user/collection';
 import * as util from './util';
@@ -27,6 +28,7 @@ const router = express.Router();
  */
 router.get(
   '/',
+  [profileValidator.isProfileExists],
   async (req: Request, res: Response, next: NextFunction) => {
     if (req.query.username !== undefined) {
         next();

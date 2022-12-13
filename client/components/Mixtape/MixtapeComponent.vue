@@ -25,6 +25,10 @@
         <div v-if="$store.state.username === mixtape.creator" class="actions">
           <button @click="deleteMixtape">🗑️ Delete</button>
         </div>
+         <!-- <div v-if="$store.state.username === mixtape.creator" class="actions">
+          <button @click="editCaption">Edit Caption</button>
+        </div> -->
+        
       </header>
       <div class="content">
         <div class='caption'>
@@ -65,7 +69,7 @@
           <p>{{ alert }}</p>
         </article>
       </section>
-      <LikeComponent :liked-object-id="mixtape._id" />
+      <LikeComponent :mixtapeId="mixtape._id" />
       <div v-if="showComments === false" class="comment-button-container">
         <button @click="$router.push(`/comments/${mixtape._id}`)">
           Comments

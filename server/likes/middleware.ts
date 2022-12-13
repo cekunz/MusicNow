@@ -1,45 +1,44 @@
-import type {Request, Response, NextFunction} from 'express';
-import likedObjectCollection from './collection';
+import {Request, Response, NextFunction} from 'express';
+import LikeCollection from './collection';
+
 
 /**
- * Checks if a Like with id in req.params or req.body exists
+ * Checks if a user is trying to double-like a post
  */
-const isLikedExists = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const likedObjectId = req.params.id ?? (req.body.id as string);
-  const liked = await likedObjectCollection.findOne(likedObjectId);
-  if (!liked) {
-    res.status(404).json({
-      error: `Liked object with id ${req.params.id} does not exist.`
-    });
-    return;
-  }
-
-  next();
-};
+ const isDoubleLike = async (req: Request, res: Response, next: NextFunction) => {
+    const mixtapeId = (req.params.mixtapeId as string) ?? undefined;
+    const user = (req.query.username as string);
+    const currentLikes: string[] = await LikeCollection.findLikesByMixtape(mixtapeId);
+    const userCurrentLikes = currentLikes.filter((x) => x === user);
+    
+    if (userCurrentLikes.length > 0) {
+        res.status(405).json({
+            message: 'You already liked this freet!'
+        });
+        return;
+    }
+    next();
+  };
+  
 
 /**
- * Checks if a Like with id in req.params doesn't exist
+ * Checks if a user is trying to remove a like without the like existing
  */
-const isLikedDoesntExist = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const likedObjectId = req.params.id ?? (req.body.id as string);
-  const liked = await likedObjectCollection.findOne(likedObjectId);
+ const unlikeWithoutLike = async (req: Request, res: Response, next: NextFunction) => {
+    const mixtapeId = (req.params.mixtapeId as string) ?? undefined;
+    const user = (req.query.username as string);
+    const currentLikes: string[] = await LikeCollection.findLikesByMixtape(mixtapeId);
+    const userCurrentLikes = currentLikes.filter((x) => x === user);
 
-  if (liked) {
-    res.status(403).json({
-      error: `Liked object with id ${req.params.id} already exists.`
-    });
-    return;
-  }
+    if (userCurrentLikes.length === 0) {
+        res.status(405).json({
+            message: 'You have not liked this freet!'
+        });
+        return;
+    }
+    next();
+  };
+  
 
-  next();
-};
 
-export {isLikedExists, isLikedDoesntExist};
+export {isDoubleLike, unlikeWithoutLike};

@@ -7,7 +7,7 @@
     <router-link
     class="memory"
     style="text-decoration: none; color: black"
-    :to="{path: `/comments/${mixtape._id}`, query: {memory: true}}"
+    :to="{path: `/comments/${mixtape._id}`, query: {memory: true} }"
   >
     <img class="square" v-if="mixtape.songs[0].albumCover" :src="mixtape.songs[0].albumCover" />
     <img class="square" v-else-if="mixtape.songs[1].albumCover" :src="mixtape.songs[1].albumCover" />

@@ -13,7 +13,6 @@
 
     <div v-else>
       <div v-if="simpleCover">
-        <!-- <img class='image' :src='albumCover'> -->
         <div class="image-wrapper">
           <img class="image" :src="albumCover" />
           <FavoriteComponent :trackId="trackId" />

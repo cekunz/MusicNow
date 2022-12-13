@@ -156,7 +156,7 @@ export default {
       }
     }
   },
-  updated() {
+  beforeMount() {
     this.$store.commit('refreshFriends');
     this.$store.commit('refreshFriendRequests');
     this.$store.commit('refreshPossibleFriends');

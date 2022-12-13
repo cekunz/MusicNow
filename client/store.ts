@@ -269,12 +269,14 @@ const store = new Vuex.Store({
       /**
        * Update all of the likes
        */
-      const allMixtapes = [
+
+      // this is set to avoid duplicates. quick cheat-y way of doing it and could be imrpoved but it works and its for testing.
+      const allMixtapes = new Set([
         ...(state.mixtapes ?? []),
         ...(state.profileMixtapes ?? [])
-      ];
-      if (allMixtapes.length > 0) {
-        const requests = allMixtapes.map((mixtape) => {
+      ]);
+      if (allMixtapes.size > 0) {
+        const requests = [...allMixtapes].map((mixtape) => {
           const url = `/api/likes/${mixtape._id}`;
           const res = fetch(url).then(async (r) => r.json());
           return res;

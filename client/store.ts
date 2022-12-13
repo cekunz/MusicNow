@@ -76,8 +76,8 @@ const store = new Vuex.Store({
        */
       state.profileMixtapes = profileMixtapes;
     },
-    async refreshProfileIcon(state, updatedProfileIcon){
-      /**    
+    async refreshProfileIcon(state, updatedProfileIcon) {
+      /**
        * Update the stored profileCircleColor to the specified one.
        * @param profileColor - new profileColor to set
        */
@@ -269,8 +269,12 @@ const store = new Vuex.Store({
       /**
        * Update all of the likes
        */
-      if (state.mixtapes.length > 0) {
-        const requests = state.mixtapes.map((mixtape) => {
+      const allMixtapes = [
+        ...(state.mixtapes ?? []),
+        ...(state.profileMixtapes ?? [])
+      ];
+      if (allMixtapes.length > 0) {
+        const requests = allMixtapes.map((mixtape) => {
           const url = `/api/likes/${mixtape._id}`;
           const res = fetch(url).then(async (r) => r.json());
           return res;

@@ -135,20 +135,24 @@ export default {
       if (this.usernameQuery === '') {
         return this.$store.state.nonFriends.splice(0, 5);
       } else {
-        const filtered = this.$store.state.nonFriends.filter((username) =>
-          username.includes(this.usernameQuery)
+        const noCaps = this.usernameQuery.toLowerCase()
+        const usernamesNoCaps = this.$store.state.nonFriends.map((username) => [username,username.toLowerCase()])
+        const filtered = usernamesNoCaps.filter((usernames) =>
+          usernames[1].includes(noCaps)
         );
-        return filtered;
+        return filtered.map((usernames) => usernames[0]);
       }
     },
     friendsToShow() {
       if (this.friendQuery === '') {
         return this.$store.state.friends;
       } else {
-        const filtered = this.$store.state.friends.filter((username) =>
-          username.includes(this.friendQuery)
+        const noCaps = this.friendQuery.toLowerCase()
+        const usernamesNoCaps = this.$store.state.friends.map((username) => [username,username.toLowerCase()])
+        const filtered = usernamesNoCaps.filter((usernames) =>
+          usernames[1].includes(noCaps)
         );
-        return filtered;
+        return filtered.map((usernames) => usernames[0]);
       }
     }
   },

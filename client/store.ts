@@ -304,14 +304,15 @@ const store = new Vuex.Store({
        */
       const newLikes = JSON.parse(JSON.stringify(state.likes)); // Copy to ensure no alliasing occurs;
       const objectId = like.likedObjectId;
-      const user = state.username;
+      const user = state.userId; // check! was username
       if (objectId in newLikes) {
-        const likers = newLikes[objectId].likers;
-
-        // Remove liker with a matching username
-        newLikes[objectId].likers = likers.filter((liker) => {
-          liker !== user;
-        });
+        const newLikers = []
+        for (const liker of newLikes[objectId].likers) {
+          if (liker !== user) {
+            newLikers.push(liker);
+          }
+        }
+        newLikes[objectId].likers = newLikers;
       }
       state.likes = newLikes;
     }

@@ -8,6 +8,7 @@ type MixtapeResponse = {
   songs: Song[];
   creator: String;
   date: String;
+  caption: String;
 };
 
 /**
@@ -23,6 +24,16 @@ const constructMixtapeResponse = (mixtape: HydratedDocument<Mixtape>): MixtapeRe
       versionKey: false // Cosmetics; prevents returning of __v property
     })
   };
+  if (mixtapeCopy.caption !== null && mixtapeCopy.caption !== undefined) {
+    return {
+      ...mixtapeCopy,
+      _id: mixtapeCopy._id.toString(),
+      songs: mixtapeCopy.songs,
+      creator: mixtapeCopy.creator,
+      date: mixtapeCopy.date,
+      caption: mixtapeCopy.caption
+    };
+  }
   return {
     ...mixtapeCopy,
     _id: mixtapeCopy._id.toString(),

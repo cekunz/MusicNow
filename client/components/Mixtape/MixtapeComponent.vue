@@ -27,6 +27,12 @@
         </div>
       </header>
       <div class="content">
+        <div class='caption'>
+          <p v-if="mixtape.caption !== null && mixtape.caption !== undefined && mixtape.caption.length > 0">
+            {{mixtape.caption}}
+          </p>
+        </div>
+        <div class='songs'>
         <SongComponent
           :trackName="mixtape.songs[0].songTitle"
           :artist="mixtape.songs[0].songArtist"
@@ -48,6 +54,7 @@
           :albumCover="mixtape.songs[2].albumCover"
           :simpleCover="true"
         />
+        </div>
       </div>
       <section class="alerts">
         <article
@@ -169,13 +176,32 @@ export default {
 </script>
 
 <style scoped>
-.content {
+.songs {
   display: flex;
   flex-direction: row;
   justify-content: center;
   margin: 50px 0;
 }
 
+.caption {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: left;
+  margin-top: 10px;
+  margin-bottom: -65px;
+  margin-left: 20px;
+  margin-right: 0px;
+  font-size: 22px;
+  width: 630px;
+  /* font-weight: lighter; */
+}
+.content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 50px;
+}
 .circle {
   display: inline-block;
   background-color: v-bind(profileCircleColor);
@@ -221,9 +247,6 @@ export default {
 }
 
 .username-container {
-  /* display: flex;
-  flex-direction: row;
-  align-content: center; */
   position: absolute;
   z-index: 1;
   left: 40px;
@@ -233,7 +256,6 @@ export default {
 .username-link {
   position: absolute;
   z-index: 1;
-  /* left: 40px; */
   top: 25%;
 }
 

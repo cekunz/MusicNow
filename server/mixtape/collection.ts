@@ -31,12 +31,24 @@ class MixtapeCollection {
     song2: Song,
     song3: Song,
     username: string,
-    date: string
+    date: string,
+    caption: string | null
   ): Promise<HydratedDocument<Mixtape>> {
+    if (caption !== null) {
+      const mixtape = new MixtapeModel({
+        songs: [song1, song2, song3],
+        creator: username,
+        date,
+        caption
+      });
+      await mixtape.save(); // Saves mixtape to MongoDB
+      return mixtape;
+    }
+    
     const mixtape = new MixtapeModel({
       songs: [song1, song2, song3],
       creator: username,
-      date
+      date,
     });
     await mixtape.save(); // Saves mixtape to MongoDB
     return mixtape;

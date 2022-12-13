@@ -17,6 +17,7 @@
           <MemoryComponent 
             class="memory-page"
             v-for="mixtape in this.$store.state.profileMixtapes"
+            :key="mixtape"
             :mixtape="mixtape"
           />
         </div>

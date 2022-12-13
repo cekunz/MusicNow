@@ -102,6 +102,7 @@ router.get(
  * @param {string} song2Id - The track Id of the song on spotify
  * @param {string} song3Id - The track Id of the song on spotify
  * @param {string} username - The name of the creator
+ * @param {string} caption - the caption of the mixtape  
  *
  * @return {MixtapeResponse} - The created song
  * @throws {403} - If the user is not logged in
@@ -113,13 +114,15 @@ router.post(
     const song1 = await SongCollection.findOne(req.body.song1);
     const song2 = await SongCollection.findOne(req.body.song2);
     const song3 = await SongCollection.findOne(req.body.song3);
+    const caption = req.body.caption;
     const {username} = req.params;
     const mixtape = await MixtapeCollection.addOne(
       song1,
       song2,
       song3,
       username,
-      formatDate()
+      formatDate(),
+      caption
     );
 
     // Create a new like object to go along with the mixtape

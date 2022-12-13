@@ -1,16 +1,18 @@
 <template>
-  <article class="friend">
-    <header>
-      <h3 class="author" v-if="this.$store.state.friends.includes(friend)">
-        <router-link
-          style="text-decoration: none; color: black"
-          :to="{name: 'Profile', params: {name: friend}}"
-        >
-          <span v-on:click="goToProfile"> @{{ friend }} </span>
-        </router-link>
-      </h3>
-      <h3 class="author" v-else>@{{ friend }}</h3>
-    </header>
+  <article v-if="profileCircleText !== null" class="friend">
+    <div class="circle">
+      <p class="circle-inner">{{ profileCircleText }}</p>
+    </div>
+    <h3 class="author " v-if="this.$store.state.friends.includes(friend)">
+      <router-link
+        style="text-decoration: none; color: black"
+        :to="{name: 'Profile', params: {name: friend}}"
+      >
+        <span v-on:click="goToProfile"> @{{ friend }} </span>
+      </router-link>
+    </h3>
+    <h3 class="author" v-else> @{{ friend }}</h3>
+    <div class="filler"></div>
     <div class="right">
       <button class="button-deny" @click="removeFriend" v-if="confirmed">
         Remove Friend
@@ -42,6 +44,9 @@
       </article>
     </section>
   </article>
+  <article v-else class="friend">
+    <i class="fas fa-circle-notch fa-spin fa-2x loading" />
+  </article>
 </template>
 
 <script>
@@ -69,8 +74,24 @@ export default {
   },
   data() {
     return {
+      profileCircleColor: null,
+      profileCircleText: null,
       alerts: {} // Displays success/error messages encountered during freet modification
     };
+  },
+  async beforeMount() {
+    const url = `/api/profile?username=${this.friend}`;
+    const res = await fetch(url).then(async (r) => r.json());
+    if (res.iconText === undefined) {
+      this.profileCircleText = res.fullName[0];
+    } else {
+      this.profileCircleText = res.iconText;
+    }
+    if (res.iconColor === undefined) {
+      this.profileCircleColor = '#ccc';
+    } else {
+      this.profileCircleColor = res.iconColor;
+    }
   },
   methods: {
     goToProfile() {
@@ -200,16 +221,20 @@ export default {
 
 .right {
   display: flex;
-  flex-direction: row;
-  justify-content: right;
+  /* float: right; */
 }
 .friend {
+  display: flex;
   padding: 10px;
   margin-bottom: 20px;
   border: solid 2px rgb(197, 197, 197);
   border-radius: 12px;
   width: 100%;
   background-color: white;
+}
+
+.author {
+  display: flex;
 }
 
 button {
@@ -238,5 +263,35 @@ button:hover {
   background-color: rgb(255, 255, 255);
   border-width: 2px;
   color: #e9112a;
+}
+
+.circle {
+  background-color: v-bind(profileCircleColor);
+  margin-top: 5px;
+  margin-right: 10px;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+}
+
+.circle-inner {
+  color: black;
+  display: table-cell;
+  align-content: center;
+  vertical-align: middle;
+  text-align: center;
+  text-decoration: none;
+  height: 60px;
+  width: 60px;
+  font-size: 22px;
+}
+
+.filler {
+  flex-grow: 1;
+}
+
+.loading{
+  
+  margin: auto
 }
 </style>

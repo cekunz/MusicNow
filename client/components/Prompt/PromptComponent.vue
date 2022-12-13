@@ -1,6 +1,7 @@
 <template>
    <div class="center">
-      <h1> {{ $store.state.prompt.promptText }} </h1>
+      <h1 v-if="$store.state.prompt !== undefined"> {{ $store.state.prompt.promptText }} </h1>
+      <h1> Create anthing you want </h1>
    </div>
 </template>
 

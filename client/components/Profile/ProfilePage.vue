@@ -218,7 +218,7 @@ button:hover {
   flex-direction: column;
   justify-content: center;
   text-align: center;
-  border: solid 3px rgb(24, 23, 23);
+  border: solid 1px rgb(24, 23, 23);
   border-radius: 2px;
   text-decoration: none;
 }
@@ -252,14 +252,6 @@ button:hover {
   margin: 300px;
   color: rgba(0, 0, 0, 0.545);
 }
-/* .not-modal {
-  background-color: #e5fff6;
-}
-.view-all-songs {
-  /* width: 100%;
-  height: 100%;
-  margin-top: 55%; */
-
 
 .hover-view:hover {
   text-decoration: underline;

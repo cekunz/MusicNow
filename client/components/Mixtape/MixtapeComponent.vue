@@ -25,9 +25,9 @@
         <div v-if="$store.state.username === mixtape.creator" class="actions">
           <button @click="deleteMixtape">🗑️ Delete</button>
         </div>
-         <div v-if="$store.state.username === mixtape.creator" class="actions">
+         <!-- <div v-if="$store.state.username === mixtape.creator" class="actions">
           <button @click="editCaption">Edit Caption</button>
-        </div>
+        </div> -->
         
       </header>
       <div class="content">

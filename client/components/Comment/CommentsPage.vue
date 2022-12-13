@@ -10,7 +10,7 @@
         <h2 v-else>
           <router-link
             style="text-decoration: none; color: black"
-            :to="{name: 'Profile', params: {name: this.$store.state.profileUsername}}"
+            :to="{name: 'Profile', params: {name: this.$store.state.profileUsername} }"
           >
             <i class="fas fa-arrow-left left-side"></i>
           </router-link>
@@ -53,10 +53,12 @@ export default {
   computed: {
     mixtape() {
       // look for mixtapes in current feed and profile
-      const allMixtapes = [
+      const allMixtapesSet = new Set([
         ...(this.$store.state.mixtapes ?? []),
+        (this.$store.state.personalMixtape ?? []),
         ...(this.$store.state.profileMixtapes ?? [])
-      ];
+      ]);
+      const allMixtapes = [...allMixtapesSet];
       for (const mixtape of allMixtapes) {
         if (this.$route.params.mixtapeId === mixtape._id) {
           return mixtape;

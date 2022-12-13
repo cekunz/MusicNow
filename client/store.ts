@@ -27,7 +27,7 @@ const store = new Vuex.Store({
     friendRequests: [],
     nonFriends: [],
     favorites: [],
-    prompt: '', // the daily prompt
+    prompt: null, // the daily prompt
     likes: [], // All likes from friends
     comments: []
   },

@@ -83,7 +83,7 @@ export default {
     const url = `/api/profile?username=${this.friend}`;
     const res = await fetch(url).then(async (r) => r.json());
     if (res.iconText === undefined) {
-      this.profileCircleText = res.fullName[0];
+      this.profileCircleText = res.fullName ? res.fullName[0] : this.friend[0];
     } else {
       this.profileCircleText = res.iconText;
     }

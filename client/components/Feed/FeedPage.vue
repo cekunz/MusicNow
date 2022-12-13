@@ -24,7 +24,7 @@
         <MusicNowHeader /> 
       <div class="heading">
         <h2>Today's prompt</h2>
-        <h1 class='prompt'>{{ $store.state.prompt.promptText }}</h1>
+        <h1 class='prompt'>{{ feedPrompt }}</h1>
       </div>
 
       <center>
@@ -79,7 +79,8 @@ export default {
   },
   computed: {
     feedPrompt() {
-      const prompt = this.$store.state.prompt.promptText;
+      const prompt = this.$store.state.prompt ? this.$store.state.prompt.promptText 
+                                              : " ";
       const promptSection = prompt.substring(25);
       return `${promptSection}`;
     }

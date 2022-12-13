@@ -54,10 +54,12 @@ export default {
 
 .memory {
   margin: 2%;
-  /* border: solid 3px rgb(176, 176, 176); */
-  /* background-color: rgb(176, 176, 176); */
-  border: solid 3px #009965;
-  background-color: #009965;
+  /* border: solid 3px rgb(176, 176, 176);
+  background-color: rgb(176, 176, 176); */
+  /* border: solid 3px #009965;
+  background-color: #009965; */
+  border: solid 3px #7bebc8;
+  background-color: #7bebc8;
   border-radius: 2px;
   height: 44%;
   width: 20%;

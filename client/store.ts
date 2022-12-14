@@ -173,7 +173,11 @@ const store = new Vuex.Store({
       const today = `${month} ${day}, ${year}`;
       const url = `/api/mixtape/${state.username}?date=${today}&feed=true`;
       const res = await fetch(url).then(async (r) => r.json());
-      state.mixtapes = res;
+      if (res.status === 200) {
+        state.mixtapes = res;
+      } else {
+        state.mixtapes = [];
+      }
     },
     async refreshFriends(state) {
       /**

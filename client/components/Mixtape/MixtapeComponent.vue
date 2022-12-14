@@ -75,14 +75,15 @@
         </article>
       </section>
       <LikeComponent :mixtapeId="mixtape._id" />
-      <div v-if="showComments === false" class="comment-button-container">
+      <div
+        v-if="showComments === false"
+        class="comment-button-container"
+        @click="$router.push(`/comments/${mixtape._id}`)"
+      >
         <!-- <button @click="$router.push(`/comments/${mixtape._id}`)">
           Comments
         </button> -->
-        <i
-          class="far fa-comment fa-lg"
-          @click="$router.push(`/comments/${mixtape._id}`)"
-        ></i>
+        <i class="far fa-comment fa-lg"></i>
         Comments
       </div>
     </div>

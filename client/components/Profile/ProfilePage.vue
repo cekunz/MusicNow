@@ -59,7 +59,7 @@
             <div class="favorites-rectangle">
               <SongComponent
                 v-for="favorite in this.favoriteSongsToDisplay"
-                :key="favorite"
+                :key="favorite._id"
                 class="profile-song"
                 :trackName="favorite.song.songTitle"
                 :artist="favorite.song.songArtist"

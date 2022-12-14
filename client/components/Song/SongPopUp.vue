@@ -3,33 +3,27 @@
   <div class="modal-mask">
     <div class="modal-wrapper">
       <div class="modal-container1">
-        <button class="modal-default-button" @click="$emit('close')">
-          X
-        </button>
+        <button class="modal-default-button" @click="$emit('close')">X</button>
         <div class="modal-body1">
-          <div class="songSearch"> 
-            <textarea
-            @input="searchQuery = $event.target.value"
-            placeholder="Search for a song by title, artist, or album name..."
+          <div class="songSearch">
+            <input
+              @input="searchQuery = $event.target.value"
+              @keyup.enter="submitSong"
+              placeholder="Search for a song by title, artist, or album name..."
             />
-            <button class ='submit'
-            @click="submitSong"
-            >
-            Search
-            </button>
+            <button class="submit" @click="submitSong">Search</button>
           </div>
-        <div v-if="selecting" class="songPicture"> 
-              
-          <SongComponent 
-          v-for="result in searchResults"
-          @select="selected"
-          :key="result.index"
-          :trackName="result.trackName"
-          :artist="result.artist"
-          :trackId="result.trackId"
-          :albumCover="result.albumCover"/>
-        </div>
-          
+          <div v-if="selecting" class="songPicture">
+            <SongComponent
+              v-for="result in searchResults"
+              @select="selected"
+              :key="result.index"
+              :trackName="result.trackName"
+              :artist="result.artist"
+              :trackId="result.trackId"
+              :albumCover="result.albumCover"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -42,13 +36,12 @@ import SongComponent from '@/components/Song/SongComponent.vue';
 export default {
   name: 'SongPopUp',
   components: {SongComponent},
-  props: {
-  },
+  props: {},
   data() {
     return {
       selecting: false,
       artist: '',
-      trackName: '', 
+      trackName: '',
       trackId: '',
       albumCover: '',
       searchQuery: '',
@@ -63,9 +56,14 @@ export default {
       this.artist = songInfo.songArtist;
       this.trackId = songInfo.trackId;
       this.albumCover = songInfo.albumCover;
-      await this.createSong(songInfo)
+      await this.createSong(songInfo);
       this.submitted = true;
-      this.$emit('selected', {songTitle: this.trackName, songArtist: this.artist, trackId: songInfo.trackId, albumCover: this.albumCover})
+      this.$emit('selected', {
+        songTitle: this.trackName,
+        songArtist: this.artist,
+        trackId: songInfo.trackId,
+        albumCover: this.albumCover
+      });
     },
     formatSongs(result) {
       /**
@@ -73,26 +71,30 @@ export default {
        */
       this.searchResults = [];
       for (const s of result) {
-        const trackId = '' + s.id ;
+        const trackId = '' + s.id;
         const artist = s.artists[0].name;
         const trackName = s.name;
-        const albumCover = s.album.images[1].url 
-        this.searchResults.push({artist:artist, trackName:trackName, albumCover:albumCover, trackId: trackId});
+        const albumCover = s.album.images[1].url;
+        this.searchResults.push({
+          artist: artist,
+          trackName: trackName,
+          albumCover: albumCover,
+          trackId: trackId
+        });
       }
       return;
-
     },
     async createSong(songDetails) {
       /**
        * Create song object in db
        */
       const options = {
-        method: 'POST', 
+        method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(songDetails)
       };
-      
-       try {
+
+      try {
         const r = await fetch('api/song', options);
         if (!r.ok) {
           const res = await r.json();
@@ -118,8 +120,8 @@ export default {
           setTimeout(() => this.$delete(this.alerts, params.message), 3000);
         }
       };
-     this.request(params);
-     this.searchQuery = "";
+      this.request(params);
+      this.searchQuery = '';
     },
     async request(params) {
       /**
@@ -129,7 +131,8 @@ export default {
        * @param params.callback - Function to run if the the request succeeds
        */
       const options = {
-        method: params.method, headers: {'Content-Type': 'application/json'}
+        method: params.method,
+        headers: {'Content-Type': 'application/json'}
       };
       if (params.body) {
         options.body = params.body;
@@ -157,14 +160,22 @@ export default {
 </script>
 
 <style>
+input {
+  font-size: 16px;
+  height: 2em;
+  border: rgb(63, 63, 63) solid 1px;
+  padding: 0 8px;
+  border-radius: 8px;
+}
 button {
   padding: 8px;
+  margin: 8px;
   font-size: 16px;
   align-self: center;
   border: solid 1px #ccc;
+  border-radius: 8px;
   /* background-color: rgb(255, 255, 255); */
-  background-color: aquamarine;
-  border-radius: 2px;
+  background-color: white;
 }
 
 .submit {
@@ -173,7 +184,7 @@ button {
   align-self: center;
   border: solid 1px #ccc;
   /* background-color: rgb(255, 255, 255); */
-  background-color: aquamarine;
+  background-color: rgb(214, 255, 241);
   border-radius: 2px;
 }
 
@@ -183,9 +194,9 @@ button {
 
 button:hover {
   /* background-color: rgb(54, 54, 54); */
-  background-color: #004c33;
+  background-color: #e8fff7;
   color: white;
-  border-color: rgb(54, 54, 54);
+  border-color: #81ffd3;
 }
 
 .modal-mask {
@@ -206,11 +217,11 @@ button:hover {
 .modal-container1 {
   height: 820px;
   width: 100px;
-  margin: 100px 100px; 
+  margin: 100px 100px;
   padding: 20px 20px;
   /* background-color: #ccc; */
   background-color: aquamarine;
-  border-radius: 2px;
+  border-radius: 18px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
   font-family: Helvetica, Arial, sans-serif;
 }
@@ -218,12 +229,13 @@ button:hover {
 .modal-body1 {
   margin: 20px 0;
 }
-.modal-default-button {
+/* .modal-default-button {
   float: right;
 }
 .modal-default-button:hover {
-  background-color: #004c33;
-}
+  background-color: #dcfff3;
+  border-color: #81ffd3;
+} */
 .songSearch {
   display: flex;
   flex-direction: column;
@@ -237,10 +249,9 @@ button:hover {
   column-gap: 20px;
   grid-auto-rows: 120px;
   grid-template-areas:
-    " a a "
-    " b b "
-    " c c ";
-  align-self: center; 
+    ' a a '
+    ' b b '
+    ' c c ';
+  align-self: center;
 }
-
 </style>

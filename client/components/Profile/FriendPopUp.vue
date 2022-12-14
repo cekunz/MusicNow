@@ -2,11 +2,9 @@
   <div class="modal-mask">
     <div class="modal-wrapper">
       <div class="modal-container1">
-        <button class="modal-default-button" @click="$emit('close')">
-          X
-        </button>
+        <button class="modal-default-button" @click="$emit('close')">X</button>
         <div class="modal-body1">
-          <FriendComponent 
+          <FriendComponent
             v-for="friend in friends"
             class="friend"
             :key="friend"
@@ -29,16 +27,15 @@ export default {
     friends: {
       type: Array,
       required: true
-    },
+    }
   },
   data() {
     return {
-      list: this.friends,
+      list: this.friends
     };
   },
-  methods: {
-      }
-        }
+  methods: {}
+};
 </script>
 
 <style>
@@ -78,7 +75,7 @@ button:hover {
   margin: 0px auto;
   padding: 20px 30px;
   background-color: white;
-  border-radius: 2px;
+  border-radius: 18px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
   font-family: Helvetica, Arial, sans-serif;
   max-height: 600px;
@@ -98,5 +95,4 @@ button:hover {
   border: solid 1px white;
   background-color: white;
 }
-
 </style>

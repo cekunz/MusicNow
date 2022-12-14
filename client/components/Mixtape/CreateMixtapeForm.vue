@@ -1,42 +1,41 @@
 <!-- Form for creating Mixtape -->
 
 <template>
-<div class='forms-container'>
+  <div class="forms-container">
     <header>
-        <PromptComponent />
+      <PromptComponent />
     </header>
     <section class="songs">
-        <SelectSongForm style='margin-right:30px' @submit="updateSong1" />
-        <SelectSongForm style='margin-right:30px' @submit="updateSong2"/>
-        <SelectSongForm @submit="updateSong3"/>
+      <SelectSongForm style="margin-right: 30px" @submit="updateSong1" />
+      <SelectSongForm style="margin-right: 30px" @submit="updateSong2" />
+      <SelectSongForm @submit="updateSong3" />
     </section>
 
-     <div class=buttons >
-      <div class='captionInput'
-        v-if="song1!==null && song2!==null && song3!==null"
+    <div class="buttons">
+      <div
+        class="captionInput"
+        v-if="song1 !== null && song2 !== null && song3 !== null"
       >
         <label for="caption"> Caption your Mixtape:</label>
         <textarea
-            type="text"
-            id="caption"
-            @input="caption = $event.target.value"
-            placeholder="Optional, 200 character limit"
-            maxlength="200"
-            style="resize: none"
-            
-          />
+          type="text"
+          id="caption"
+          @input="caption = $event.target.value"
+          placeholder="Optional, 200 character limit"
+          maxlength="200"
+          style="resize: none"
+        />
       </div>
-     </div>
+    </div>
 
-     <button class='submit'
-      v-if="song1!==null && song2!==null && song3!==null"
+    <button
+      class="submit"
+      v-if="song1 !== null && song2 !== null && song3 !== null"
       @click="submitMixtape"
     >
       Submit
     </button>
-
-
-</div>
+  </div>
 </template>
 
 <script>
@@ -60,13 +59,13 @@ export default {
     openCaption() {
       this.editingCaption = true;
     },
-    updateSong1(song1){
+    updateSong1(song1) {
       this.song1 = song1.trackId;
     },
-    updateSong2(song2){
+    updateSong2(song2) {
       this.song2 = song2.trackId;
     },
-    updateSong3(song3){
+    updateSong3(song3) {
       this.song3 = song3.trackId;
     },
 
@@ -76,7 +75,12 @@ export default {
        */
 
       // only pass in the trackId
-      const body = JSON.stringify({song1: this.song1, song2: this.song2, song3:this.song3, caption: this.caption});
+      const body = JSON.stringify({
+        song1: this.song1,
+        song2: this.song2,
+        song3: this.song3,
+        caption: this.caption
+      });
       const params = {
         method: 'POST',
         message: 'Successfully created mixtape!',
@@ -96,14 +100,18 @@ export default {
        * @param params.callback - Function to run if the the request succeeds
        */
       const options = {
-        method: params.method, headers: {'Content-Type': 'application/json'}
+        method: params.method,
+        headers: {'Content-Type': 'application/json'}
       };
       if (params.body) {
         options.body = params.body;
       }
 
       try {
-        const r = await fetch(`/api/mixtape/${this.$store.state.username}`, options);
+        const r = await fetch(
+          `/api/mixtape/${this.$store.state.username}`,
+          options
+        );
         if (!r.ok) {
           const res = await r.json();
           throw new Error(res.error);
@@ -123,7 +131,6 @@ export default {
 };
 </script>
 
-
 <style scoped>
 .forms-container {
   margin: auto;
@@ -131,7 +138,8 @@ export default {
   flex-direction: column;
   justify-content: center;
   width: 100%;
-  border: solid 4px rgb(192, 192, 192);
+  border: solid 2px rgb(192, 192, 192);
+  border-radius: 16px;
   background-color: white;
 }
 
@@ -146,7 +154,6 @@ export default {
 .caption {
   font-size: 18px;
   margin-bottom: 15px;
-
 }
 .buttons {
   margin-top: 10px;
@@ -163,13 +170,9 @@ h2 {
   flex-direction: row;
   justify-content: center;
   padding-bottom: 50px;
-  
 }
 .submit {
   width: 300px;
   text-align: center;
-} 
-
-
-
+}
 </style>

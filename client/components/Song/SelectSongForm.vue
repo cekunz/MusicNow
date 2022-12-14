@@ -1,37 +1,27 @@
 <!-- Form for creating Song Selection -->
 
 <template>
-<div>
+  <div>
     <section v-if="!submitted">
-        <div v-if="!editing">
-            <button class='plus'
-            v-if="!editing"
-            @click="startEditing"  
-            >
-            +
-            </button> 
-        </div>
-        <div v-if="editing" class="song"> 
-           <SongPopUp 
-           @close="close"
-           @selected="selected"
-           />
-         
-        </div>
+      <div v-if="!editing">
+        <button class="plus" v-if="!editing" @click="startEditing">+</button>
+      </div>
+      <div v-if="editing" class="song">
+        <SongPopUp @close="close" @selected="selected" />
+      </div>
     </section>
-    <section class='submitted' v-if="submitted">
-       <SongComponent 
+    <section class="submitted" v-if="submitted">
+      <SongComponent
         @cleared="close"
         :trackName="trackName"
         :artist="artist"
         :trackId="trackId"
         :albumCover="albumCover"
         :editable="true"
-        />
-         <!-- :simpleCover="true" -->
-       
+      />
+      <!-- :simpleCover="true" -->
     </section>
-</div>
+  </div>
 </template>
 
 <script>
@@ -43,16 +33,16 @@ export default {
   components: {SongComponent, SongPopUp},
   props: {
     prompt: {
-        type: Object,
-        required: false
-    },
+      type: Object,
+      required: false
+    }
   },
   data() {
     return {
       editing: false, // Whether or not this song is in edit mode
       selecting: false,
       artist: '',
-      trackName: '', 
+      trackName: '',
       trackId: '',
       albumCover: '',
       searchQuery: '',
@@ -70,44 +60,52 @@ export default {
       /**
        * Enables edit mode on this song.
        */
-       this.editing = true; 
+      this.editing = true;
     },
     async selected(songInfo) {
       this.trackName = songInfo.songTitle;
       this.artist = songInfo.songArtist;
       this.trackId = songInfo.trackId;
       this.albumCover = songInfo.albumCover;
-      await this.createSong(songInfo)
+      await this.createSong(songInfo);
       this.submitted = true;
       this.editing = false;
-      this.$emit('submit', {songTitle: this.trackName, songArtist: this.artist, trackId: songInfo.trackId})
+      this.$emit('submit', {
+        songTitle: this.trackName,
+        songArtist: this.artist,
+        trackId: songInfo.trackId
+      });
     },
     formatSongs(result) {
       /**
        * puts search results into a usable format
        */
       for (const s of result) {
-        const trackId = '' + s.id ;
+        const trackId = '' + s.id;
         const artist = s.artists[0].name;
         const trackName = s.name;
-        const albumCover = s.album.images[1].url 
-        this.searchResults.push({artist:artist, trackName:trackName, albumCover:albumCover, trackId: trackId});
+        const albumCover = s.album.images[1].url;
+        this.searchResults.push({
+          artist: artist,
+          trackName: trackName,
+          albumCover: albumCover,
+          trackId: trackId
+        });
       }
-      
-      return;
 
+      return;
     },
     async createSong(songDetails) {
       /**
        * Create song object in db
        */
       const options = {
-        method: 'POST', 
+        method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(songDetails)
       };
-      
-       try {
+
+      try {
         const r = await fetch('api/song', options);
         if (!r.ok) {
           const res = await r.json();
@@ -123,7 +121,7 @@ export default {
        * Finds song for mixtape
        * - first get the song objects, then ping the mixtape endpoint
        */
-      const url = `api/song/search?q=${this.searchQuery}&type=track`
+      const url = `api/song/search?q=${this.searchQuery}&type=track`;
       const params = {
         url: url,
         method: 'GET',
@@ -133,7 +131,7 @@ export default {
           setTimeout(() => this.$delete(this.alerts, params.message), 3000);
         }
       };
-     this.request(params);
+      this.request(params);
     },
     async request(params) {
       /**
@@ -143,7 +141,8 @@ export default {
        * @param params.callback - Function to run if the the request succeeds
        */
       const options = {
-        method: params.method, headers: {'Content-Type': 'application/json'}
+        method: params.method,
+        headers: {'Content-Type': 'application/json'}
       };
       if (params.body) {
         options.body = params.body;
@@ -172,13 +171,12 @@ export default {
 </script>
 
 <style scoped>
-
 .plus {
   font-size: 30px;
   padding: 70px;
   margin: 10px;
-  border: solid 4px rgb(192, 192, 192);
-  border-radius: 2px;
+  border: solid 2px rgb(192, 192, 192);
+  border-radius: 8px;
   width: 100%;
 }
 
@@ -197,13 +195,13 @@ export default {
 }
 
 button {
-  background-color: aquamarine;
+  background-color: rgb(255, 255, 255);
 }
 
 button:hover {
   /* background-color: rgb(84, 84, 84); */
-  background-color: #009965;
-  color: white;
-  border-color: rgb(54, 54, 54);
+  background-color: #e4fff7;
+  color: rgb(56, 108, 90);
+  border-color: rgb(88, 229, 180);
 }
 </style>

@@ -131,9 +131,13 @@ export default {
 button {
   font-size: 15px;
   padding: 5px;
-  background-color: aquamarine;
+  border-radius: 8px;
+  background-color: rgb(255, 255, 255);
 }
 button:hover {
-  background-color: #009965;
+  background-color: #e4fff7;
+  color: rgb(56, 108, 90);
+  border-color: rgb(88, 229, 180);
+  color: black;
 }
 </style>

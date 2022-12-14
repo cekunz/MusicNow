@@ -9,8 +9,10 @@
             <div class="circle">
               <p class="circle-inner">{{ profilePicText }}</p>
             </div>
-            <h2 class="info">{{ $store.state.profileFullname }}</h2>
-            <h2 class="info">@{{ $store.state.profileUsername }}</h2>
+            <div class="name-info">
+              <h3>{{ $store.state.profileFullname }}</h3>
+              <h3>@{{ $store.state.profileUsername }}</h3>
+            </div>
             <button @click="open">
               {{ $store.state.profileFriends.length }} Friends
             </button>
@@ -142,7 +144,7 @@ button {
   padding: 10px;
   font-size: 20px;
   align-self: center;
-  margin-top: 30px;
+  margin-top: 50px;
   border: solid 1px rgb(211, 211, 211);
   background-color: rgb(255, 255, 255);
   border-radius: 2px;
@@ -157,8 +159,18 @@ button:hover {
   cursor: pointer;
 }
 
-.info {
+.name-info {
   margin: 0px;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  align-items: center;
+  width: 100%;
+  bottom: 50px;
+}
+
+.name-info h3 {
+  margin: 4px;
 }
 
 .left {
@@ -240,6 +252,7 @@ button:hover {
 
 .user-info {
   text-align: center;
+  position: relative;
 }
 .memory-info {
   text-align: center;

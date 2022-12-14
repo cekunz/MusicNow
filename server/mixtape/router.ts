@@ -13,11 +13,11 @@ const router = express.Router();
  * @returns current date formatted as month, day, year
  */
 function formatDate() {
-  const date = new Date();
-  const day = date.getDate();
-  const month = date.toLocaleString('default', {month: 'long'});
-  const year = date.getFullYear();
-  // Formatted as Month Day, Year (Nov 21, 2022 for example)
+  const date = new Date()
+  const day = date.toLocaleString('en-US', {timeZone: 'America/New_York', day: 'numeric'});
+  const month = date.toLocaleString('en-US', {timeZone: 'America/New_York', month: 'long'});
+  const year = date.toLocaleString('en-US', {timeZone: 'America/New_York', year: 'numeric'});
+  // // Formatted as Month Day, Year (Nov 21, 2022 for example)
 
   return `${month} ${day}, ${year}`;
 }

@@ -67,6 +67,5 @@ button:hover {
 }
 
 main {
-  background-color: #e5fff6;
 }
 </style>

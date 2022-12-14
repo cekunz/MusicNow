@@ -52,7 +52,6 @@
       </div>
       <div v-else>
         <div class="friends" v-if="usernameQuery === ''">
-          >
           <h2>
             There are currently no other users to add as friends, check back
             later!

@@ -25,39 +25,44 @@
         <div v-if="$store.state.username === mixtape.creator" class="actions">
           <button @click="deleteMixtape">🗑️ Delete</button>
         </div>
-         <!-- <div v-if="$store.state.username === mixtape.creator" class="actions">
+        <!-- <div v-if="$store.state.username === mixtape.creator" class="actions">
           <button @click="editCaption">Edit Caption</button>
         </div> -->
-        
       </header>
       <div class="content">
-        <div class='caption'>
-          <p v-if="mixtape.caption !== null && mixtape.caption !== undefined && mixtape.caption.length > 0">
-            {{mixtape.caption}}
+        <div class="caption">
+          <p
+            v-if="
+              mixtape.caption !== null &&
+              mixtape.caption !== undefined &&
+              mixtape.caption.length > 0
+            "
+          >
+            {{ mixtape.caption }}
           </p>
         </div>
-        <div class='songs'>
-        <SongComponent
-          :trackName="mixtape.songs[0].songTitle"
-          :artist="mixtape.songs[0].songArtist"
-          :trackId="mixtape.songs[0].trackId"
-          :albumCover="mixtape.songs[0].albumCover"
-          :simpleCover="true"
-        />
-        <SongComponent
-          :trackName="mixtape.songs[1].songTitle"
-          :artist="mixtape.songs[1].songArtist"
-          :trackId="mixtape.songs[1].trackId"
-          :albumCover="mixtape.songs[1].albumCover"
-          :simpleCover="true"
-        />
-        <SongComponent
-          :trackName="mixtape.songs[2].songTitle"
-          :artist="mixtape.songs[2].songArtist"
-          :trackId="mixtape.songs[2].trackId"
-          :albumCover="mixtape.songs[2].albumCover"
-          :simpleCover="true"
-        />
+        <div class="songs">
+          <SongComponent
+            :trackName="mixtape.songs[0].songTitle"
+            :artist="mixtape.songs[0].songArtist"
+            :trackId="mixtape.songs[0].trackId"
+            :albumCover="mixtape.songs[0].albumCover"
+            :simpleCover="true"
+          />
+          <SongComponent
+            :trackName="mixtape.songs[1].songTitle"
+            :artist="mixtape.songs[1].songArtist"
+            :trackId="mixtape.songs[1].trackId"
+            :albumCover="mixtape.songs[1].albumCover"
+            :simpleCover="true"
+          />
+          <SongComponent
+            :trackName="mixtape.songs[2].songTitle"
+            :artist="mixtape.songs[2].songArtist"
+            :trackId="mixtape.songs[2].trackId"
+            :albumCover="mixtape.songs[2].albumCover"
+            :simpleCover="true"
+          />
         </div>
       </div>
       <section class="alerts">
@@ -71,9 +76,14 @@
       </section>
       <LikeComponent :mixtapeId="mixtape._id" />
       <div v-if="showComments === false" class="comment-button-container">
-        <button @click="$router.push(`/comments/${mixtape._id}`)">
+        <!-- <button @click="$router.push(`/comments/${mixtape._id}`)">
           Comments
-        </button>
+        </button> -->
+        <i
+          class="far fa-comment fa-lg"
+          @click="$router.push(`/comments/${mixtape._id}`)"
+        ></i>
+        Comments
       </div>
     </div>
   </article>
@@ -264,10 +274,18 @@ export default {
 }
 
 .comment-button-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
   position: absolute;
   z-index: 1;
   right: 40px;
   bottom: 40px;
+}
+
+.comment-button-container:hover {
+  color: #12de9d;
+  cursor: pointer;
 }
 
 .delete-button-container {

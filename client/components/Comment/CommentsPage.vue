@@ -68,11 +68,25 @@ export default {
   computed: {
     mixtape() {
       // look for mixtapes in current feed and profile
-      const allMixtapesSet = new Set([
-        ...(this.$store.state.mixtapes ?? []),
-        this.$store.state.personalMixtape ?? [],
-        ...(this.$store.state.profileMixtapes ?? [])
-      ]);
+      const allMixtapesSet = new Set();
+      if (this.$store.state.mixtapes && this.$store.state.mixtapes.length > 0) {
+        this.$store.state.mixtapes.forEach((mixtape) => {
+          allMixtapesSet.add(mixtape);
+        });
+      }
+      if (
+        this.$store.state.profileMixtapes &&
+        this.$store.state.profileMixtapes.length > 0
+      ) {
+        this.$store.state.profileMixtapes.forEach((mixtape) => {
+          allMixtapesSet.add(mixtape);
+        });
+      }
+
+      if (this.$store.state.personalMixtape) {
+        allMixtapesSet.add(this.$store.state.personalMixtape);
+      }
+
       const allMixtapes = [...allMixtapesSet];
       for (const mixtape of allMixtapes) {
         if (this.$route.params.mixtapeId === mixtape._id) {

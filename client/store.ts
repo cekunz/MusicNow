@@ -171,9 +171,10 @@ const store = new Vuex.Store({
       // Formatted as Month Day, Year (Nov 21, 2022 for example)
 
       const today = `${month} ${day}, ${year}`;
+
       const url = `/api/mixtape/${state.username}?date=${today}&feed=true`;
       const res = await fetch(url).then(async (r) => r.json());
-      if (res.status === 200) {
+      if (res.length > 0) { 
         state.mixtapes = res;
       } else {
         state.mixtapes = [];

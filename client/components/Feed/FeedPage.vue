@@ -82,7 +82,7 @@ export default {
       const prompt = this.$store.state.prompt ? this.$store.state.prompt.promptText 
                                               : " ";
       const promptSection = prompt.substring(25);
-      return `${promptSection}`;
+      return `${prompt}`;  // Section
     }
   }
 };

@@ -6,7 +6,7 @@
   <article>
     <section v-if="profileCircleText !== null" class="comment-container">
       <div class="circle-profile">
-        <p class="circle-inner">{{ this.profileCircleText }}</p>
+        <p class="circle-profile-inner">{{ this.profileCircleText }}</p>
       </div>
       <div>
         <h4 class="comment-user" v-if="this.$store.state.friends.includes(comment.author) || comment.author === $store.state.username">
@@ -90,7 +90,7 @@ export default {
   float: left;
 }
 
-.circle-inner {
+.circle-profile-inner {
   color: black;
   display: table-cell;
   align-content: center;
@@ -99,7 +99,7 @@ export default {
   text-decoration: none;
   height: 90px;
   width: 90px;
-  font-size: 22px;
+  font-size: 36px;
 }
 
 .loading {

@@ -92,11 +92,12 @@ export default {
 <style scoped>
 .favorite-container {
   position: absolute;
-  right: 10%;
-  top: 0%;
+  right: 15px;
+  top: -12px;
   border-radius: 50%;
   background-color: white;
   cursor: pointer;
+  filter: drop-shadow(0 2px 0.25rem rgba(0, 0, 0, 0.417));
 }
 .favorited {
   color: #12de9d;
